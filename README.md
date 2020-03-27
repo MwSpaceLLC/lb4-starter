@@ -12,7 +12,7 @@ Install package and vendor:
     
     npm install && npm pretest && npm build:watch && npm start
 
-#### Package Futures
+#### Package Futures (DB=> MondoDB)
 
 - auth https://github.com/strongloop
 - role https://github.com/strongloop
