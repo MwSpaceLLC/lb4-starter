@@ -67,8 +67,8 @@ export class TwilioController {
                     },
                 },
             }
-        ) numberPhone: string,
-    ): Promise<any> {
+        ) numberPhone: object,
+    ): Promise<object> {
 
         console.log(currentUserProfile);
         console.log(numberPhone);

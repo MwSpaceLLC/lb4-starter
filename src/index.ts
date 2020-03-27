@@ -16,7 +16,7 @@ export async function main(options: ApplicationConfig = {}) {
 
     const url = app.restServer.url;
 
-    console.log(`©2020 IBM ~ All rights reserved | ${environment.app_name} lb4 => serve at ${url}`);
+    console.log(`©2020 IBM ~ All rights reserved | ${environment.appName} lb4 => serve at ${url}`);
 
     return app;
 }

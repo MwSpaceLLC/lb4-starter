@@ -10,8 +10,8 @@ export class TwilioServices {
     constructor(SENDER = null) {
 
         this.client = new twilio(
-            environment.twilio.account_sid,
-            environment.twilio.auth_token
+            environment.twilio.accountSid,
+            environment.twilio.authToken
         );
 
         this.sender = SENDER
@@ -25,14 +25,14 @@ export class TwilioServices {
         this.client.messages.create({
             body: body,
             to: to,
-            from: this.sender ? this.sender : environment.twilio.semder
+            from: this.sender ? this.sender : environment.twilio.sender
         })
-            .then((message: any) => {
+            .then((message: object) => {
 
-                console.log(message.sid);
+                console.log(message);
                 return true;
 
-            }, (error: any) => {
+            }, (error: object) => {
 
                 console.log(error);
                 return false;

@@ -46,7 +46,7 @@ export class ServerWalletItApplication extends BootMixin(
         // Set config from env file
         this.api({
             openapi: '3.0.0',
-            info: {title: environment.app_name, version: environment.version},
+            info: {title: environment.appName, version: environment.version},
             paths: {},
             servers: [{url: '/'}],
         });
