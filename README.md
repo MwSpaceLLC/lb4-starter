@@ -1,10 +1,6 @@
-# lb4-starter ~ <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | *ALPHA*
+## lb4-starter ~ <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | *ALPHA*
 
-- auth https://github.com/strongloop
-- role https://github.com/strongloop
-- mail https://github.com/nodemailer/nodemailer
-- sms https://github.com/twilio/twilio-node
-- stripe https://github.com/stripe/stripe-node
+<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/lb4-starter-package-mwspace.png" width="100%">
 
 ### Start with this package
 
@@ -15,3 +11,11 @@ Rename environment $vars:
 Install package and vendor:
     
     npm install && npm pretest && npm build:watch && npm start
+
+#### Package Futures
+
+- auth https://github.com/strongloop
+- role https://github.com/strongloop
+- sms https://github.com/twilio/twilio-node
+- mail https://github.com/nodemailer/nodemailer
+- stripe https://github.com/stripe/stripe-node
