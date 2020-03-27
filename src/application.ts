@@ -27,7 +27,7 @@ import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strateg
 import {
     PasswordHasherBindings,
     TokenServiceBindings,
-    TokenServiceConstants,
+    TokenServiceConstants, TwilioServiceBindings,
     UserServiceBindings,
 } from './keys';
 
@@ -36,6 +36,7 @@ import {BcryptHasher} from './services/hash.password.bcryptjs';
 import {JWTService} from './services/jwt-service';
 import {MyUserService} from './services/user-service';
 import {environment} from "./environments/environment";
+import {TwilioServices} from "./services/twilio/client-service";
 
 export class ServerWalletItApplication extends BootMixin(
     ServiceMixin(RepositoryMixin(RestApplication)),
@@ -103,6 +104,10 @@ export class ServerWalletItApplication extends BootMixin(
         this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
         this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
+
+        //Binding all sdk values
+        this.bind(TwilioServiceBindings.TWILIO_CLIENT).toClass(TwilioServices);
+
     }
 
     async start() {

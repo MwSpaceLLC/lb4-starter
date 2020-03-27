@@ -8,6 +8,7 @@ import {PasswordHasher} from './services/hash.password.bcryptjs';
 import {TokenService, UserService} from '@loopback/authentication';
 import {User} from './models';
 import {Credentials} from './repositories';
+import {TwilioClient} from "./services/twilio/client-service";
 
 export namespace TokenServiceConstants {
     export const TOKEN_SECRET_VALUE = 'myjwts3cr3t';
@@ -36,5 +37,18 @@ export namespace PasswordHasherBindings {
 export namespace UserServiceBindings {
     export const USER_SERVICE = BindingKey.create<UserService<User, Credentials>>(
         'services.user.service',
+    );
+}
+
+
+/**
+ |--------------------------------------------------------------------------
+ | Sdk binding
+ |--------------------------------------------------------------------------
+ | Here is where you can Register all bindings in app services
+ */
+export namespace TwilioServiceBindings {
+    export const TWILIO_CLIENT = BindingKey.create<TwilioClient>(
+        'services.twilio.client',
     );
 }

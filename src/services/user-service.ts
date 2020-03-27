@@ -25,11 +25,9 @@ export class MyUserService implements UserService<User, Credentials> {
 
         const invalidCredentialsError = 'Autenticazione non valida';
 
-        console.log(this.authmsg());
-
-        console.info('');
-        console.info('credentials: ');
-        console.log(credentials)
+        // console.info('');
+        // console.info('credentials: ');
+        // console.log(credentials)
 
         const foundUser = await this.userRepository.findOne({
             where: {email: credentials.email},
@@ -39,17 +37,17 @@ export class MyUserService implements UserService<User, Credentials> {
             throw new HttpErrors.Unauthorized(invalidCredentialsError);
         }
 
-        console.info('');
-        console.info('foundUser: ');
-        console.log(foundUser)
+        // console.info('');
+        // console.info('foundUser: ');
+        // console.log(foundUser)
 
         const credentialsFound = await this.userRepository.findCredentials(
             foundUser.id,
         );
 
-        console.info('');
-        console.log('credentialsFound: ');
-        console.log(credentialsFound)
+        // console.info('');
+        // console.log('credentialsFound: ');
+        // console.log(credentialsFound)
 
         if (!credentialsFound) {
             throw new HttpErrors.Unauthorized(invalidCredentialsError);
@@ -76,21 +74,9 @@ export class MyUserService implements UserService<User, Credentials> {
         };
     }
 
-    rand(min: number, max: number) {
+    uniqueId(min: number, max: number) {
         return Math.floor(
             Math.random() * (max - min) + min
         )
-    }
-
-    authmsg() {
-        return Math.floor(
-            Math.random() * (11 - 99) + 99
-        ) + ' ' + Math.floor(
-            Math.random() * (11 - 99) + 99
-        ) + ' ' + Math.floor(
-            Math.random() * (11 - 99) + 99
-        ) + ' ' + Math.floor(
-            Math.random() * (11 - 99) + 99
-        );
     }
 }

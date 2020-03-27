@@ -1,21 +1,21 @@
-// import {inject} from '@loopback/context';
-
-import {getModelSchemaRef, HttpErrors, post, get, requestBody, put, param} from "@loopback/rest";
-import {validateCredentials} from "../../services/validator";
-import _ from "lodash";
-import {NewUserRequest} from "../user.controller";
-import {model} from "@loopback/repository";
+import {HttpErrors, get} from "@loopback/rest";
+import {model, repository} from "@loopback/repository";
 import {OPERATION_SECURITY_SPEC} from "../../utils/security-spec";
-import {User} from "../../models";
 import {authenticate} from "@loopback/authentication";
-import {authorize} from "@loopback/authorization";
-import {basicAuthorization} from "../../services/basic.authorizor";
 import {inject} from "@loopback/core";
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
+import {UserRepository} from "../../repositories";
+import {TwilioClient} from "../../services/twilio/client-service";
+import {TwilioServiceBindings} from "../../keys";
+import {TwilioResponseSchema} from "../specs/twilio-controller.specs";
 
 @model()
 export class TwilioController {
-    constructor() {
+    constructor(
+        @repository(UserRepository) public userRepository: UserRepository,
+        @inject(TwilioServiceBindings.TWILIO_CLIENT)
+        public twilioClient: TwilioClient,
+    ) {
     }
 
     /**
@@ -26,22 +26,14 @@ export class TwilioController {
      | Here is where you can Register web users for your application.
      |
      */
-
-    @post('/twilio/test/msg', {
+    @get('/sms/auth/msg', {
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
                 description: 'Twilio AUTHMSG',
                 content: {
                     'application/json': {
-                        schema: {
-                            type: 'object',
-                            properties: {
-                                token: {
-                                    sid: 'string',
-                                },
-                            },
-                        },
+                        schema: TwilioResponseSchema,
                     },
                 },
             },
@@ -50,32 +42,19 @@ export class TwilioController {
     @authenticate('jwt')
     async sendAuthMsg(
         @inject(SecurityBindings.USER)
-            currentUserProfile: UserProfile,
-        @requestBody(
-            {
-                description: 'Send AUTHMSG to User.phoneNumber',
-                content: {
-                    'application/json': {
-                        schema: {
-                            type: 'object',
-                            properties: {
-                                numberPhone: {
-                                    type: 'string',
-                                },
-                            },
-                        },
-                    },
-                },
-            }
-        ) numberPhone: object,
-    ): Promise<object> {
+            currentUserProfile: UserProfile
+    ): Promise<void | object> {
 
-        console.log(currentUserProfile);
-        console.log(numberPhone);
+        const user = await this.userRepository.findById(
+            currentUserProfile[securityId]
+        );
 
-        return {
-            sid: 'ciao'
-        }
+        if (!user.phone)
+            throw new HttpErrors.UnprocessableEntity(
+                `User.phone number is required`,
+            );
+
+        return this.twilioClient.sendAuthCode(user.phone)
     }
 
 }

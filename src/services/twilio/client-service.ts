@@ -1,43 +1,92 @@
 import {environment} from "../../environments/environment";
+import {HttpErrors} from "@loopback/rest";
 
 const twilio = require('twilio');
 
-export class TwilioServices {
+export interface TwilioObject {
+    phone: string
+}
 
-    private client: any;
-    private sender: any;
+export interface TwilioClient<T = string> {
+    sendMessage(to: T, body: T, SENDER?: null): Promise<void | object>;
 
-    constructor(SENDER = null) {
+    sendAuthCode(to: T): Promise<void | object>;
 
+    authCode(): string;
+}
+
+export class TwilioServices implements TwilioClient {
+
+    private client: { messages: { create: (arg0: { body: string; to: string; from: string | null; }) => Promise<object>; }; };
+
+    constructor() {
         this.client = new twilio(
             environment.twilio.accountSid,
             environment.twilio.authToken
         );
-
-        this.sender = SENDER
     }
 
     /**
      * @param to
      * @param body
+     * @param SENDER
      */
-    sendMessage(to: string, body: string) {
-        this.client.messages.create({
+    async sendMessage(to: string, body: string, SENDER = null): Promise<void | object> {
+        return this.client.messages.create({
             body: body,
             to: to,
-            from: this.sender ? this.sender : environment.twilio.sender
+            from: SENDER ? SENDER : environment.twilio.sender
         })
-            .then((message: object) => {
+            .then(message => {
 
-                console.log(message);
-                return true;
+                return message;
 
-            }, (error: object) => {
+            }, error => {
 
                 console.log(error);
-                return false;
+
+                throw new HttpErrors.HttpError(
+                    `Twilio error | status: ${error.status} | message: ${error.message}`,
+                );
 
             });
+    }
+
+
+    /**
+     * @param to
+     */
+    async sendAuthCode(to: string): Promise<void | object> {
+        return this.client.messages.create({
+            body: this.authCode() + ' è il codice di verifica per ' + environment.appName,
+            to: to,
+            from: 'AUTHMSG'
+        })
+            .then(message => {
+
+                return message;
+
+            }, error => {
+
+                console.log(error);
+
+                throw new HttpErrors.HttpError(
+                    `Twilio error | status: ${error.status} | message: ${error.message}`,
+                );
+
+            });
+    }
+
+    authCode() {
+        return Math.floor(
+            Math.random() * (11 - 99) + 99
+        ) + ' ' + Math.floor(
+            Math.random() * (11 - 99) + 99
+        ) + ' ' + Math.floor(
+            Math.random() * (11 - 99) + 99
+        ) + ' ' + Math.floor(
+            Math.random() * (11 - 99) + 99
+        );
     }
 
 }
