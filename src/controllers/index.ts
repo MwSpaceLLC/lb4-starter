@@ -4,4 +4,4 @@
 // License text available at https://opensource.org/licenses/MIT
 
 export * from './user.controller';
-export * from './Sdk/twilio.controller';
+export * from './twilio.controller';

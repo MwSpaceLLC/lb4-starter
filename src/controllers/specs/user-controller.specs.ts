@@ -4,6 +4,8 @@
 // License text available at https://opensource.org/licenses/MIT
 
 // TODO(jannyHou): This should be moved to @loopback/authentication
+import {User} from "../../models";
+
 export const UserProfileSchema = {
     type: 'object',
     required: ['id'],
@@ -40,4 +42,44 @@ export const CredentialsRequestBody = {
     content: {
         'application/json': {schema: CredentialsSchema},
     },
+};
+
+const RegisterSchema = {
+    type: 'object',
+    required: ['email', 'password'],
+    properties: {
+        email: {
+            type: 'string',
+            format: 'email',
+        },
+        password: {
+            type: 'string',
+            minLength: 8,
+        },
+        agreement: {
+            type: 'boolean',
+            default: true,
+        },
+    },
+};
+
+export const RegisterRequestBody = {
+    description: 'The input of register function',
+    content: {
+        'application/json': {schema: RegisterSchema},
+    },
+};
+
+export const UserTokenResponseSchema = {
+    type: 'object',
+    properties: {
+        'userProfile': {type: 'object'},
+        'token': {
+            type: 'object',
+            properties: {
+                'value': {type: 'string'},
+                'expiredAt': {type: 'string'}
+            }
+        }
+    }
 };

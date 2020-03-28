@@ -9,10 +9,11 @@ import {TokenService, UserService} from '@loopback/authentication';
 import {User} from './models';
 import {Credentials} from './repositories';
 import {TwilioClient} from "./services/twilio/client-service";
+import {environment} from "./environments/environment";
 
 export namespace TokenServiceConstants {
-    export const TOKEN_SECRET_VALUE = 'myjwts3cr3t';
-    export const TOKEN_EXPIRES_IN_VALUE = '600';
+    export const TOKEN_SECRET_VALUE = environment.TOKEN_SECRET;
+    export const TOKEN_EXPIRES_IN_VALUE = environment.TOKEN_EXPIRES;
 }
 
 export namespace TokenServiceBindings {

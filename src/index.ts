@@ -1,6 +1,7 @@
 import {ServerWalletItApplication} from './application';
 import {ApplicationConfig} from '@loopback/core';
 import {environment} from "./environments/environment";
+import moment from 'moment-timezone';
 
 export {ServerWalletItApplication};
 
@@ -9,6 +10,10 @@ export async function main(options: ApplicationConfig = {}) {
     if (environment.production) {
         console.log('ENV IN PROD')
     }
+
+    moment().tz(environment.TIME_ZONE).format();
+    moment.locale(environment.LOCALE);
+    moment().format(environment.DATE_FORMAT);
 
     const app = new ServerWalletItApplication(options);
     await app.boot();

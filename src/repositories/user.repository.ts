@@ -19,6 +19,12 @@ export type Credentials = {
     password: string;
 };
 
+export type RegisterCredentials = {
+    email: string;
+    password: string;
+    agreement?: boolean;
+};
+
 export class UserRepository extends DefaultCrudRepository<User,
     typeof User.prototype.id> {
 

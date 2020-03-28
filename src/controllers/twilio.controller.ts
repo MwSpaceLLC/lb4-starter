@@ -1,13 +1,13 @@
 import {HttpErrors, get} from "@loopback/rest";
 import {model, repository} from "@loopback/repository";
-import {OPERATION_SECURITY_SPEC} from "../../utils/security-spec";
+import {OPERATION_SECURITY_SPEC} from "../utils/security-spec";
 import {authenticate} from "@loopback/authentication";
 import {inject} from "@loopback/core";
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
-import {UserRepository} from "../../repositories";
-import {TwilioClient} from "../../services/twilio/client-service";
-import {TwilioServiceBindings} from "../../keys";
-import {TwilioResponseSchema} from "../specs/twilio-controller.specs";
+import {UserRepository} from "../repositories";
+import {TwilioClient} from "../services/twilio/client-service";
+import {TwilioServiceBindings} from "../keys";
+import {TwilioResponseSchema} from "./specs/twilio-controller.specs";
 
 @model()
 export class TwilioController {

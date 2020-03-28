@@ -1,7 +1,4 @@
 // Copyright IBM Corp. 2019,2020. All Rights Reserved.
-// Node module: loopback4-example-shopping
-// This file is licensed under the MIT License.
-// License text available at https://opensource.org/licenses/MIT
 
 import {repository, model, property} from '@loopback/repository';
 import {validateCredentials} from '../services/validator';
@@ -13,7 +10,6 @@ import {
     get,
     requestBody,
     HttpErrors,
-    getModelSchemaRef,
 } from '@loopback/rest';
 
 import {User} from '../models';
@@ -25,12 +21,14 @@ import {
     TokenService,
     UserService,
 } from '@loopback/authentication';
+
 import {authorize} from '@loopback/authorization';
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
 import {
-    CredentialsRequestBody,
-    UserProfileSchema,
+    CredentialsRequestBody, RegisterRequestBody,
+    UserProfileSchema, UserTokenResponseSchema,
 } from './specs/user-controller.specs';
+
 import {Credentials} from '../repositories';
 import {PasswordHasher} from '../services/hash.password.bcryptjs';
 
@@ -43,6 +41,9 @@ import _ from 'lodash';
 
 import {OPERATION_SECURITY_SPEC} from '../utils/security-spec';
 import {basicAuthorization} from '../services/basic.authorizor';
+import {environment} from "../environments/environment";
+import moment from 'moment';
+
 
 @model()
 export class NewUserRequest extends User {
@@ -51,6 +52,14 @@ export class NewUserRequest extends User {
         required: true
     })
     password: string;
+}
+
+interface UserTokenResponse {
+    userProfile: object;
+    token: {
+        value: string,
+        expiredAt: Date
+    }
 }
 
 export class UserController {
@@ -73,56 +82,31 @@ export class UserController {
      | Here is where you can Register web users for your application.
      |
      */
-    @post('/users', {
+    @post('/users/register', {
         responses: {
             '200': {
                 description: 'User',
                 content: {
                     'application/json': {
-                        schema: {
-                            type: 'object',
-                            properties: {
-                                token: {
-                                    type: 'string',
-                                },
-                            },
-                        },
+                        schema: UserTokenResponseSchema,
                     },
                 },
             },
         },
     })
     async create(
-        @requestBody({
-            content: {
-                'application/json': {
-                    schema: getModelSchemaRef(NewUserRequest, {
-                        title: 'NewUser',
-                        exclude: [
-                            'id',
-                            'roles',
-                            'name',
-                            'email_verified',
-                            'phoneCode',
-                            'phone',
-                            'gate',
-                            'status',
-                        ],
-                    }),
-                },
-            },
-        })
-            newUserRequest: NewUserRequest,
-    ): Promise<{ token: string }> {
+        @requestBody(RegisterRequestBody) newUserRequest: NewUserRequest,
+    ): Promise<UserTokenResponse> {
 
         const uniqid = require('uniqid');
 
-        // All new users have the "customer" role by default
+        // Assign defautl property
         newUserRequest.roles = ['customer'];
+
+        newUserRequest.gate = 'verify/phone';
 
         // Create Username by default
         newUserRequest.name = 'user-' + uniqid();
-
 
         // ensure a valid email value and password value
         validateCredentials(_.pick(newUserRequest, ['email', 'password']));
@@ -134,22 +118,27 @@ export class UserController {
 
         try {
             // create the new user
-            const savedUser = await this.userRepository.create(
+            const user = await this.userRepository.create(
                 _.omit(newUserRequest, 'password'),
             );
 
             // set the password
             await this.userRepository
-                .userCredentials(savedUser.id)
+                .userCredentials(user.id)
                 .create({password});
 
-            // convert a User object into a UserProfile object (reduced set of properties)
-            const userProfile = this.userService.convertToUserProfile(savedUser);
-
-            // create a JSON Web Token based on the user profile
-            const token = await this.jwtService.generateToken(userProfile);
-
-            return {token};
+            return {
+                userProfile: user,
+                token: {
+                    value: await this.jwtService.generateToken(
+                        this.userService.convertToUserProfile(user)
+                    ),
+                    expiredAt: moment().add(
+                        environment.TOKEN_EXPIRES,
+                        'seconds'
+                    ).toDate()
+                }
+            };
 
         } catch (error) {
             // MongoError 11000 duplicate key
@@ -163,26 +152,19 @@ export class UserController {
 
     /**
      |--------------------------------------------------------------------------
-     | Login User
+     | Authenticate User
      |--------------------------------------------------------------------------
      |
      | Here is where you can Login web users for your application.
      |
      */
-    @post('/users/login', {
+    @post('/users/authenticate', {
         responses: {
             '200': {
-                description: 'Token',
+                description: 'User Token Response',
                 content: {
                     'application/json': {
-                        schema: {
-                            type: 'object',
-                            properties: {
-                                token: {
-                                    type: 'string',
-                                },
-                            },
-                        },
+                        schema: UserTokenResponseSchema,
                     },
                 },
             },
@@ -190,65 +172,55 @@ export class UserController {
     })
     async login(
         @requestBody(CredentialsRequestBody) credentials: Credentials,
-    ): Promise<{ token: string }> {
+    ): Promise<UserTokenResponse> {
         // ensure the user exists, and the password is correct
         const user = await this.userService.verifyCredentials(credentials);
 
-        // convert a User object into a UserProfile object (reduced set of properties)
-        const userProfile = this.userService.convertToUserProfile(user);
-
-        // create a JSON Web Token based on the user profile
-        const token = await this.jwtService.generateToken(userProfile);
-
-        return {token};
+        return {
+            userProfile: user,
+            token: {
+                value: await this.jwtService.generateToken(
+                    this.userService.convertToUserProfile(user)
+                ),
+                expiredAt: moment().add(
+                    environment.TOKEN_EXPIRES,
+                    'seconds'
+                ).toDate()
+            }
+        };
     }
 
     /**
      |--------------------------------------------------------------------------
-     | updateById User ID
+     | Fetch User Logged In
      |--------------------------------------------------------------------------
      |
-     | Here is where you can updateById web users for your application.
+     | Here is where you can findById web users for your application.
      |
      */
-    @put('/users/{userId}', {
+    @get('/users/me', {
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
-                description: 'User',
+                description: 'The current user profile',
                 content: {
                     'application/json': {
-                        schema: {
-                            'x-ts-type': User,
-                        },
+                        schema: UserProfileSchema,
                     },
                 },
             },
         },
     })
     @authenticate('jwt')
-    @authorize({
-        allowedRoles: ['admin', 'customer'],
-        voters: [basicAuthorization],
-    })
-    async set(
+    async printCurrentUser(
         @inject(SecurityBindings.USER)
             currentUserProfile: UserProfile,
-        @param.path.string('userId') userId: string,
-        @requestBody({description: 'update user'}) user: User,
-    ): Promise<void> {
-        try {
-            // Only admin can assign roles
-            if (!currentUserProfile.roles.includes('admin')) {
-                delete user.roles;
-            }
-            const updatedUser = await this.userRepository.updateById(userId, user);
-            return updatedUser;
-        } catch (e) {
-            return e;
-        }
-    }
+    ): Promise<User> {
 
+        return this.userRepository.findById(
+            currentUserProfile[securityId]
+        );
+    }
 
     /**
      |--------------------------------------------------------------------------
@@ -259,6 +231,7 @@ export class UserController {
      |
      */
     @get('/users/{userId}', {
+        'x-visibility': 'undocumented',
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
@@ -282,29 +255,48 @@ export class UserController {
         return this.userRepository.findById(userId);
     }
 
-
-    @get('/users/me', {
+    /**
+     |--------------------------------------------------------------------------
+     | updateById User ID
+     |--------------------------------------------------------------------------
+     |
+     | Here is where you can updateById web users for your application.
+     |
+     */
+    @put('/users/{userId}', {
+        'x-visibility': 'undocumented',
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
-                description: 'The current user profile',
+                description: 'User',
                 content: {
                     'application/json': {
-                        schema: UserProfileSchema,
+                        schema: {
+                            'x-ts-type': User,
+                        },
                     },
                 },
             },
         },
     })
     @authenticate('jwt')
-    async printCurrentUser(
+    async set(
         @inject(SecurityBindings.USER)
             currentUserProfile: UserProfile,
-    ): Promise<User> {
-        // (@jannyHou)FIXME: explore a way to generate OpenAPI schema
-        // for symbol property
+        @param.path.string('userId') userId: string,
+        @requestBody({description: 'update user'}) user: User,
+    ): Promise<void> {
+        try {
 
-        const userId = currentUserProfile[securityId];
-        return this.userRepository.findById(userId);
+            // TODO: Perform your action
+            // Only admin can assign roles
+            if (!currentUserProfile.roles.includes('admin')) {
+                delete user.roles;
+            }
+
+            return await this.userRepository.updateById(userId, user);
+        } catch (e) {
+            return e;
+        }
     }
 }
