@@ -12,6 +12,16 @@ export const environment = {
         privateKey: '',
     },
 
+    //Mail Configuration
+    MAIL_MAILER: 'smtp',
+    MAIL_HOST: 'smtp.mailtrap.io',
+    MAIL_PORT: 2525,
+    MAIL_USERNAME: '',
+    MAIL_PASSWORD: '',
+    MAIL_ENCRYPTION: null,
+    MAIL_FROM_ADDRESS: 'no-reply@lb4-starter.git',
+    MAIL_FROM_NAME: 'lb4-starter',
+
     //Other Configurations
     TIME_ZONE: 'Europe/Rome',
     LOCALE: 'it',

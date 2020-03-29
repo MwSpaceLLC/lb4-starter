@@ -3,10 +3,6 @@ import {HttpErrors} from "@loopback/rest";
 
 const twilio = require('twilio');
 
-export interface TwilioObject {
-    phone: string
-}
-
 export interface TwilioClient<T = string> {
     sendMessage(to: T, body: T, SENDER?: null): Promise<void | object>;
 

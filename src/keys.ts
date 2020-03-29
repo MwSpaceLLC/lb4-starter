@@ -1,5 +1,5 @@
 // Copyright IBM Corp. 2019,2020. All Rights Reserved.
-// Node module: loopback4-example-shopping
+// Node module: lb4-starter | MwSpace LLC
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
@@ -10,6 +10,7 @@ import {User} from './models';
 import {Credentials} from './repositories';
 import {TwilioClient} from "./services/twilio/client-service";
 import {environment} from "./environments/environment";
+import {MailClient} from "./services/nodemailer/mail-service";
 
 export namespace TokenServiceConstants {
     export const TOKEN_SECRET_VALUE = environment.TOKEN_SECRET;
@@ -51,5 +52,11 @@ export namespace UserServiceBindings {
 export namespace TwilioServiceBindings {
     export const TWILIO_CLIENT = BindingKey.create<TwilioClient>(
         'services.twilio.client',
+    );
+}
+
+export namespace MailServiceBindings {
+    export const MAIL_CLIENT = BindingKey.create<MailClient>(
+        'services.nodemailer.client',
     );
 }

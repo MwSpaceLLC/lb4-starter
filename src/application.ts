@@ -1,5 +1,5 @@
 // Copyright IBM Corp. 2019,2020. All Rights Reserved.
-// Node module: loopback4-example-shopping
+// Node module: lb4-starter | MwSpace LLC
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
@@ -25,6 +25,7 @@ import {ServiceMixin} from '@loopback/service-proxy';
 import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strategy';
 
 import {
+    MailServiceBindings,
     PasswordHasherBindings,
     TokenServiceBindings,
     TokenServiceConstants, TwilioServiceBindings,
@@ -37,6 +38,7 @@ import {JWTService} from './services/jwt-service';
 import {MyUserService} from './services/user-service';
 import {environment} from "./environments/environment";
 import {TwilioServices} from "./services/twilio/client-service";
+import {MailService} from "./services/nodemailer/mail-service";
 
 export class ServerWalletItApplication extends BootMixin(
     ServiceMixin(RepositoryMixin(RestApplication)),
@@ -105,9 +107,17 @@ export class ServerWalletItApplication extends BootMixin(
 
         this.bind(UserServiceBindings.USER_SERVICE).toClass(MyUserService);
 
-        //Binding all sdk values
-        this.bind(TwilioServiceBindings.TWILIO_CLIENT).toClass(TwilioServices);
+        this.customBinding();
 
+    }
+
+    private customBinding() {
+        /**
+         |--------------------------------------------------------------------------
+         | Custom Binding Value
+         |------------------------------------------------------------------------*/
+        this.bind(TwilioServiceBindings.TWILIO_CLIENT).toClass(TwilioServices);
+        this.bind(MailServiceBindings.MAIL_CLIENT).toClass(MailService);
     }
 
     async start() {

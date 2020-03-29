@@ -5,56 +5,58 @@ import {authenticate} from "@loopback/authentication";
 import {inject} from "@loopback/core";
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
 import {UserRepository} from "../repositories";
-import {TwilioClient} from "../services/twilio/client-service";
-import {TwilioServiceBindings} from "../keys";
-import {TwilioResponseSchema} from "./specs/twilio-controller.specs";
+import {MailServiceBindings, TwilioServiceBindings} from "../keys";
+import {MailerResponseSchema} from "./specs/mailer-controller.specs";
+import {MailClient} from "../services/nodemailer/mail-service";
+import {SentMessageInfo} from "nodemailer";
 
 @model()
-export class TwilioController {
+export class MailerController {
     constructor(
         @repository(UserRepository) public userRepository: UserRepository,
-        @inject(TwilioServiceBindings.TWILIO_CLIENT)
-        public twilioClient: TwilioClient,
+        @inject(MailServiceBindings.MAIL_CLIENT)
+        public mailClient: MailClient,
     ) {
     }
 
     /**
      |--------------------------------------------------------------------------
-     | Twilio Management
+     | Node Mailer Management
      |--------------------------------------------------------------------------
      |
-     | Here is where you can Register web users for your application.
+     | Here is where you can Register Node Mailer for your application.
      |
      */
-    @get('/sms/auth/msg', {
+    @get('/mail/auth/confirm', {
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
-                description: 'Twilio AUTHMSG',
+                description: 'Mail Confirmation',
                 content: {
                     'application/json': {
-                        schema: TwilioResponseSchema,
+                        schema: MailerResponseSchema,
                     },
                 },
             },
         },
     })
     @authenticate('jwt')
-    async sendAuthMsg(
+    async sendConfirmation(
         @inject(SecurityBindings.USER)
             currentUserProfile: UserProfile
-    ): Promise<void | object> {
+    ): Promise<SentMessageInfo> {
 
         const user = await this.userRepository.findById(
             currentUserProfile[securityId]
         );
 
-        if (!user.phone)
+        if (!user.email)
             throw new HttpErrors.UnprocessableEntity(
-                `User.phone number is required`,
+                `User.email is required`,
             );
 
-        return this.twilioClient.sendAuthCode(user.phone)
+        // Send email (TEMPLATE LOCATE IN (src/services/nodemailer/emails/*) WITHOUT .TS)
+        return this.mailClient.send('✔ Confirm Node Mail | lb4-starter', 'confirm', user.email)
     }
 
 }

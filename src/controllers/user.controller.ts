@@ -103,7 +103,7 @@ export class UserController {
         // Assign defautl property
         newUserRequest.roles = ['customer'];
 
-        newUserRequest.gate = 'verify/phone';
+        newUserRequest.gate = 'confirm/email';
 
         // Create Username by default
         newUserRequest.name = 'user-' + uniqid();
