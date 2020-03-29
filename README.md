@@ -2,15 +2,28 @@
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/lb4-starter.png" width="100%">
 
-### Start with this package
+## Start with this package
 
-Rename environment $vars:
 
-    src/environment/environment.example.ts => environment.ts
+###### Have you installed Node.js?
 
-Install package and vendor:
+Before you install LoopBack, make sure to download and install Node.js (version 8.9.x or higher), a JavaScript runtime.
+
+###### Install LoopBack 4 CLI
+
+The LoopBack 4 CLI is a command-line interface that can scaffold a project or extension. The CLI provides the fastest way to get started with a LoopBack 4 project that adheres to best practices.
+
+###### Clone lb4-starter
+
+    git clone https://github.com/MwSpaceLLC/lb4-starter.git
+
+###### Install package and vendor:
     
-    npm install && npm pretest && npm build:watch && npm start
+    npm install && npm install && npm pretest && npm build:watch && npm start
+
+###### Configure your environment $vars:
+
+    src/environment/environment.example.ts => environment.ts || environment.ts 
 
 #### Package Futures (DB=> MondoDB)
 
