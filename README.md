@@ -18,7 +18,7 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
 ###### Configure your environment $vars:
 
-    src/environment/environment.example.ts => environment.ts 
+    mv src/environments/environment.example.ts src/environments/environment.ts
 
 ###### Install package and vendor:
     

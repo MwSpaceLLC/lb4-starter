@@ -42,6 +42,6 @@ export const environment = {
     DATE_FORMAT: 'DD/MM/YYYY',
 
     // JWT Configuration
-    TOKEN_SECRET: 'rajaisverysympledev',
+    TOKEN_SECRET: 'mySecretLabel',
     TOKEN_EXPIRES: '14400',
 };
