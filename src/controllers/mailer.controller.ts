@@ -66,7 +66,7 @@ export class MailerController {
             '✔ Confirm e-mail address',
             'confirm',
             [
-                {link: `${environment.host}/email/confirmation/${token}`}
+                {link: `//${environment.host}/email/confirmation/${token}`}
             ]
         ).send(user.email)
 
