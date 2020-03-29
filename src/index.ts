@@ -11,6 +11,10 @@ export async function main(options: ApplicationConfig = {}) {
         console.log('ENV IN PROD')
     }
 
+    options.rest.host = environment.host || undefined;
+    options.rest.port = environment.port || 3000;
+    options.rest.openApiSpec.disabled = !environment.openApiSpec;
+
     moment().tz(environment.TIME_ZONE).format();
     moment.locale(environment.LOCALE);
     moment().format(environment.DATE_FORMAT);

@@ -1,4 +1,5 @@
 export const MailerResponseSchema = {
+    description: 'Mailer Response Schema',
     type: 'object',
     properties: {
         "accepted": {type: 'object'},

@@ -9,6 +9,7 @@ import {UserCredentials} from './user-credentials.model';
 
 @model({
     settings: {
+        hiddenProperties: [],
         indexes: {
             uniqueEmail: {
                 keys: {
@@ -36,6 +37,12 @@ export class User extends Entity {
     email: string;
 
     @property({
+        type: 'date',
+        required: false,
+    })
+    email_verified: string;
+
+    @property({
         type: 'string',
         required: true,
     })
@@ -46,12 +53,6 @@ export class User extends Entity {
         required: true,
     })
     agreement?: boolean;
-
-    @property({
-        type: 'date',
-        required: false,
-    })
-    email_verified: string;
 
     @property({
         type: 'string',
@@ -66,10 +67,10 @@ export class User extends Entity {
     phone: string;
 
     @property({
-        type: 'string',
+        type: 'date',
         required: false,
     })
-    gate: string;
+    phone_verified: string;
 
     @property({
         type: 'string',

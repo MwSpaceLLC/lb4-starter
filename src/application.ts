@@ -51,7 +51,7 @@ export class ServerWalletItApplication extends BootMixin(
             openapi: '3.0.0',
             info: {title: environment.appName, version: environment.version},
             paths: {},
-            servers: [{url: '/'}],
+            servers: [{url: '/'}]
         });
 
         this.setUpBindings();
@@ -69,11 +69,13 @@ export class ServerWalletItApplication extends BootMixin(
         this.static('/', path.join(__dirname, '../public'));
 
         // Customize @loopback/rest-explorer configuration here
-        this.configure(RestExplorerBindings.COMPONENT).to({
-            path: '/explorer',
-        });
-
-        this.component(RestExplorerComponent);
+        if (environment.apiExplorer) {
+            this.configure(RestExplorerBindings.COMPONENT).to({
+                path: environment.apiExplorerPath,
+                useSelfHostedSpec: true,
+            });
+            this.component(RestExplorerComponent);
+        }
 
         this.projectRoot = __dirname;
 

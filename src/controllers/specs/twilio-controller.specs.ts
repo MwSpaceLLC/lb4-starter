@@ -1,4 +1,5 @@
 export const TwilioResponseSchema = {
+    description: 'Twilio Response Schema',
     type: 'object',
     properties: {
         "accountSid": {type: 'string'},

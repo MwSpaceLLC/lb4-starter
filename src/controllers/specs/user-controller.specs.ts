@@ -3,10 +3,8 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-// TODO(jannyHou): This should be moved to @loopback/authentication
-import {User} from "../../models";
-
 export const UserProfileSchema = {
+    description: 'User Profile Schema',
     type: 'object',
     required: ['id'],
     properties: {
@@ -16,12 +14,8 @@ export const UserProfileSchema = {
     },
 };
 
-// TODO(jannyHou): This is a workaround to manually
-// describe the request body of 'Users/login'.
-// We should either create a Credential model, or
-// infer the spec from User model
-
 const CredentialsSchema = {
+    description: 'Credentials Schema',
     type: 'object',
     required: ['email', 'password'],
     properties: {
@@ -37,7 +31,7 @@ const CredentialsSchema = {
 };
 
 export const CredentialsRequestBody = {
-    description: 'The input of login function',
+    description: 'Credentials Request Body',
     required: true,
     content: {
         'application/json': {schema: CredentialsSchema},
@@ -45,6 +39,7 @@ export const CredentialsRequestBody = {
 };
 
 const RegisterSchema = {
+    description: 'Register Schema',
     type: 'object',
     required: ['email', 'password'],
     properties: {
@@ -64,13 +59,14 @@ const RegisterSchema = {
 };
 
 export const RegisterRequestBody = {
-    description: 'The input of register function',
+    description: 'Register Request Body',
     content: {
         'application/json': {schema: RegisterSchema},
     },
 };
 
 export const UserTokenResponseSchema = {
+    description: 'User Token Response Schema',
     type: 'object',
     properties: {
         'userProfile': {type: 'object'},

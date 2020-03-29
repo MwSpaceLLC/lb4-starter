@@ -1,11 +1,10 @@
 // Copyright IBM Corp. 2019,2020. All Rights Reserved.
 
-import {repository, model, property} from '@loopback/repository';
+import {repository} from '@loopback/repository';
 import {validateCredentials} from '../services/validator';
 
 import {
     post,
-    put,
     param,
     get,
     requestBody,
@@ -43,24 +42,7 @@ import {OPERATION_SECURITY_SPEC} from '../utils/security-spec';
 import {basicAuthorization} from '../services/basic.authorizor';
 import {environment} from "../environments/environment";
 import moment from 'moment';
-
-
-@model()
-export class NewUserRequest extends User {
-    @property({
-        type: 'string',
-        required: true
-    })
-    password: string;
-}
-
-interface UserTokenResponse {
-    userProfile: object;
-    token: {
-        value: string,
-        expiredAt: Date
-    }
-}
+import {NewUserRequest, UserTokenResponse} from "./interfaces/user.interface";
 
 export class UserController {
     constructor(
@@ -102,8 +84,6 @@ export class UserController {
 
         // Assign defautl property
         newUserRequest.roles = ['customer'];
-
-        newUserRequest.gate = 'confirm/email';
 
         // Create Username by default
         newUserRequest.name = 'user-' + uniqid();
@@ -238,9 +218,7 @@ export class UserController {
                 description: 'User',
                 content: {
                     'application/json': {
-                        schema: {
-                            'x-ts-type': User,
-                        },
+                        schema: UserProfileSchema,
                     },
                 },
             },
@@ -263,40 +241,42 @@ export class UserController {
      | Here is where you can updateById web users for your application.
      |
      */
-    @put('/users/{userId}', {
-        'x-visibility': 'undocumented',
-        security: OPERATION_SECURITY_SPEC,
-        responses: {
-            '200': {
-                description: 'User',
-                content: {
-                    'application/json': {
-                        schema: {
-                            'x-ts-type': User,
-                        },
-                    },
-                },
-            },
-        },
-    })
-    @authenticate('jwt')
-    async set(
-        @inject(SecurityBindings.USER)
-            currentUserProfile: UserProfile,
-        @param.path.string('userId') userId: string,
-        @requestBody({description: 'update user'}) user: User,
-    ): Promise<void> {
-        try {
+    // @put('/users/{userId}', {
+    //     'x-visibility': 'undocumented',
+    //     security: OPERATION_SECURITY_SPEC,
+    //     responses: {
+    //         '200': {
+    //             description: 'User',
+    //             content: {
+    //                 'application/json': {
+    //                     schema: {
+    //                         'x-ts-type': User,
+    //                     },
+    //                 },
+    //             },
+    //         },
+    //     },
+    // })
+    // @authenticate('jwt')
+    // async set(
+    //     @inject(SecurityBindings.USER)
+    //         currentUserProfile: UserProfile,
+    //     @param.path.string('userId') userId: string,
+    //     @requestBody({description: 'update user'}) user: User,
+    // ): Promise<void> {
+    //     try {
+    //
+    //         // TODO: Perform your action
+    //         // Only admin can assign roles
+    //         if (!currentUserProfile.roles.includes('admin')) {
+    //             delete user.roles;
+    //         }
+    //
+    //         return await this.userRepository.updateById(userId, user);
+    //     } catch (e) {
+    //         return e;
+    //     }
+    // }
 
-            // TODO: Perform your action
-            // Only admin can assign roles
-            if (!currentUserProfile.roles.includes('admin')) {
-                delete user.roles;
-            }
 
-            return await this.userRepository.updateById(userId, user);
-        } catch (e) {
-            return e;
-        }
-    }
 }
