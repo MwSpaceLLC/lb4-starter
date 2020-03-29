@@ -17,13 +17,13 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
     git clone https://github.com/MwSpaceLLC/lb4-starter.git && cd lb4-starter
 
-###### Install package and vendor:
-    
-    npm install && npm install && npm pretest && npm build:watch && npm start
-
 ###### Configure your environment $vars:
 
-    src/environment/environment.example.ts => environment.ts || environment.ts 
+    src/environment/environment.example.ts => environment.ts 
+
+###### Install package and vendor:
+    
+    npm install && npm run pretest && npm run build:watch && npm start
 
 ###### Package Futures pre-dev
 
