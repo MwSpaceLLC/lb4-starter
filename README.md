@@ -4,7 +4,6 @@
 
 ## Start with this package
 
-
 ###### Have you installed Node.js?
 
 Before you install LoopBack, make sure to download and install Node.js (version 8.9.x or higher), a JavaScript runtime.
@@ -24,6 +23,8 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 ###### Install package and vendor:
     
     npm install && npm run pretest && npm start
+    
+Fine! Please read official Doc at https://loopback.io/doc/en/lb4/    
 
 ###### Package Futures pre-dev
 
