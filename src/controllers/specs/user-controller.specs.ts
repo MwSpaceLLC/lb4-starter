@@ -17,7 +17,7 @@ export const UserProfileSchema = {
         "phone": {type: 'string'},
         "phone_verified": {type: 'string'},
         "status": {type: 'string'},
-        "roles": {type: 'array', items: []}
+        // "roles": {type: 'array', items: []}
     },
 };
 
@@ -83,7 +83,7 @@ export const UserTokenResponseSchema = {
                 "email": {type: 'string'},
                 "name": {type: 'string'},
                 "agreement": {type: 'boolean'},
-                "roles": {type: 'array', items: []}
+                // "roles": {type: 'array', items: []}
             },
         },
         "token": {

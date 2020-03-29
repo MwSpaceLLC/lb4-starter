@@ -9,6 +9,7 @@ import {MailServiceBindings, TwilioServiceBindings} from "../keys";
 import {MailerResponseSchema} from "./specs/mailer-controller.specs";
 import {MailClient} from "../services/nodemailer/mail-service";
 import {SentMessageInfo} from "nodemailer";
+import {environment} from "../environments/environment";
 
 @model()
 export class MailerController {
@@ -27,7 +28,7 @@ export class MailerController {
      | Here is where you can Register Node Mailer for your application.
      |
      */
-    @get('/mail/auth/confirm', {
+    @get('/email/verification', {
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
@@ -56,7 +57,7 @@ export class MailerController {
             );
 
         // Send email (TEMPLATE LOCATE IN (src/services/nodemailer/emails/*) WITHOUT .TS)
-        return this.mailClient.send('✔ Confirm Node Mail | lb4-starter', 'confirm', user.email)
+        return this.mailClient.send('✔ Conferma indirizzo @mail | ' + environment.appName, 'confirm', user.email)
     }
 
 }

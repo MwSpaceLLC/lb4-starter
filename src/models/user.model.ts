@@ -9,7 +9,7 @@ import {UserCredentials} from './user-credentials.model';
 
 @model({
     settings: {
-        hiddenProperties: [],
+        hiddenProperties: ['roles'],
         indexes: {
             uniqueEmail: {
                 keys: {

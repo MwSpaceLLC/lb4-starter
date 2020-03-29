@@ -26,7 +26,7 @@ export class SmsController {
      | Here is where you can Register SMS Manager for your application.
      |
      */
-    @get('/sms/auth/msg', {
+    @get('/phone/verification', {
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
