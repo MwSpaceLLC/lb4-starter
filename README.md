@@ -16,7 +16,18 @@ Install package and vendor:
 
 - auth https://github.com/strongloop
 - role https://github.com/strongloop
-- sms https://github.com/twilio/twilio-node
+
+#### sms [message] https://github.com/twilio/twilio-node 🎇
+
+<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/IMG_0581_AUTHMSG.jpg" width="50%">
+
+##### @inject(MailServiceBindings.MAIL_CLIENT)
+    
+        twilioClient.send(
+            user.phone,
+             '✔ Welcome Message | AUTHMSG',
+              'lb4-starter'
+          )
 
 #### mail [template] https://github.com/nodemailer/nodemailer 🎇
 
@@ -31,3 +42,5 @@ Install package and vendor:
           )
 
 - stripe https://github.com/stripe/stripe-node
+
+        // in dev

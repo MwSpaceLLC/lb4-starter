@@ -55,6 +55,8 @@ export class SmsController {
             );
 
         return this.twilioClient.sendAuthCode(user.phone)
+
+        // return this.twilioClient.send(user.phone, '✔ Confirm Node Sms', 'lb4-starter')
     }
 
 }

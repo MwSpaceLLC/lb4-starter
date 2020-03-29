@@ -4,7 +4,7 @@ import {HttpErrors} from "@loopback/rest";
 const twilio = require('twilio');
 
 export interface TwilioClient<T = string> {
-    sendMessage(to: T, body: T, SENDER?: null): Promise<void | object>;
+    send(to: T, body: T, SENDER?: string | null): Promise<void | object>;
 
     sendAuthCode(to: T): Promise<void | object>;
 
@@ -27,7 +27,7 @@ export class TwilioServices implements TwilioClient {
      * @param body
      * @param SENDER
      */
-    async sendMessage(to: string, body: string, SENDER = null): Promise<void | object> {
+    async send(to: string, body: string, SENDER = null): Promise<void | object> {
         return this.client.messages.create({
             body: body,
             to: to,
