@@ -1,4 +1,4 @@
-## lb4-starter ~ <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | *ALPHA*
+## lb4-starter ~ <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | *ALPHA* | MongoDB
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/lb4-starter.png" width="100%">
 
@@ -25,7 +25,7 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
     src/environment/environment.example.ts => environment.ts || environment.ts 
 
-#### Package Futures (DB=> MondoDB)
+#### Package Futures pre-dev
 
 - auth https://github.com/strongloop
 - role https://github.com/strongloop
