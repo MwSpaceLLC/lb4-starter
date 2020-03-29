@@ -15,7 +15,7 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
 ###### Clone lb4-starter
 
-    git clone https://github.com/MwSpaceLLC/lb4-starter.git
+    git clone https://github.com/MwSpaceLLC/lb4-starter.git && cd lb4-starter
 
 ###### Install package and vendor:
     
