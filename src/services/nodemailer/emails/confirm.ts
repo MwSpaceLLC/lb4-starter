@@ -246,18 +246,18 @@ export const HTML = `
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 20px; padding-bottom: 15px; font-family: Tahoma, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;line-height:1.2;padding-top:20px;padding-right:40px;padding-bottom:15px;padding-left:40px;">
                                         <div style="line-height: 1.2; font-size: 12px; color: #555555; font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; mso-line-height-alt: 14px;">
-                                            <p style="font-size: 46px; line-height: 1.2; text-align: center; word-break: break-word; mso-line-height-alt: 55px; margin: 0;"><span style="font-size: 46px; color: #003188;"><strong>We Appreciate your feedback!</strong></span></p>
+                                            <p style="font-size: 46px; line-height: 1.2; text-align: center; word-break: break-word; mso-line-height-alt: 55px; margin: 0;"><span style="font-size: 46px; color: #003188;"><strong>Confirm e-mail address!</strong></span></p>
                                         </div>
                                     </div>
                                     <!--[if mso]></td></tr></table><![endif]-->
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 15px; padding-bottom: 10px; font-family: Tahoma, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;line-height:1.5;padding-top:15px;padding-right:40px;padding-bottom:10px;padding-left:40px;">
                                         <div style="line-height: 1.5; font-size: 12px; font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; color: #555555; mso-line-height-alt: 18px;">
-                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"><span style="background-color: transparent;"><span style="color: #6d89bc;"><span style="font-size: 16px;">This is a mail from <a href="https://github.com/MwSpaceLLC/lb4-starter" rel="noopener" style="text-decoration: underline;" target="_blank"><strong>lb4-starter</strong></a>!</span></span></span></p>
+                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"><span style="background-color: transparent;"><span style="color: #6d89bc;"><span style="font-size: 16px;">This is a mail from</span></span></span></p>
                                             <p style="line-height: 1.5; word-break: break-word; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"><span style="background-color: transparent;"> </span></p>
-                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;">We saw you filled out our survey, thank you so much for your feedback - it's truly appreciated. We just wanted you to know that your feedback has been received.</span></p>
+                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;"><a href="{{link}}" rel="noopener" style="text-decoration: underline;" target="_blank"><strong>Verify Email Address</strong></a></span></p>
                                             <p style="line-height: 1.5; word-break: break-word; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"> </p>
-                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;">Feedback like yours helps us improve our product and service.</span></p>
+                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;">If you did not create an account, no further action is required.</span></p>
                                             <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;">Your insight is so important to us!</span></p>
                                         </div>
                                     </div>
@@ -280,8 +280,7 @@ export const HTML = `
                                     <!--[if mso]><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 40px; padding-left: 40px; padding-top: 20px; padding-bottom: 10px; font-family: Tahoma, sans-serif"><![endif]-->
                                     <div style="color:#555555;font-family:Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;line-height:1.5;padding-top:20px;padding-right:40px;padding-bottom:10px;padding-left:40px;">
                                         <div style="line-height: 1.5; font-size: 12px; font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif; color: #555555; mso-line-height-alt: 18px;">
-                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;">Cheers,</span></p>
-                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;">Aleksandr Ivanovitchø - CEO of MwSpace LLC</span></p>
+                                            <p style="line-height: 1.5; word-break: break-word; font-family: inherit; font-size: 16px; mso-line-height-alt: 24px; margin: 0;"><span style="font-size: 16px; color: #6d89bc;">If you’re having trouble clicking the "Verify Email Address" button, copy and paste the URL below into your web browser: <a href="{{link}}" rel="noopener" style="text-decoration: underline;" target="_blank"><strong>{{link}}</strong></a></span></p>
                                             <p style="line-height: 1.5; word-break: break-word; font-family: inherit; mso-line-height-alt: NaNpx; margin: 0;"> </p>
                                         </div>
                                     </div>
@@ -338,6 +337,27 @@ export const HTML = `
                     </div>
                 </div>
             </div>
+            <div style="background-color:transparent;">
+                <div class="block-grid" style="Margin: 0 auto; min-width: 320px; max-width: 640px; overflow-wrap: break-word; word-wrap: break-word; word-break: break-word; background-color: transparent;">
+                    <div style="border-collapse: collapse;display: table;width: 100%;background-color:transparent;">
+                        <!--[if (mso)|(IE)]><table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:transparent;"><tr><td align="center"><table cellpadding="0" cellspacing="0" border="0" style="width:640px"><tr class="layout-full-width" style="background-color:transparent"><![endif]-->
+                        <!--[if (mso)|(IE)]><td align="center" width="640" style="background-color:transparent;width:640px; border-top: 0px solid transparent; border-left: 0px solid transparent; border-bottom: 0px solid transparent; border-right: 0px solid transparent;" valign="top"><table width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td style="padding-right: 0px; padding-left: 0px; padding-top:0px; padding-bottom:0px;"><![endif]-->
+                        <div class="col num12" style="min-width: 320px; max-width: 640px; display: table-cell; vertical-align: top; width: 640px;">
+                            <div style="width:100% !important;">
+                                <!--[if (!mso)&(!IE)]><!-->
+                                <div style="border-top:0px solid transparent; border-left:0px solid transparent; border-bottom:0px solid transparent; border-right:0px solid transparent; padding-top:0px; padding-bottom:0px; padding-right: 0px; padding-left: 0px;">
+                                    <!--<![endif]-->
+                                    <div></div>
+                                    <!--[if (!mso)&(!IE)]><!-->
+                                </div>
+                                <!--<![endif]-->
+                            </div>
+                        </div>
+                        <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
+                        <!--[if (mso)|(IE)]></td></tr></table></td></tr></table><![endif]-->
+                    </div>
+                </div>
+            </div>
             <!--[if (mso)|(IE)]></td></tr></table><![endif]-->
         </td>
     </tr>
@@ -345,4 +365,4 @@ export const HTML = `
 </table>
 <!--[if (IE)]></div><![endif]-->
 </body>
-</html>`
+</html>`;

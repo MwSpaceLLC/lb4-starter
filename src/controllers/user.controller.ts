@@ -5,7 +5,6 @@ import {validateCredentials} from '../services/validator';
 
 import {
     post,
-    param,
     get,
     requestBody,
     HttpErrors,
@@ -21,7 +20,6 @@ import {
     UserService,
 } from '@loopback/authentication';
 
-import {authorize} from '@loopback/authorization';
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
 import {
     CredentialsRequestBody, RegisterRequestBody,
@@ -39,10 +37,11 @@ import {
 import _ from 'lodash';
 
 import {OPERATION_SECURITY_SPEC} from '../utils/security-spec';
-import {basicAuthorization} from '../services/basic.authorizor';
 import {environment} from "../environments/environment";
 import moment from 'moment';
 import {NewUserRequest, UserTokenResponse} from "./interfaces/user.interface";
+
+import uniqid from "uniqid";
 
 export class UserController {
     constructor(
@@ -80,13 +79,11 @@ export class UserController {
         @requestBody(RegisterRequestBody) newUserRequest: NewUserRequest,
     ): Promise<UserTokenResponse> {
 
-        const uniqid = require('uniqid');
-
         // Assign defautl property
         newUserRequest.roles = ['customer'];
 
         // Create Username by default
-        newUserRequest.name = 'user-' + uniqid();
+        newUserRequest.name = uniqid('user-');
 
         // ensure a valid email value and password value
         validateCredentials(_.pick(newUserRequest, ['email', 'password']));

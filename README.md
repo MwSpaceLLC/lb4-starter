@@ -54,11 +54,12 @@ Fine! Please read official Doc at https://loopback.io/doc/en/lb4/
 
 ##### @inject(MailServiceBindings.MAIL_CLIENT)
     
-        mailClient.send(
-            '✔ Confirm Node Mail | lb4-starter',
-             'confirm',
-              user.email
-          )
+    mailClient.prepare(
+        '✔ Confirm e-mail address', << SUBJECT
+        'confirm', << HTML TEMPLATE
+       [{link: uniqid('mail-token')}]  << PARAMS {{var}}
+    )
+        .send(user.email,'another@mail.com','another@mail.it')
 
 - stripe https://github.com/stripe/stripe-node
 

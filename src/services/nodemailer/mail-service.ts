@@ -1,17 +1,20 @@
 import {environment} from "../../environments/environment";
 import Mail from "nodemailer/lib/mailer";
 import {SentMessageInfo} from "nodemailer";
-
-const nodemailer = require('nodemailer');
+import nodemailer from "nodemailer";
 
 export interface MailClient<T = string> {
-    send(subject: string, template: string, ...to: string[]): Promise<SentMessageInfo>;
+    prepare(subject: string, template: string, params: Array<object>): MailClient;
+
+    send(...to: string[]): Promise<SentMessageInfo>;
 }
 
 export class MailService implements MailClient {
 
     private transporter: Mail;
-    private info: void;
+
+    private html: string;
+    private subject: string;
 
     constructor() {
         this.transporter = nodemailer.createTransport({
@@ -19,37 +22,80 @@ export class MailService implements MailClient {
             port: environment.MAIL_PORT,
             secure: false, // true for 465, false for other ports
             auth: {
-                user: environment.MAIL_USERNAME, // generated ethereal user
-                pass: environment.MAIL_PASSWORD // generated ethereal password
+                user: environment.MAIL_USERNAME, // ethereal user
+                pass: environment.MAIL_PASSWORD // ethereal password
             }
         });
     }
 
     /**
-     * @param subject string
-     * @param template string
-     * @param to string[]
+     * @param subject
+     * @param template
+     * @param params
      */
-    async send(subject: string, template: string, ...to: string[]): Promise<SentMessageInfo> {
-
+    public prepare(subject: string, template: string, params: Array<object>): MailClient {
         try {
-            //TODO: Refactor. This only for test
             const email = require('./emails/' + template);
 
-            // return console.log(email.HTML);
+            this.subject = subject;
 
-            this.info = await this.transporter.sendMail({
-                from: `"${environment.MAIL_FROM_NAME}" <${environment.MAIL_FROM_ADDRESS}>`, // sender address
-                to: to.toString(), // list of receivers
-                subject: subject, // Subject line
-                html: email.HTML // html body
-            });
+            //TODO: Refactor. Only for test (key val replace)
+            this.replaceTemplateKeys(email.HTML, params);
 
-            return this.info;
+            return this;
 
         } catch (e) {
-            throw new Error(`HTML TS template not exist in src/services/nodemailer/emails/${template}.ts`)
+
+            throw new Error(e.message)
         }
+    }
+
+    /**
+     * @param to
+     */
+    async send(...to: string[]): Promise<SentMessageInfo> {
+
+        if (!this.subject) {
+            throw new Error('subject mail transport is required')
+        }
+        if (!this.html) {
+            throw new Error('prepare function() is required before send()')
+        }
+
+        try {
+
+            return await this.transporter.sendMail({
+                from: `"${environment.MAIL_FROM_NAME}" <${environment.MAIL_FROM_ADDRESS}>`, // sender address
+                to: to.toString(), // list of receivers
+                subject: this.subject, // Subject line
+                html: this.html // html body
+            });
+
+        } catch (e) {
+
+            throw new Error(e.message)
+        }
+    }
+
+    /**
+     * Replace Native element in template
+     * @param template
+     * @param params
+     */
+    private replaceTemplateKeys(template: string, params: Array<object>): void {
+        params.forEach((element: object) => {
+            for (const [key, value] of Object.entries(element)) {
+
+                console.log(`{{${key}}}`);
+                console.log(value);
+
+                if (!template.includes(`{{${key}}}`)) {
+                    throw new Error(`Email ts template not include a local var named: {{${key}}}`)
+                }
+
+                this.html = template.replace(new RegExp(`{{${key}}}`, 'g'), value);
+            }
+        });
     }
 
 }

@@ -11,6 +11,9 @@ import {MailClient} from "../services/nodemailer/mail-service";
 import {SentMessageInfo} from "nodemailer";
 import {environment} from "../environments/environment";
 
+import uniqid from "uniqid";
+import {url} from "inspector";
+
 @model()
 export class MailerController {
     constructor(
@@ -57,7 +60,23 @@ export class MailerController {
             );
 
         // Send email (TEMPLATE LOCATE IN (src/services/nodemailer/emails/*) WITHOUT .TS)
-        return this.mailClient.send('✔ Conferma indirizzo @mail | ' + environment.appName, 'confirm', user.email)
+        // return this.mailClient.send(
+        //     '✔ Confirm e-mail address | ' + environment.appName,
+        //     'confirm',
+        //     [{
+        //         link: uniqid('mail-token')
+        //     }],
+        //     user.email,
+        // )
+
+        return this.mailClient.prepare(
+            '✔ Confirm e-mail address',
+            'confirm',
+            [
+                {link: url() + uniqid('mail-token')}
+            ]
+        ).send(user.email, user.email, user.email)
+
     }
 
 }
