@@ -210,28 +210,28 @@ export class UserController {
      | Here is where you can findById web users for your application.
      |
      */
-    @get('/users/{userId}', {
-        'x-visibility': 'undocumented',
-        security: OPERATION_SECURITY_SPEC,
-        responses: {
-            '200': {
-                description: 'User',
-                content: {
-                    'application/json': {
-                        schema: UserProfileSchema,
-                    },
-                },
-            },
-        },
-    })
-    @authenticate('jwt')
-    @authorize({
-        allowedRoles: ['admin', 'support', 'customer'],
-        voters: [basicAuthorization],
-    })
-    async findById(@param.path.string('userId') userId: string): Promise<User> {
-        return this.userRepository.findById(userId);
-    }
+    // @get('/users/{userId}', {
+    //     'x-visibility': 'undocumented',
+    //     security: OPERATION_SECURITY_SPEC,
+    //     responses: {
+    //         '200': {
+    //             description: 'User',
+    //             content: {
+    //                 'application/json': {
+    //                     schema: UserProfileSchema,
+    //                 },
+    //             },
+    //         },
+    //     },
+    // })
+    // @authenticate('jwt')
+    // @authorize({
+    //     allowedRoles: ['admin', 'support', 'customer'],
+    //     voters: [basicAuthorization],
+    // })
+    // async findById(@param.path.string('userId') userId: string): Promise<User> {
+    //     return this.userRepository.findById(userId);
+    // }
 
     /**
      |--------------------------------------------------------------------------
@@ -266,7 +266,6 @@ export class UserController {
     // ): Promise<void> {
     //     try {
     //
-    //         // TODO: Perform your action
     //         // Only admin can assign roles
     //         if (!currentUserProfile.roles.includes('admin')) {
     //             delete user.roles;

@@ -7,20 +7,23 @@ export const TwilioResponseSchema = {
         "body": {type: 'string'},
         "dateCreated": {type: 'string'},
         "dateUpdated": {type: 'string'},
-        "dateSent": null,
+        "dateSent": {type: 'string'},
         "direction": {type: 'string'},
-        "errorCode": null,
-        "errorMessage": null,
+        "errorCode": {type: 'string'},
+        "errorMessage": {type: 'string'},
         "from": {type: 'string'},
-        "messagingServiceSid": null,
-        "numMedia": "0",
-        "numSegments": "1",
-        "price": null,
+        "messagingServiceSid": {type: 'string'},
+        "numMedia": {type: 'integer'},
+        "numSegments": {type: 'integer'},
+        "price": {type: 'string'},
         "priceUnit": {type: 'string'},
         "sid": {type: 'string'},
         "status": {type: 'string'},
         "subresourceUris": {
-            "media": {type: 'string'}
+            type: 'object',
+            properties: {
+                "media": {type: 'string'}
+            }
         },
         "to": {type: 'string'},
         "uri": {type: 'string'}

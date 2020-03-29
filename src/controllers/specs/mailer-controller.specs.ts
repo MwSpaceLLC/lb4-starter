@@ -2,15 +2,18 @@ export const MailerResponseSchema = {
     description: 'Mailer Response Schema',
     type: 'object',
     properties: {
-        "accepted": {type: 'object'},
-        "rejected": {type: 'object'},
+        "accepted": {type: 'array', items: []},
+        "rejected": {type: 'array', items: []},
         "envelopeTime": {type: 'number'},
         "messageTime": {type: 'number'},
         "messageSize": {type: 'number'},
         "response": {type: 'string'},
         "envelope": {
-            "from": {type: 'string'},
-            "to": {type: 'object'}
+            type: 'object',
+            properties: {
+                "from": {type: 'string'},
+                "to": {type: 'array', items: []}
+            }
         },
         "messageId": {type: 'string'}
     }

@@ -8,9 +8,16 @@ export const UserProfileSchema = {
     type: 'object',
     required: ['id'],
     properties: {
-        id: {type: 'string'},
-        name: {type: 'string'},
-        email: {type: 'string'},
+        "id": {type: 'string'},
+        "email": {type: 'string'},
+        "email_verified": {type: 'string'},
+        "name": {type: 'string'},
+        "agreement": {type: 'boolean'},
+        "phoneCode": {type: 'string'},
+        "phone": {type: 'string'},
+        "phone_verified": {type: 'string'},
+        "status": {type: 'string'},
+        "roles": {type: 'array', items: []}
     },
 };
 
@@ -69,13 +76,22 @@ export const UserTokenResponseSchema = {
     description: 'User Token Response Schema',
     type: 'object',
     properties: {
-        'userProfile': {type: 'object'},
-        'token': {
+        "userProfile": {
             type: 'object',
             properties: {
-                'value': {type: 'string'},
-                'expiredAt': {type: 'string'}
+                "id": {type: 'string'},
+                "email": {type: 'string'},
+                "name": {type: 'string'},
+                "agreement": {type: 'boolean'},
+                "roles": {type: 'array', items: []}
+            },
+        },
+        "token": {
+            type: 'object',
+            properties: {
+                "value": {type: 'string'},
+                "expiredAt": {type: 'string'}
             }
         }
-    }
+    },
 };
