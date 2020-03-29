@@ -2,7 +2,7 @@
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/lb4-starter.png" width="100%">
 
-## Start with this package
+## Start with this package 😎 
 
 ###### Have you installed Node.js?
 
@@ -26,7 +26,12 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
     
 Fine! Please read official Doc at https://loopback.io/doc/en/lb4/    
 
-###### Package Futures pre-dev
+###### Disable Spec and Explorer (only rest server)
+    
+    openApiSpec: false,
+    apiExplorer: false,
+
+## Package Futures Compiled 🥶
 
 - auth https://github.com/strongloop
 - role https://github.com/strongloop
