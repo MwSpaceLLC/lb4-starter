@@ -86,9 +86,6 @@ export class MailService implements MailClient {
         params.forEach((element: object) => {
             for (const [key, value] of Object.entries(element)) {
 
-                console.log(`{{${key}}}`);
-                console.log(value);
-
                 if (!template.includes(`{{${key}}}`)) {
                     throw new Error(`Email ts template not include a local var named: {{${key}}}`)
                 }

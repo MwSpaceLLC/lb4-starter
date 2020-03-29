@@ -64,6 +64,7 @@ export class UserController {
      |
      */
     @post('/users/register', {
+        // 'x-visibility': 'undocumented',
         responses: {
             '200': {
                 description: 'User',
@@ -136,6 +137,7 @@ export class UserController {
      |
      */
     @post('/users/authenticate', {
+        // 'x-visibility': 'undocumented',
         responses: {
             '200': {
                 description: 'User Token Response',
@@ -176,6 +178,7 @@ export class UserController {
      |
      */
     @get('/users/me', {
+        // 'x-visibility': 'undocumented',
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {

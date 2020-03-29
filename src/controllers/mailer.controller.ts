@@ -1,4 +1,4 @@
-import {HttpErrors, get} from "@loopback/rest";
+import {HttpErrors, get, param} from "@loopback/rest";
 import {model, repository} from "@loopback/repository";
 import {OPERATION_SECURITY_SPEC} from "../utils/security-spec";
 import {authenticate} from "@loopback/authentication";
@@ -10,9 +10,8 @@ import {MailerResponseSchema} from "./specs/mailer-controller.specs";
 import {MailClient} from "../services/nodemailer/mail-service";
 import {SentMessageInfo} from "nodemailer";
 import {environment} from "../environments/environment";
-
+import {EmailTokenConfirmSchema} from './specs/mailer-controller.specs'
 import uniqid from "uniqid";
-import {url} from "inspector";
 
 @model()
 export class MailerController {
@@ -32,6 +31,7 @@ export class MailerController {
      |
      */
     @get('/email/verification', {
+        // 'x-visibility': 'undocumented',
         security: OPERATION_SECURITY_SPEC,
         responses: {
             '200': {
@@ -59,23 +59,57 @@ export class MailerController {
                 `User.email is required`,
             );
 
-        // Send email (TEMPLATE LOCATE IN (src/services/nodemailer/emails/*) WITHOUT .TS)
-        // return this.mailClient.send(
-        //     '✔ Confirm e-mail address | ' + environment.appName,
-        //     'confirm',
-        //     [{
-        //         link: uniqid('mail-token')
-        //     }],
-        //     user.email,
-        // )
+
+        const token = uniqid('token') + uniqid('') + uniqid('') + uniqid('') + uniqid('')
 
         return this.mailClient.prepare(
             '✔ Confirm e-mail address',
             'confirm',
             [
-                {link: url() + uniqid('mail-token')}
+                {link: `${environment.host}/email/confirmation/${token}`}
             ]
-        ).send(user.email, user.email, user.email)
+        ).send(user.email)
+
+    }
+
+    /**
+     |--------------------------------------------------------------------------
+     | Email Confirmation
+     |--------------------------------------------------------------------------
+     |
+     | Here is where you can Register Confirmation for your application.
+     |
+     */
+    @get('/email/confirmation/{token}', {
+        // 'x-visibility': 'undocumented',
+        security: OPERATION_SECURITY_SPEC,
+        responses: {
+            '200': {
+                description: 'User Confirmation Email Token',
+                content: {
+                    'application/json': {
+                        schema: EmailTokenConfirmSchema,
+                    },
+                },
+            },
+        },
+    })
+    @authenticate('jwt')
+    async emailConfirmation(
+        @param.path.string('token') userId: string,
+        @inject(SecurityBindings.USER)
+            currentUserProfile: UserProfile
+    ): Promise<object> {
+
+        const user = await this.userRepository.findById(
+            currentUserProfile[securityId]
+        );
+
+        console.log(user);
+
+        return {
+            success: true
+        }
 
     }
 

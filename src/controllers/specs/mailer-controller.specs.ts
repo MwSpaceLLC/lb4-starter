@@ -18,3 +18,9 @@ export const MailerResponseSchema = {
         "messageId": {type: 'string'}
     }
 };
+
+export const EmailTokenConfirmSchema = {
+    description: 'Credentials Schema',
+    type: 'object',
+    properties: {},
+};
