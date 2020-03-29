@@ -25,12 +25,12 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
     src/environment/environment.example.ts => environment.ts || environment.ts 
 
-#### Package Futures pre-dev
+###### Package Futures pre-dev
 
 - auth https://github.com/strongloop
 - role https://github.com/strongloop
 
-#### sms [message] https://github.com/twilio/twilio-node 🎇
+###### sms [message] https://github.com/twilio/twilio-node 🎇
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/IMG_0581_AUTHMSG.jpg" width="35%">
 
@@ -42,7 +42,7 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
               'lb4-starter'
           )
 
-#### mail [template] https://github.com/nodemailer/nodemailer 🎇
+###### mail [template] https://github.com/nodemailer/nodemailer 🎇
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mail-template-function.png" width="50%">
 
