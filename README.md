@@ -19,7 +19,7 @@ Install package and vendor:
 
 #### sms [message] https://github.com/twilio/twilio-node 🎇
 
-<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/IMG_0581_AUTHMSG.jpg" width="50%">
+<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/IMG_0581_AUTHMSG.jpg" width="35%">
 
 ##### @inject(MailServiceBindings.MAIL_CLIENT)
     
