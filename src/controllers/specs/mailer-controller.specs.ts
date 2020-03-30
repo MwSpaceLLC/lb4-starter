@@ -20,7 +20,7 @@ export const MailerResponseSchema = {
 };
 
 export const EmailTokenConfirmSchema = {
-    description: 'Credentials Schema',
+    description: 'Email Token Confirm Schema Schema',
     type: 'object',
     properties: {
         "token": true,

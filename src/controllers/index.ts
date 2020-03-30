@@ -4,4 +4,4 @@
 // License text available at https://opensource.org/licenses/MIT
 
 export * from './user.controller';
-export * from './sms.controller';
+export * from './phone.controller';

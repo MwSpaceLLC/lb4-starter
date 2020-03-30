@@ -29,3 +29,12 @@ export const TwilioResponseSchema = {
         "uri": {type: 'string'}
     }
 };
+
+// TODO: complete this
+export const PhoneCodeConfirmSchema = {
+    description: 'Phone Code Confirm Schema',
+    type: 'object',
+    properties: {
+        "status": {type: 'boolean'},
+    },
+};
