@@ -22,5 +22,20 @@ export const MailerResponseSchema = {
 export const EmailTokenConfirmSchema = {
     description: 'Credentials Schema',
     type: 'object',
-    properties: {},
+    properties: {
+        "token": true,
+        "hash": {
+            type: 'array',
+            items: [
+                {
+                    type: 'object',
+                    properties: {
+                        "id": {type: 'string'},
+                        "hash": {type: 'string'},
+                        "userId": {type: 'string'}
+                    }
+                }
+            ]
+        }
+    },
 };

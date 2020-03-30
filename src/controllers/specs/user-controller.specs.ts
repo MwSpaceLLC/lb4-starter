@@ -10,12 +10,12 @@ export const UserProfileSchema = {
     properties: {
         "id": {type: 'string'},
         "email": {type: 'string'},
-        "email_verified": {type: 'string'},
+        "emailVerified": {type: 'string'},
         "name": {type: 'string'},
         "agreement": {type: 'boolean'},
         "phoneCode": {type: 'string'},
         "phone": {type: 'string'},
-        "phone_verified": {type: 'string'},
+        "phoneVerified": {type: 'string'},
         "status": {type: 'string'},
         // "roles": {type: 'array', items: []}
     },

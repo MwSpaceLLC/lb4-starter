@@ -3,9 +3,10 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {Entity, model, property, hasOne} from '@loopback/repository';
+import {Entity, model, property, hasOne, hasMany} from '@loopback/repository';
 
 import {UserCredentials} from './user-credentials.model';
+import {UserTokens} from './user-tokens.model';
 
 @model({
     settings: {
@@ -40,7 +41,7 @@ export class User extends Entity {
         type: 'date',
         required: false,
     })
-    email_verified: string;
+    emailVerified: Date;
 
     @property({
         type: 'string',
@@ -70,7 +71,7 @@ export class User extends Entity {
         type: 'date',
         required: false,
     })
-    phone_verified: string;
+    phoneVerified: Date;
 
     @property({
         type: 'string',
@@ -86,6 +87,9 @@ export class User extends Entity {
         itemType: 'string',
     })
     roles?: string[];
+
+    @hasMany(() => UserTokens)
+    userTokens: UserTokens[];
 
     constructor(data?: Partial<User>) {
         super(data);

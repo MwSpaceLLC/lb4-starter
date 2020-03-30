@@ -59,15 +59,26 @@ export class MailerController {
                 `User.email is required`,
             );
 
+        const token =
+            uniqid('email-') +
+            uniqid('') +
+            uniqid('') +
+            uniqid('') +
+            uniqid('');
 
-        const token = uniqid('token') + uniqid('') + uniqid('') + uniqid('') + uniqid('')
+        // TODO: Change with your server or perform your action
+        const link = `http://${environment.host}:${environment.port}/email/confirmation/${token}`;
+
+        await this.userRepository.userTokens(
+            currentUserProfile[securityId]
+        ).create({
+            hash: token
+        });
 
         return this.mailClient.prepare(
             '✔ Confirm e-mail address',
             'confirm',
-            [
-                {link: `//${environment.host}/email/confirmation/${token}`}
-            ]
+            [{link: link}]
         ).send(user.email)
 
     }
@@ -96,19 +107,31 @@ export class MailerController {
     })
     @authenticate('jwt')
     async emailConfirmation(
-        @param.path.string('token') userId: string,
+        @param.path.string('token') token: string,
         @inject(SecurityBindings.USER)
             currentUserProfile: UserProfile
     ): Promise<object> {
 
-        const user = await this.userRepository.findById(
+        const find = await this.userRepository.userTokens(
             currentUserProfile[securityId]
+        ).find({where: {hash: token}});
+
+        if (!find.length) {
+            return {token: false}
+        }
+
+        // Update user model with email verified
+        await this.userRepository.updateById(
+            currentUserProfile[securityId],
+            {
+                emailVerified: new Date()
+            }
         );
 
-        console.log(user);
-
+        // Email token confirm has valid
         return {
-            success: true
+            token: true,
+            hash: find
         }
 
     }
