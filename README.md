@@ -74,16 +74,14 @@ export const environment = {
     
     npm install && npm run pretest && npm start
     
-Fine! Please read official Doc at https://loopback.io/doc/en/lb4/
+Fine! Please before start read official [Loopback Documentation](https://loopback.io/doc/en/lb4/Inside-LoopBack-Application.html)
  
-## Package Futures Compiled 🥶
+## Package Futures Included 🥶
 
 - auth https://github.com/strongloop
 - role https://github.com/strongloop
 
-###### sms [message] https://github.com/twilio/twilio-node 🎇
-
-<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/IMG_0581_AUTHMSG.jpg" width="35%">
+* sms [message] https://github.com/twilio/twilio-node 🎇 | [DEMO](https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/IMG_0581_AUTHMSG.jpg)
 
 ##### @inject(TwilioServiceBindings.TWILIO_CLIENT)
     
@@ -96,9 +94,7 @@ twilioClient.send(
 ```
 
 
-###### mail [template] https://github.com/nodemailer/nodemailer 🎇
-
-<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mail-template-function.png" width="50%">
+###### mail [template management] https://github.com/nodemailer/nodemailer 🎇 | | [DEMO](https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mail-template-function.png)
 
 ##### @inject(MailServiceBindings.MAIL_CLIENT)
 
@@ -112,5 +108,3 @@ mailClient.prepare(
 ```
     
 - stripe https://github.com/stripe/stripe-node
-
-        // in dev
