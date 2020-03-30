@@ -7,6 +7,5 @@
   "user": "",
   "password": "",
   "database": "lb4-starter",
-  "useNewUrlParser": true,
-  "useUnifiedTopology": true
+  "useNewUrlParser": true
 }

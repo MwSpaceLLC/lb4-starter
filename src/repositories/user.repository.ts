@@ -4,11 +4,12 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {Getter, inject} from '@loopback/core';
+import {MongoDataSource} from '../datasources';
 import {
     DefaultCrudRepository,
     HasOneRepositoryFactory,
-    juggler,
-    repository, HasManyRepositoryFactory
+    repository,
+    HasManyRepositoryFactory
 } from '@loopback/repository';
 
 import {User, UserCredentials, UserTokens} from '../models';
@@ -34,7 +35,7 @@ export class UserRepository extends DefaultCrudRepository<User, typeof User.prot
     public readonly userTokens: HasManyRepositoryFactory<UserTokens, typeof User.prototype.id>;
 
     constructor(
-        @inject('datasources.mongo') dataSource: juggler.DataSource,
+        @inject('datasources.mongo') dataSource: MongoDataSource,
         @repository.getter('UserCredentialsRepository')
         protected userCredentialsRepositoryGetter: Getter<UserCredentialsRepository>,
         @repository.getter('UserTokensRepository')
@@ -42,15 +43,11 @@ export class UserRepository extends DefaultCrudRepository<User, typeof User.prot
     ) {
         super(User, dataSource);
 
-        this.userTokens = this.createHasManyRepositoryFactoryFor(
-            'userTokens',
-            userTokensRepositoryGetter
-        );
+        this.userTokens = this.createHasManyRepositoryFactoryFor('userTokens', userTokensRepositoryGetter);
+        this.registerInclusionResolver('userTokens', this.userTokens.inclusionResolver);
 
-        this.userCredentials = this.createHasOneRepositoryFactoryFor(
-            'userCredentials',
-            userCredentialsRepositoryGetter,
-        );
+        this.userCredentials = this.createHasOneRepositoryFactoryFor('userCredentials', userCredentialsRepositoryGetter);
+        this.registerInclusionResolver('userCredentials', this.userCredentials.inclusionResolver);
     }
 
     async findCredentials(
