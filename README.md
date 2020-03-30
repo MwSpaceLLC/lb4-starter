@@ -93,8 +93,7 @@ twilioClient.send(
   )
 ```
 
-
-###### mail [template management] https://github.com/nodemailer/nodemailer 🎇 | | [DEMO](https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mail-template-function.png)
+* mail [template management] https://github.com/nodemailer/nodemailer 🎇 | | [DEMO](https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mail-template-function.png)
 
 ##### @inject(MailServiceBindings.MAIL_CLIENT)
 
