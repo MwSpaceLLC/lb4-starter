@@ -20,17 +20,62 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
     mv src/environments/environment.example.ts src/environments/environment.ts
 
+```javascript
+export const environment = {
+    appName: 'lb4-starter',
+    production: false,
+    version: '0.9.0-alpha',
+
+    //Rest Server Configuration
+    host: '127.0.0.1',
+    port: 3030,
+    openApiSpec: true,
+
+    //Rest Server Configuration
+    apiExplorer: true,
+    apiSelfHostedSpec: true,
+    apiExplorerPath: '/explorer',
+
+    //Sdk Configuration
+    twilio: {
+        accountSid: '',
+        authToken: '',
+        sender: ''
+    },
+    stripe: {
+        publicKey: '',
+        privateKey: '',
+    },
+
+    //Mail Configuration
+    MAIL_MAILER: 'smtp',
+    MAIL_HOST: 'smtp.mailtrap.io',
+    MAIL_PORT: 2525,
+    MAIL_USERNAME: '',
+    MAIL_PASSWORD: '',
+    MAIL_ENCRYPTION: null,
+    MAIL_FROM_ADDRESS: 'no-reply@lb4-starter.git',
+    MAIL_FROM_NAME: 'lb4-starter',
+
+    //Other Configurations
+    TIME_ZONE: 'Europe/Rome',
+    LOCALE: 'it',
+    LANG: 'it',
+    FAIL_LANG: 'en',
+    DATE_FORMAT: 'DD/MM/YYYY',
+
+    // JWT Configuration
+    TOKEN_SECRET: 'mySecretLabel',
+    TOKEN_EXPIRES: '14400',
+};
+```
+
 ###### Install package and vendor:
     
     npm install && npm run pretest && npm start
     
-Fine! Please read official Doc at https://loopback.io/doc/en/lb4/    
-
-###### Disable Spec and Explorer (only rest server)
-    
-    openApiSpec: false,
-    apiExplorer: false,
-
+Fine! Please read official Doc at https://loopback.io/doc/en/lb4/
+ 
 ## Package Futures Compiled 🥶
 
 - auth https://github.com/strongloop
@@ -42,25 +87,30 @@ Fine! Please read official Doc at https://loopback.io/doc/en/lb4/
 
 ##### @inject(TwilioServiceBindings.TWILIO_CLIENT)
     
-        twilioClient.send(
-            user.phone,
-             '✔ Welcome Message | AUTHMSG',
-              'lb4-starter'
-          )
+```javascript
+twilioClient.send(
+    user.phone,
+     '✔ Welcome Message | AUTHMSG',
+      'lb4-starter'
+  )
+```
+
 
 ###### mail [template] https://github.com/nodemailer/nodemailer 🎇
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mail-template-function.png" width="50%">
 
 ##### @inject(MailServiceBindings.MAIL_CLIENT)
-    
-    mailClient.prepare(
-        '✔ Confirm e-mail address', << SUBJECT
-        'confirm', << HTML TEMPLATE
-       [{link: uniqid('mail-token')}]  << PARAMS {{var}}
-    )
-        .send(user.email,'another@mail.com','another@mail.it')
 
+```javascript
+mailClient.prepare(
+    '✔ Confirm e-mail address', // SUBJECT
+    'confirm', // HTML TEMPLATE src/services/nodemailer/emails/confirm.ts
+   [{link: uniqid('mail-token')}]  // HTML PARAM {{link}}
+)
+    .send(user.email,'another@mail.com','another@mail.it')
+```
+    
 - stripe https://github.com/stripe/stripe-node
 
         // in dev
