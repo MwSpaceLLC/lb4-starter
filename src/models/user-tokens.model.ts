@@ -9,8 +9,7 @@ import {Entity, model, property} from '@loopback/repository';
 export class UserTokens extends Entity {
     @property({
         type: 'string',
-        id: true,
-        mongodb: {dataType: 'ObjectID'},
+        id: true
     })
     id: string;
 

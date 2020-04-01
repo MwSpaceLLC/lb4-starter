@@ -26,8 +26,7 @@ import {UserTokens} from './user-tokens.model';
 export class User extends Entity {
     @property({
         type: 'string',
-        id: true,
-        mongodb: {dataType: 'ObjectID'},
+        id: true
     })
     id: string;
 
@@ -54,6 +53,11 @@ export class User extends Entity {
         required: true,
     })
     agreement?: boolean;
+
+    @property({
+        type: 'string',
+    })
+    plan?: string;
 
     @property({
         type: 'string',

@@ -13,6 +13,10 @@ export const environment = {
     apiSelfHostedSpec: true,
     apiExplorerPath: '/explorer',
 
+    //Application Front End Configuration
+    endpoint: 'localhost',
+    endpointPort: 4200,
+
     //Sdk Configuration
     twilio: {
         accountSid: '',

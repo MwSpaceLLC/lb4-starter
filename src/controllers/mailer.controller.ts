@@ -67,7 +67,7 @@ export class MailerController {
             uniqid('');
 
         // TODO: Change with your server or perform your action
-        const link = `http://${environment.host}:${environment.port}/email/confirmation/${token}`;
+        const link = `http://${environment.endpoint}:${environment.endpointPort}/confirm/email/${token}`;
 
         await this.userRepository.userTokens(
             currentUserProfile[securityId]
