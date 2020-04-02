@@ -210,7 +210,7 @@ export class PhoneController {
                 }
             });
 
-        if (!codeVerify) {
+        if (!codeVerify.length) {
             // TODO: U also update or change this for perform.
             // For us, This is fasted method to check also 1 code
             // And bypass other many Errors in sql schema Relation
@@ -243,7 +243,7 @@ export class PhoneController {
         );
 
 
-        // Email token confirm has valid
+        // Phone code confirm has valid
         return {
             userProfile: userSelect,
             code: codeVerify
