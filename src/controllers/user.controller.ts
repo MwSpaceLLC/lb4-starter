@@ -157,12 +157,17 @@ export class UserController {
 
         const uid = this.userService.convertToUserProfile(user)[securityId];
 
-        // Update User Repository statos => OAUTH
-        await this.userRepository.updateById(uid,
-            {
-                status: 'oauth'
-            }
-        );
+        const find = await this.userRepository.findById(uid);
+
+        // User have phone register and force oauth
+        if (find.phone && find.phoneCode) {
+            // Update User Repository statos => OAUTH
+            await this.userRepository.updateById(uid,
+                {
+                    status: 'oauth'
+                }
+            );
+        }
 
         return {
             userProfile: user,
