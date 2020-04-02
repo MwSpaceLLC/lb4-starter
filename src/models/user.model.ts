@@ -7,6 +7,7 @@ import {Entity, model, property, hasOne, hasMany} from '@loopback/repository';
 
 import {UserCredentials} from './user-credentials.model';
 import {UserTokens} from './user-tokens.model';
+import {UserCodes} from './user-codes.model';
 
 @model({
     settings: {
@@ -94,6 +95,9 @@ export class User extends Entity {
 
     @hasMany(() => UserTokens)
     userTokens: UserTokens[];
+
+  @hasMany(() => UserCodes)
+  userCodes: UserCodes[];
 
     constructor(data?: Partial<User>) {
         super(data);

@@ -69,6 +69,12 @@ export class MailerController {
         // TODO: Change with your server or perform your action
         const link = `http://${environment.endpoint}:${environment.endpointPort}/confirm/email/${token}`;
 
+        // TODO: U also update or change this for perform.
+        // For us, This is fasted method to check also 1 code
+        // And bypass other many Errors in sql schema Relation
+        // Delete all Codes in User Repository Relation
+        await this.userRepository.userTokens(currentUserProfile[securityId]).delete();
+
         await this.userRepository.userTokens(
             currentUserProfile[securityId]
         ).create({

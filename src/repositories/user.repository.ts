@@ -12,10 +12,11 @@ import {
     HasManyRepositoryFactory
 } from '@loopback/repository';
 
-import {User, UserCredentials, UserTokens} from '../models';
+import {User, UserCredentials, UserTokens, UserCodes} from '../models';
 
 import {UserCredentialsRepository} from './user-credentials.repository';
 import {UserTokensRepository} from './user-tokens.repository';
+import {UserCodesRepository} from './user-codes.repository';
 
 export type Credentials = {
     email: string;
@@ -34,14 +35,20 @@ export class UserRepository extends DefaultCrudRepository<User, typeof User.prot
 
     public readonly userTokens: HasManyRepositoryFactory<UserTokens, typeof User.prototype.id>;
 
+    public readonly userCodes: HasManyRepositoryFactory<UserCodes, typeof User.prototype.id>;
+
     constructor(
         @inject('datasources.mongo') dataSource: MongoDataSource,
         @repository.getter('UserCredentialsRepository')
         protected userCredentialsRepositoryGetter: Getter<UserCredentialsRepository>,
         @repository.getter('UserTokensRepository')
         protected userTokensRepositoryGetter: Getter<UserTokensRepository>,
+        @repository.getter('UserCodesRepository')
+        protected userCodesRepositoryGetter: Getter<UserCodesRepository>,
     ) {
         super(User, dataSource);
+        this.userCodes = this.createHasManyRepositoryFactoryFor('userCodes', userCodesRepositoryGetter);
+        this.registerInclusionResolver('userCodes', this.userCodes.inclusionResolver);
 
         this.userTokens = this.createHasManyRepositoryFactoryFor('userTokens', userTokensRepositoryGetter);
         this.registerInclusionResolver('userTokens', this.userTokens.inclusionResolver);

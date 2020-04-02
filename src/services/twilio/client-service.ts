@@ -6,9 +6,9 @@ const twilio = require('twilio');
 export interface TwilioClient<T = string> {
     send(to: T, body: T, SENDER?: string | null): Promise<void | object>;
 
-    sendAuthCode(to: T): Promise<void | object>;
+    sendAuthCode(to: T, code?: T): Promise<void | object>;
 
-    authCode(): string;
+    randCode(): string;
 }
 
 export class TwilioServices implements TwilioClient {
@@ -50,11 +50,12 @@ export class TwilioServices implements TwilioClient {
 
 
     /**
-     * @param to
+     * @param to string
+     * @param code string
      */
-    async sendAuthCode(to: string): Promise<void | object> {
+    async sendAuthCode(to: string, code?: string): Promise<void | object> {
         return this.client.messages.create({
-            body: this.authCode() + ' è il codice di verifica per ' + environment.appName,
+            body: (code ? code : this.randCode()) + ' è il codice di verifica per ' + environment.appName,
             to: to,
             from: 'AUTHMSG'
         })
@@ -73,7 +74,7 @@ export class TwilioServices implements TwilioClient {
             });
     }
 
-    authCode() {
+    randCode() {
         return Math.floor(
             Math.random() * (11 - 99) + 99
         ) + ' ' + Math.floor(
