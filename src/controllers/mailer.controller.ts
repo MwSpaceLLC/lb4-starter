@@ -124,7 +124,7 @@ export class MailerController {
 
         if (!find.length) {
             throw new HttpErrors.UnprocessableEntity(
-                `Token not in User Interface required`,
+                `Token noon valido o scaduto`,
             );
         }
 
