@@ -155,6 +155,15 @@ export class UserController {
         // ensure the user exists, and the password is correct
         const user = await this.userService.verifyCredentials(credentials);
 
+        const uid = this.userService.convertToUserProfile(user)[securityId];
+
+        // Update User Repository statos => OAUTH
+        await this.userRepository.updateById(uid,
+            {
+                status: 'oauth'
+            }
+        );
+
         return {
             userProfile: user,
             token: {

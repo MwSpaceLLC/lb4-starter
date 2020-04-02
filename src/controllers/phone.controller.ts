@@ -14,6 +14,7 @@ import {
     TwilioResponseSchema
 } from "./specs/twilio-controller.specs";
 import {PhoneRegister} from "./interfaces/phone.interface";
+import _ from "lodash";
 
 @model()
 // TODO: Refactor many function in this class (clear code)
@@ -63,6 +64,13 @@ export class PhoneController {
         // Select User Repository
         const user = this.userRepository;
 
+        const find = await user.findById(uid);
+
+        // Compare user Phone if Exist
+        if (find.phone === phoneRegister.phone) {
+            throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
+        }
+
         try {
 
             // Update User Repository
@@ -105,6 +113,7 @@ export class PhoneController {
 
                 // Twilio catch number verification
             } else if (error.code === 21211) {
+
                 throw new HttpErrors.UnprocessableEntity(
                     `Il numero di telefono non è valido`,
                 );
@@ -169,13 +178,29 @@ export class PhoneController {
                 random: rndCode.replace(/\s+/g, '')
             });
 
-        // Send Code To User Phone
-        const sendAuthMsg = await this.twilioClient.sendAuthCode(
-            userSelect.phoneCode + userSelect.phone,
-            rndCode
-        );
+        try {
+            // Send Code To User Phone
+            const sendAuthMsg = await this.twilioClient.sendAuthCode(
+                userSelect.phoneCode + userSelect.phone,
+                rndCode
+            );
 
-        return sendAuthMsg;
+            return sendAuthMsg;
+
+        } catch (error) {
+            // Twilio catch number verification
+            if (error.code === 21211) {
+
+                throw new HttpErrors.UnprocessableEntity(
+                    `Il numero di telefono non è valido`,
+                );
+            } else {
+                throw error;
+            }
+
+        }
+
+
     }
 
     /**
@@ -254,13 +279,13 @@ export class PhoneController {
 
         }
 
-        // Update User Repository Phone Verified
+        // Update User Repository Phone Verified+status
         await this.userRepository.updateById(uid,
             {
+                status: 'enable',
                 phoneVerified: new Date()
             }
         );
-
 
         // Phone code confirm has valid
         return {
