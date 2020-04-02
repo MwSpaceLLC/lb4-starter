@@ -63,36 +63,45 @@ export class PhoneController {
         // Select User Repository
         const user = this.userRepository;
 
-        // Update User Repository
-        await user.updateById(uid,
-            phoneRegister
-        );
+        try {
 
-        // Select User Repository
-        const userSelect = await user.findById(uid);
+            //  TODO: Perform Twilio Sender Number Verification
+            // Send Code To User Phone
+            const sendAuthMsg = await this.twilioClient.sendAuthCode(
+                phoneRegister.phoneCode + phoneRegister.phone,
+                rndCode
+            );
 
-        // TODO: U also update or change this for perform.
-        // For us, This is fasted method to check also 1 code
-        // And bypass other many Errors in sql schema Relation
-        // Delete all Codes in User Repository Relation
-        await this.userRepository.userCodes(uid).delete();
+            // Update User Repository
+            await user.updateById(uid,
+                phoneRegister
+            );
 
-        // Add Code To User Repository Relation
-        await this.userRepository.userCodes(uid)
-            .create({
-                random: rndCode
-            });
+            // Select User Repository
+            const userSelect = await user.findById(uid);
 
-        // Send Code To User Phone
-        const sendAuthMsg = await this.twilioClient.sendAuthCode(
-            userSelect.phoneCode + userSelect.phone,
-            rndCode
-        );
+            // TODO: U also update or change this for perform.
+            // For us, This is fasted method to check also 1 code
+            // And bypass other many Errors in sql schema Relation
+            // Delete all Codes in User Repository Relation
+            await this.userRepository.userCodes(uid).delete();
 
-        return {
-            oauth: sendAuthMsg,
-            userProfile: userSelect
-        };
+            // Add Code To User Repository Relation
+            await this.userRepository.userCodes(uid)
+                .create({
+                    random: rndCode
+                });
+
+            return {
+                oauth: sendAuthMsg,
+                userProfile: userSelect
+            };
+
+        } catch (e) {
+            throw new HttpErrors.UnprocessableEntity(
+                `Il numero di telefono non è valido`,
+            );
+        }
 
     }
 

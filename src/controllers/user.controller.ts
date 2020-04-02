@@ -197,9 +197,19 @@ export class UserController {
             currentUserProfile: UserProfile,
     ): Promise<User> {
 
-        return this.userRepository.findById(
-            currentUserProfile[securityId]
-        );
+        try {
+            const userProfile = await this.userRepository.findById(
+                currentUserProfile[securityId]
+            );
+
+            return userProfile;
+
+        } catch (e) {
+            throw new HttpErrors.Unauthorized(
+                `Utente Non trovato nel sistema`,
+            );
+
+        }
     }
 
     /**
