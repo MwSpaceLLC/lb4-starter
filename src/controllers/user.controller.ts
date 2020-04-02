@@ -156,43 +156,14 @@ export class UserController {
         @requestBody(CredentialsRequestBody) credentials: Credentials,
     ): Promise<UserTokenResponse> {
         // ensure the user exists, and the password is correct
-        const user = await this.userService.verifyCredentials(credentials);
+        let user = await this.userService.verifyCredentials(credentials);
 
         const uid = this.userService.convertToUserProfile(user)[securityId];
 
-        const find = await this.userRepository.findById(uid);
-
-        // TODO: THIS MUST REFACTOR. ONLY FOR DEV
-        // User have phone register and force oauth
-        if (find.phone && find.phoneCode) {
-
-            // Random code for the User
-            const rndCode = this.twilioClient.randCode();
-
-            // TODO: U also update or change this for perform.
-            // For us, This is fasted method to check also 1 code
-            // And bypass other many Errors in sql schema Relation
-            // Delete all Codes in User Repository Relation
-            await this.userRepository.userCodes(uid).delete();
-
-            // Add Code To User Repository Relation
-            await this.userRepository.userCodes(uid)
-                .create({
-                    random: rndCode.replace(/\s+/g, '')
-                });
-
-            // Re-Send Code To User Phone
-            await this.twilioClient.sendAuthCode(
-                find.phoneCode + find.phone,
-                rndCode
-            );
-
-            // Update User Repository statos => OAUTH
-            await this.userRepository.updateById(uid,
-                {
-                    status: 'oauth'
-                }
-            );
+        if (environment.loginAuthMsg) {
+            await this.loginSendAuthMsg(uid);
+            // Force to override user data
+            user = await this.userRepository.findById(uid);
         }
 
         return {
@@ -254,78 +225,50 @@ export class UserController {
 
     /**
      |--------------------------------------------------------------------------
-     | findById User ID
+     | Auth Chek User ID TODO: Must Refactor
      |--------------------------------------------------------------------------
      |
-     | Here is where you can findById web users for your application.
+     | Here is where you can Auth Chek web Login users for your application.
      |
      */
-    // @get('/users/{userId}', {
-    //     'x-visibility': 'undocumented',
-    //     security: OPERATION_SECURITY_SPEC,
-    //     responses: {
-    //         '200': {
-    //             description: 'User',
-    //             content: {
-    //                 'application/json': {
-    //                     schema: UserProfileSchema,
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
-    // @authenticate('jwt')
-    // @authorize({
-    //     allowedRoles: ['admin', 'support', 'customer'],
-    //     voters: [basicAuthorization],
-    // })
-    // async findById(@param.path.string('userId') userId: string): Promise<User> {
-    //     return this.userRepository.findById(userId);
-    // }
+    private async loginSendAuthMsg(uid: string) {
 
-    /**
-     |--------------------------------------------------------------------------
-     | updateById User ID
-     |--------------------------------------------------------------------------
-     |
-     | Here is where you can updateById web users for your application.
-     |
-     */
-    // @put('/users/{userId}', {
-    //     'x-visibility': 'undocumented',
-    //     security: OPERATION_SECURITY_SPEC,
-    //     responses: {
-    //         '200': {
-    //             description: 'User',
-    //             content: {
-    //                 'application/json': {
-    //                     schema: {
-    //                         'x-ts-type': User,
-    //                     },
-    //                 },
-    //             },
-    //         },
-    //     },
-    // })
-    // @authenticate('jwt')
-    // async set(
-    //     @inject(SecurityBindings.USER)
-    //         currentUserProfile: UserProfile,
-    //     @param.path.string('userId') userId: string,
-    //     @requestBody({description: 'update user'}) user: User,
-    // ): Promise<void> {
-    //     try {
-    //
-    //         // Only admin can assign roles
-    //         if (!currentUserProfile.roles.includes('admin')) {
-    //             delete user.roles;
-    //         }
-    //
-    //         return await this.userRepository.updateById(userId, user);
-    //     } catch (e) {
-    //         return e;
-    //     }
-    // }
+        const find = await this.userRepository.findById(uid);
+
+        // User have phone register and force oauth
+        if (find.phone && find.phoneCode) {
+
+            // Random code for the User
+            const rndCode = this.twilioClient.randCode();
+
+            // TODO: U also update or change this for perform.
+            // For us, This is fasted method to check also 1 code
+            // And bypass other many Errors in sql schema Relation
+            // Delete all Codes in User Repository Relation
+            await this.userRepository.userCodes(uid).delete();
+
+            // Add Code To User Repository Relation
+            await this.userRepository.userCodes(uid)
+                .create({
+                    random: rndCode.replace(/\s+/g, '')
+                });
+
+            // Re-Send Code To User Phone
+            await this.twilioClient.sendAuthCode(
+                find.phoneCode + find.phone,
+                rndCode
+            );
+
+            // Update User Repository statos => OAUTH
+            await this.userRepository.updateById(uid,
+                {
+                    status: 'oauth'
+                }
+            );
+        }
+
+        return find;
+    }
 
 
 }
