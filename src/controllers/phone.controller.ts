@@ -72,30 +72,43 @@ export class PhoneController {
                 rndCode
             );
 
-            // Update User Repository
-            await user.updateById(uid,
-                phoneRegister
-            );
+            try {
 
-            // Select User Repository
-            const userSelect = await user.findById(uid);
+                // Update User Repository
+                await user.updateById(uid,
+                    phoneRegister
+                );
 
-            // TODO: U also update or change this for perform.
-            // For us, This is fasted method to check also 1 code
-            // And bypass other many Errors in sql schema Relation
-            // Delete all Codes in User Repository Relation
-            await this.userRepository.userCodes(uid).delete();
+                // Select User Repository
+                const userSelect = await user.findById(uid);
 
-            // Add Code To User Repository Relation
-            await this.userRepository.userCodes(uid)
-                .create({
-                    random: rndCode
-                });
+                // TODO: U also update or change this for perform.
+                // For us, This is fasted method to check also 1 code
+                // And bypass other many Errors in sql schema Relation
+                // Delete all Codes in User Repository Relation
+                await this.userRepository.userCodes(uid).delete();
 
-            return {
-                oauth: sendAuthMsg,
-                userProfile: userSelect
-            };
+                // Add Code To User Repository Relation
+                await this.userRepository.userCodes(uid)
+                    .create({
+                        random: rndCode
+                    });
+
+                return {
+                    oauth: sendAuthMsg,
+                    userProfile: userSelect
+                };
+
+            } catch (e) {
+
+                // MongoError 11000 duplicate key
+                if (e.code === 11000 && e.errmsg.includes('index: uniquePhone')) {
+                    throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
+                } else {
+                    throw e;
+                }
+            }
+
 
         } catch (e) {
             throw new HttpErrors.UnprocessableEntity(

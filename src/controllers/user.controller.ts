@@ -121,7 +121,7 @@ export class UserController {
         } catch (error) {
             // MongoError 11000 duplicate key
             if (error.code === 11000 && error.errmsg.includes('index: uniqueEmail')) {
-                throw new HttpErrors.Conflict('Indirizzo email presente nel sistema');
+                throw new HttpErrors.Conflict('Indirizzo email già in uso nel sistema');
             } else {
                 throw error;
             }

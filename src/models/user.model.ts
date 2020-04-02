@@ -21,6 +21,14 @@ import {UserCodes} from './user-codes.model';
                     unique: true,
                 },
             },
+            uniquePhone: {
+                keys: {
+                    phone: 1,
+                },
+                options: {
+                    unique: true,
+                },
+            },
         },
     },
 })
@@ -96,8 +104,8 @@ export class User extends Entity {
     @hasMany(() => UserTokens)
     userTokens: UserTokens[];
 
-  @hasMany(() => UserCodes)
-  userCodes: UserCodes[];
+    @hasMany(() => UserCodes)
+    userCodes: UserCodes[];
 
     constructor(data?: Partial<User>) {
         super(data);
