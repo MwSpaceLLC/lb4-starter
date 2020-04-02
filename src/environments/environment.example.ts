@@ -3,15 +3,18 @@ export const environment = {
     production: false,
     version: '0.9.0-alpha',
 
+    //App Configuration
+    loginAuthMsg: false,
+
     //Rest Server Configuration
     host: '127.0.0.1',
-    port: 3030,
+    port: 3000,
     openApiSpec: true,
 
     //Rest Server Configuration
     apiExplorer: true,
     apiSelfHostedSpec: true,
-    apiExplorerPath: '/explorer',
+    apiExplorerPath: '/graph',
 
     //Application Front End Configuration
     endpoint: 'localhost',
