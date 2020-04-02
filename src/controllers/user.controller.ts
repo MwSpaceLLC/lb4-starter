@@ -32,7 +32,7 @@ import {PasswordHasher} from '../services/hash.password.bcryptjs';
 import {
     TokenServiceBindings,
     PasswordHasherBindings,
-    UserServiceBindings,
+    UserServiceBindings, TwilioServiceBindings,
 } from '../keys';
 import _ from 'lodash';
 
@@ -42,6 +42,7 @@ import moment from 'moment';
 import {NewUserRequest, UserTokenResponse} from "./interfaces/user.interface";
 
 import uniqid from "uniqid";
+import {TwilioClient} from "../services/twilio/client-service";
 
 export class UserController {
     constructor(
@@ -52,6 +53,8 @@ export class UserController {
         public jwtService: TokenService,
         @inject(UserServiceBindings.USER_SERVICE)
         public userService: UserService<User, Credentials>,
+        @inject(TwilioServiceBindings.TWILIO_CLIENT)
+        public twilioClient: TwilioClient,
     ) {
     }
 
@@ -159,8 +162,31 @@ export class UserController {
 
         const find = await this.userRepository.findById(uid);
 
+        // TODO: THIS MUST REFACTOR. ONLY FOR DEV
         // User have phone register and force oauth
         if (find.phone && find.phoneCode) {
+
+            // Random code for the User
+            const rndCode = this.twilioClient.randCode();
+
+            // TODO: U also update or change this for perform.
+            // For us, This is fasted method to check also 1 code
+            // And bypass other many Errors in sql schema Relation
+            // Delete all Codes in User Repository Relation
+            await this.userRepository.userCodes(uid).delete();
+
+            // Add Code To User Repository Relation
+            await this.userRepository.userCodes(uid)
+                .create({
+                    random: rndCode.replace(/\s+/g, '')
+                });
+
+            // Re-Send Code To User Phone
+            await this.twilioClient.sendAuthCode(
+                find.phoneCode + find.phone,
+                rndCode
+            );
+
             // Update User Repository statos => OAUTH
             await this.userRepository.updateById(uid,
                 {
