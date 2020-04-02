@@ -60,17 +60,7 @@ export class TwilioServices implements TwilioClient {
             from: 'AUTHMSG'
         })
             .then(message => {
-
                 return message;
-
-            }, error => {
-
-                console.log(error);
-
-                throw new HttpErrors.HttpError(
-                    `Twilio error | status: ${error.status} | message: ${error.message}`,
-                );
-
             });
     }
 

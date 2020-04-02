@@ -65,55 +65,52 @@ export class PhoneController {
 
         try {
 
+            // Update User Repository
+            await user.updateById(uid,
+                phoneRegister
+            );
+
+            // Select User Repository
+            const userSelect = await user.findById(uid);
+
             //  TODO: Perform Twilio Sender Number Verification
             // Send Code To User Phone
             const sendAuthMsg = await this.twilioClient.sendAuthCode(
-                phoneRegister.phoneCode + phoneRegister.phone,
+                userSelect.phoneCode + userSelect.phone,
                 rndCode
             );
 
-            try {
+            // TODO: U also update or change this for perform.
+            // For us, This is fasted method to check also 1 code
+            // And bypass other many Errors in sql schema Relation
+            // Delete all Codes in User Repository Relation
+            await this.userRepository.userCodes(uid).delete();
 
-                // Update User Repository
-                await user.updateById(uid,
-                    phoneRegister
+            // Add Code To User Repository Relation
+            await this.userRepository.userCodes(uid)
+                .create({
+                    random: rndCode
+                });
+
+            return {
+                oauth: sendAuthMsg,
+                userProfile: userSelect
+            };
+
+        } catch (error) {
+
+            // MongoError duplicate key error
+            if (error.code === 11000 && error.errmsg.includes('index: uniquePhone')) {
+                throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
+
+                // Twilio catch number verification
+            } else if (error.code === 21211) {
+                throw new HttpErrors.UnprocessableEntity(
+                    `Il numero di telefono non è valido`,
                 );
-
-                // Select User Repository
-                const userSelect = await user.findById(uid);
-
-                // TODO: U also update or change this for perform.
-                // For us, This is fasted method to check also 1 code
-                // And bypass other many Errors in sql schema Relation
-                // Delete all Codes in User Repository Relation
-                await this.userRepository.userCodes(uid).delete();
-
-                // Add Code To User Repository Relation
-                await this.userRepository.userCodes(uid)
-                    .create({
-                        random: rndCode
-                    });
-
-                return {
-                    oauth: sendAuthMsg,
-                    userProfile: userSelect
-                };
-
-            } catch (e) {
-
-                // MongoError 11000 duplicate key
-                if (e.code === 11000 && e.errmsg.includes('index: uniquePhone')) {
-                    throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
-                } else {
-                    throw e;
-                }
+            } else {
+                throw error;
             }
-
-
-        } catch (e) {
-            throw new HttpErrors.UnprocessableEntity(
-                `Il numero di telefono non è valido`,
-            );
         }
 
     }
