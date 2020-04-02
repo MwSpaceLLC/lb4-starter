@@ -123,7 +123,9 @@ export class MailerController {
         ).find({where: {hash: token}});
 
         if (!find.length) {
-            return {token: false}
+            throw new HttpErrors.UnprocessableEntity(
+                `Token not in User Interface required`,
+            );
         }
 
         // Update user model with email verified

@@ -188,8 +188,6 @@ export class PhoneController {
             currentUserProfile: UserProfile
     ): Promise<object> {
 
-        console.log(code);
-
         // Select User ID from Auth => Json Web Token
         const uid = currentUserProfile[securityId];
 
