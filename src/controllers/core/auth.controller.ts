@@ -153,8 +153,8 @@ export class AuthController {
         },
     })
     async login(
-        @param.query.string('email') email: string,
-        @param.query.string('password') password: string,
+        @param.query.string('email', {required: true}) email: string,
+        @param.query.string('password', {required: true}) password: string,
     ): Promise<UserTokenResponse> {
 
         // ensure the user exists, and the password is correct
