@@ -101,14 +101,13 @@ twilioClient.send(
 ##### @inject(MailServiceBindings.MAIL_CLIENT)
 
 ```javascript
-        // New Construct mail
-        const mail =
-            this.mailClient.to('test@mwspace.com')
-                .subject('✔ Confirm e-mail address')
-                .markdown('confirm')
-                .with({link: link});
+const mail =
+    this.mailClient.to('test@mwspace.com')
+        .subject('✔ Confirm e-mail address')
+        .markdown('confirm')
+        .with({link: link});
 
-        return mail.send();
+return mail.send();
 ```
     
 - stripe https://github.com/stripe/stripe-node
