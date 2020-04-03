@@ -101,12 +101,14 @@ twilioClient.send(
 ##### @inject(MailServiceBindings.MAIL_CLIENT)
 
 ```javascript
-mailClient.prepare(
-    '✔ Confirm e-mail address', // SUBJECT
-    'confirm', // HTML TEMPLATE src/services/nodemailer/emails/confirm.html
-   [{link: uniqid('mail-token')}]  // HTML PARAM {{link}}
-)
-    .send(user.email,'another@mail.com','another@mail.it')
+        // New Construct mail
+        const mail =
+            this.mailClient.to('test@mwspace.com')
+                .subject('✔ Confirm e-mail address')
+                .markdown('confirm')
+                .with({link: link});
+
+        return mail.send();
 ```
     
 - stripe https://github.com/stripe/stripe-node
