@@ -2,11 +2,24 @@ import {environment} from "../../environments/environment";
 import Mail from "nodemailer/lib/mailer";
 import {SentMessageInfo} from "nodemailer";
 import nodemailer from "nodemailer";
+import ejs from "ejs";
 
 export interface MailClient<T = string> {
-    prepare(subject: string, template: string, params: Array<object>): MailClient;
 
-    send(...to: string[]): Promise<SentMessageInfo>;
+    to(...to: Array<string>): MailService;
+
+    subject(subject: string): MailService;
+
+    view(view: string): MailService;
+
+    with(params: object): MailService;
+
+    // TODO: Markdown
+    // markdown(view: string): MailClient;
+
+    // prepare(subject: string, template: string, params: object): MailClient;
+
+    send(): Promise<SentMessageInfo>;
 }
 
 export class MailService implements MailClient {
@@ -14,7 +27,9 @@ export class MailService implements MailClient {
     private transporter: Mail;
 
     private html: string;
-    private subject: string;
+    private toMail: Array<string>;
+    private paramsHtml: object = {};
+    private subjectMail: string;
 
     constructor() {
         this.transporter = nodemailer.createTransport({
@@ -30,17 +45,49 @@ export class MailService implements MailClient {
 
     /**
      * @param subject
-     * @param template
-     * @param params
      */
-    public prepare(subject: string, template: string, params: Array<object>): MailClient {
+    subject(subject: string): MailService {
+
+        this.subjectMail = subject;
+
+        return this;
+    }
+
+    /**
+     * @param to
+     */
+    to(...to: string[]): MailService {
+        this.toMail = to;
+        return this;
+    }
+
+    with(params: object): MailService {
+
+        this.paramsHtml = params
+
+        return this;
+    };
+
+    /**
+     * @param template
+     */
+    public view(template: string): MailService {
+
         try {
-            const email = require('./emails/' + template);
+            //
+            // // Assign subject at Email
+            // this.subject = subject;
 
-            this.subject = subject;
+            // Assign Email Template
+            this.html = ejs.renderFile(`${__dirname}/../../emails/views/${template}.ejs`, this.paramsHtml, {}, function (err, html) {
 
-            //TODO: Refactor. Only for test (key val replace)
-            this.replaceTemplateKeys(email.HTML, params);
+                if (err) {
+                    console.log(err);
+                    throw new Error(err.message);
+                }
+
+                return html;
+            });
 
             return this;
 
@@ -51,24 +98,21 @@ export class MailService implements MailClient {
     }
 
     /**
-     * @param to
+     * Send mail -_-'
      */
-    async send(...to: string[]): Promise<SentMessageInfo> {
+    async send(): Promise<SentMessageInfo> {
 
-        if (!this.subject) {
-            throw new Error('subject mail transport is required')
-        }
-        if (!this.html) {
-            throw new Error('prepare function() is required before send()')
+        if (!this.toMail) {
+            throw new Error('toMail is required before send()')
         }
 
         try {
 
             return await this.transporter.sendMail({
                 from: `"${environment.MAIL_FROM_NAME}" <${environment.MAIL_FROM_ADDRESS}>`, // sender address
-                to: to.toString(), // list of receivers
-                subject: this.subject, // Subject line
-                html: this.html // html body
+                to: this.toMail.toString(), // list of receivers
+                subject: this.subjectMail ? this.subjectMail : 'Mail from lb4-starter', // Subject line
+                html: this.html ? this.html : '<b>Hello by lb4-starter!</b> ' // html body
             });
 
         } catch (e) {
@@ -78,21 +122,22 @@ export class MailService implements MailClient {
     }
 
     /**
+     * TODO: Test new ejs Implement
      * Replace Native element in template
      * @param template
      * @param params
      */
-    private replaceTemplateKeys(template: string, params: Array<object>): void {
-        params.forEach((element: object) => {
-            for (const [key, value] of Object.entries(element)) {
-
-                if (!template.includes(`{{${key}}}`)) {
-                    throw new Error(`Email ts template not include a local var named: {{${key}}}`)
-                }
-
-                this.html = template.replace(new RegExp(`{{${key}}}`, 'g'), value);
-            }
-        });
-    }
+    // private replaceTemplateKeys(template: string, params: object): void {
+    //     // params.forEach((element: object) => {
+    //     //     for (const [key, value] of Object.entries(element)) {
+    //     //
+    //     //         if (!template.includes(`{{${key}}}`)) {
+    //     //             throw new Error(`Email ts template not include a local var named: {{${key}}}`)
+    //     //         }
+    //     //
+    //     //         this.html = template.replace(new RegExp(`{{${key}}}`, 'g'), value);
+    //     //     }
+    //     // });
+    // }
 
 }
