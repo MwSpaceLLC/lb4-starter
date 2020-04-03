@@ -64,7 +64,7 @@ export class PhoneController {
 
         if (!userSelect.phone)
             throw new HttpErrors.UnprocessableEntity(
-                `Il numero di telefono dell'utente è richiesto`,
+                `User phone number is required`,
             );
 
         // TODO: U also update or change this for perform.
@@ -96,7 +96,7 @@ export class PhoneController {
             if (error.code === 21211) {
 
                 throw new HttpErrors.UnprocessableEntity(
-                    `Il numero di telefono non è valido`,
+                    `The phone number is not valid`,
                 );
             } else {
                 throw error;
@@ -139,15 +139,12 @@ export class PhoneController {
         // Select User ID from Auth => Json Web Token
         const uid = currentUserProfile[securityId];
 
-        // Random code for the User
-        const rndCode = this.twilioClient.randCode();
-
         // Select User Repository
         const userSelect = await this.userRepository.findById(uid);
 
         if (!userSelect.phone)
             throw new HttpErrors.UnprocessableEntity(
-                `Il numero di telefono dell'utente è richiesto`,
+                `User phone number is required`,
             );
 
         // Find Phone Codes User Code Repository
@@ -158,30 +155,12 @@ export class PhoneController {
                 }
             });
 
+        // verification phone code is incorrect
         if (!codeVerify.length) {
-            // TODO: U also update or change this for perform.
-            // For us, This is fasted method to check also 1 code
-            // And bypass other many Errors in sql schema Relation
-            // Delete all Codes in User Repository Relation
-            await this.userRepository.userCodes(uid).delete();
-
-            // Add Code To User Repository Relation
-            await this.userRepository.userCodes(uid)
-                .create({
-                    random: rndCode.replace(/\s+/g, '')
-                });
-
-            // Re-Send Code To User Phone
-            await this.twilioClient
-                .from('AUTHMSG')
-                .to(userSelect.phone)
-                .content(`${rndCode} is your confirmation code for ${environment.appName}`)
-                .send();
 
             throw new HttpErrors.UnprocessableEntity(
-                `Il codice di verifica non è corretto`,
+                `The verification phone code is incorrect`,
             );
-
         }
 
         // Update User Repository Phone Verified+status
