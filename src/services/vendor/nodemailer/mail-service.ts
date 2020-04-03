@@ -2,8 +2,8 @@ import {environment} from "../../../environments/environment";
 import Mail from "nodemailer/lib/mailer";
 import {SentMessageInfo} from "nodemailer";
 import nodemailer from "nodemailer";
-import ejs from "ejs";
 import fs from "fs";
+import uniqid from "uniqid";
 
 export interface MailClient<T = string> {
 
@@ -15,25 +15,25 @@ export interface MailClient<T = string> {
 
     with(params: object): MailService;
 
-    // TODO: Markdown check
-    markdown(markdown: string): MailClient;
+    // // TODO: Markdown check
+    // markdown(markdown: string): MailClient;
 
     send(): Promise<SentMessageInfo>;
+
+    token(prefix?: string): string;
 }
 
 export class MailService implements MailClient {
 
-    private transporter: Mail;
+    private readonly transporter: Mail;
 
     private html: string;
-    private viewHtml: string;
-    private markdownHtml: string;
+    private markdown: string;
     private toMail: Array<string>;
     private parameters: object = {};
     private subjectMail: string;
 
-    private views: string;
-    private markdowns: string;
+    private readonly views: string;
 
     constructor() {
         this.transporter = nodemailer.createTransport({
@@ -46,8 +46,7 @@ export class MailService implements MailClient {
             }
         });
 
-        this.views = `${__dirname}/../../emails/ejs`;
-        this.markdowns = `${__dirname}/../../emails/markdown`;
+        this.views = `${__dirname}/../../../emails`;
 
     }
 
@@ -76,22 +75,22 @@ export class MailService implements MailClient {
     };
 
     /**
-     * @param template
+     * @param markdown string
      */
-    public view(template: string): MailService {
-        this.viewHtml = template;
+    public view(markdown: string): MailService {
+        this.markdown = markdown;
 
         return this;
     }
 
-    /**
-     * @param markdown
-     */
-    public markdown(markdown: string): MailService {
-        this.markdownHtml = markdown;
-
-        return this;
-    }
+    // /**
+    //  * @param markdown
+    //  */
+    // public markdown(markdown: string): MailService {
+    //     this.markdownHtml = markdown;
+    //
+    //     return this;
+    // }
 
     /**
      * Send mail -_-'
@@ -104,29 +103,12 @@ export class MailService implements MailClient {
 
         try {
 
-            if (this.viewHtml && !this.markdownHtml) {
-
-                // Assign Email Template
-                this.html = ejs
-                    .render(
-                        fs.readFileSync(
-                            `${this.views}/${this.viewHtml}.ejs`, 'utf8'),
-                        Object.assign(this.parameters, {
-                            appName: environment.appName
-                        }));
-            }
-
-            if (!this.viewHtml && this.markdownHtml) {
-                // Assign Email Template
-                this.html = this.replaceKeyFromMdFile();
-            }
-
             // Send email and try compile Node Mailer
             return await this.transporter.sendMail({
                 from: `"${environment.MAIL_FROM_NAME}" <${environment.MAIL_FROM_ADDRESS}>`, // sender address
                 to: this.toMail.toString(), // list of receivers
                 subject: this.subjectMail ? this.subjectMail : 'Mail from lb4-starter', // Subject line
-                html: this.html ? this.html : '<b>Hello by lb4-starter!</b> ' // html body
+                html: this.html ? this.replaceKeyFromMdFile() : '<b>Hello by lb4-starter!</b> ' // html body
             });
 
         } catch (e) {
@@ -145,10 +127,10 @@ export class MailService implements MailClient {
         const mit = require('markdown-it')('commonmark');
 
         // Try to read main html content for md
-        const main = fs.readFileSync(`${this.markdowns}/layouts/main.html`, 'utf8');
+        const main = fs.readFileSync(`${this.views}/layouts/main.html`, 'utf8');
 
         // Try to read first md file
-        const md = fs.readFileSync(`${this.markdowns}/${this.markdownHtml}.md`, 'utf8');
+        const md = fs.readFileSync(`${this.views}/${this.markdown}.md`, 'utf8');
 
         // Try to replace content and place new md
         const complete = main.replace(new RegExp(`{{MD_TEMPLATE_CONTENT}}`, 'g'), mit.render(md));
@@ -164,6 +146,14 @@ export class MailService implements MailClient {
 
         return this.html;
 
+    }
+
+    token(prefix?: string): string {
+        return uniqid(prefix) +
+            uniqid('') +
+            uniqid('') +
+            uniqid('') +
+            uniqid('');
     }
 
 }

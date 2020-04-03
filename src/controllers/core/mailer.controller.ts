@@ -59,12 +59,7 @@ export class MailerController {
                 `User.email is required`,
             );
 
-        const token =
-            uniqid('email-') +
-            uniqid('') +
-            uniqid('') +
-            uniqid('') +
-            uniqid('');
+        const token = this.mailClient.token();
 
         // TODO: Change with your server or perform your action
         const link = `http://${environment.endpoint}:${environment.endpointPort}/confirm/email/${token}`;
@@ -84,9 +79,9 @@ export class MailerController {
         // New Construct mail
         const mail =
             this.mailClient
-                .to('test@mwspace.com')
+                .to(user.email)
                 .subject('✔ Confirm e-mail address')
-                .markdown('confirm')
+                .view('confirm')
                 .with({link: link});
 
         return mail.send();
@@ -117,7 +112,7 @@ export class MailerController {
     })
     @authenticate('jwt')
     async emailConfirmation(
-        @param.query.string('token',{required: true}) token: string,
+        @param.query.string('token', {required: true}) token: string,
         @inject(SecurityBindings.USER)
             currentUserProfile: UserProfile
     ): Promise<object> {
@@ -128,7 +123,7 @@ export class MailerController {
 
         if (!find.length) {
             throw new HttpErrors.UnprocessableEntity(
-                `Token noon valido o scaduto`,
+                `Token invalid or expired`,
             );
         }
 

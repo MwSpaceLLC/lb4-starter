@@ -92,7 +92,7 @@ Fine! Please before start read official [Loopback Documentation](https://loopbac
 const sms =
     this.twilioClient
         .from('ln4-starter')
-        .to('+39 3927376305')
+        .to('+1 39 55 66 44 22')
         .content('✔ Confirm phone number');
 
 return await sms.send();
@@ -105,9 +105,9 @@ return await sms.send();
 ```javascript
 const mail =
     this.mailClient
-        .to('test@mwspace.com')
+        .to('email@timnet.com')
         .subject('✔ Confirm e-mail address')
-        .markdown('confirm')
+        .view('confirm')
         .with({link: link});
 
 return mail.send();
