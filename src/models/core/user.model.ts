@@ -72,12 +72,6 @@ export class User extends Entity {
         type: 'string',
         required: false,
     })
-    phoneCode: string;
-
-    @property({
-        type: 'string',
-        required: false,
-    })
     phone: string;
 
     @property({

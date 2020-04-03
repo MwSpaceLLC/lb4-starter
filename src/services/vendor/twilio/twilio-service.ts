@@ -1,4 +1,4 @@
-import {environment} from "../../environments/environment";
+import {environment} from "../../../environments/environment";
 import {Twilio} from "twilio";
 
 export interface TwilioClientInterface<T = string> {

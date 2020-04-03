@@ -3,6 +3,6 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-export * from './user.controller';
-export * from './mailer.controller';
-export * from './phone.controller';
+export * from './core/auth.controller';
+export * from './core/mailer.controller';
+export * from './core/phone.controller';

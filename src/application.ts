@@ -30,15 +30,15 @@ import {
     TokenServiceBindings,
     TokenServiceConstants, TwilioServiceBindings,
     UserServiceBindings,
-} from './keys';
+} from './utils/keys';
 
 import {MyAuthenticationSequence} from './sequence';
-import {BcryptHasher} from './services/hash.password.bcryptjs';
-import {JWTService} from './services/jwt-service';
-import {MyUserService} from './services/user-service';
+import {BcryptHasher} from './services/core/hash.password.bcryptjs';
+import {JWTService} from './services/core/jwt-service';
+import {MyUserService} from './services/core/user-service';
 import {environment} from "./environments/environment";
-import {TwilioServices} from "./services/twilio/twilio-service";
-import {MailService} from "./services/nodemailer/mail-service";
+import {TwilioServices} from "./services/vendor/twilio/twilio-service";
+import {MailService} from "./services/vendor/nodemailer/mail-service";
 
 export class ServerWalletItApplication extends BootMixin(
     ServiceMixin(RepositoryMixin(RestApplication)),

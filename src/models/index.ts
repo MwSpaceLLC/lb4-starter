@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-export * from './user.model';
-export * from './user-credentials.model';
-export * from './user-tokens.model';
-export * from './user-codes.model';
+export * from './core/user.model';
+export * from './core/user-credentials.model';
+export * from './core/user-tokens.model';
+export * from './core/user-codes.model';

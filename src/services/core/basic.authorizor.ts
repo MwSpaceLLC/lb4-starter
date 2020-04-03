@@ -31,8 +31,6 @@ export async function basicAuthorization(
         return AuthorizationDecision.DENY;
     }
 
-    console.log(currentUser)
-
     if (!currentUser.roles) {
         return AuthorizationDecision.DENY;
     }

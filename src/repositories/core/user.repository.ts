@@ -4,7 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {Getter, inject} from '@loopback/core';
-import {MongoDataSource} from '../datasources';
+import {MongoDataSource} from '../../datasources';
 import {
     DefaultCrudRepository,
     HasOneRepositoryFactory,
@@ -12,7 +12,7 @@ import {
     HasManyRepositoryFactory
 } from '@loopback/repository';
 
-import {User, UserCredentials, UserTokens, UserCodes} from '../models';
+import {User, UserCredentials, UserTokens, UserCodes} from '../../models';
 
 import {UserCredentialsRepository} from './user-credentials.repository';
 import {UserTokensRepository} from './user-tokens.repository';

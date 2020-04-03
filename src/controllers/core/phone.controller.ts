@@ -1,21 +1,19 @@
-import {HttpErrors, get, param, post, requestBody} from "@loopback/rest";
+import {HttpErrors, get, param} from "@loopback/rest";
 import {model, repository} from "@loopback/repository";
-import {OPERATION_SECURITY_SPEC} from "../utils/security-spec";
+import {OPERATION_SECURITY_SPEC} from "../../utils/security-spec";
 import {authenticate} from "@loopback/authentication";
 import {inject} from "@loopback/core";
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
-import {UserRepository} from "../repositories";
-import {TwilioClientInterface} from "../services/twilio/twilio-service";
-import {TwilioServiceBindings} from "../keys";
+import {UserRepository} from "../../repositories";
+import {TwilioClientInterface} from "../../services/vendor/twilio/twilio-service";
+import {TwilioServiceBindings} from "../../utils/keys";
+
 import {
     PhoneCodeConfirmSchema,
-    PhoneRegisterRequestBody,
-    PhoneRegistrationSchema,
     TwilioResponseSchema
-} from "./specs/twilio-controller.specs";
-import {PhoneRegister} from "./interfaces/phone.interface";
-import _ from "lodash";
-import {environment} from "../environments/environment";
+} from "../specs/twilio-controller.specs";
+
+import {environment} from "../../environments/environment";
 
 @model()
 // TODO: Refactor many function in this class (clear code)
@@ -27,108 +25,108 @@ export class PhoneController {
     ) {
     }
 
+    // /**
+    //  |--------------------------------------------------------------------------
+    //  | Phone Registration // TODO: complete this
+    //  |--------------------------------------------------------------------------
+    //  |
+    //  | Here is where you can Register Phone Registration for your application.
+    //  |
+    //  */
+    // @post('/phone/register', {
+    //     // 'x-visibility': 'undocumented',
+    //     security: OPERATION_SECURITY_SPEC,
+    //     responses: {
+    //         '200': {
+    //             description: 'Register Phone to User',
+    //             content: {
+    //                 'application/json': {
+    //                     schema: PhoneRegistrationSchema,
+    //                 },
+    //             },
+    //         },
+    //     },
+    // })
+    // @authenticate('jwt')
+    // async userPhoneRegister(
+    //     @inject(SecurityBindings.USER)
+    //         currentUserProfile: UserProfile,
+    //     @requestBody(PhoneRegisterRequestBody) phoneRegister: PhoneRegister,
+    // ): Promise<void | object> {
+    //
+    //     // Select User ID from Auth => Json Web Token
+    //     const uid = currentUserProfile[securityId];
+    //
+    //     // Random code for the User
+    //     const rndCode = this.twilioClient.randCode();
+    //
+    //     // Select User Repository
+    //     const user = this.userRepository;
+    //
+    //     const find = await user.findById(uid);
+    //
+    //     // Compare user Phone if Exist
+    //     if (find.phone === phoneRegister.phone) {
+    //         throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
+    //     }
+    //
+    //     try {
+    //
+    //         // Update User Repository
+    //         await user.updateById(uid,
+    //             phoneRegister
+    //         );
+    //
+    //         // Select User Repository
+    //         const userSelect = await user.findById(uid);
+    //
+    //         //  TODO: Perform Twilio Sender Number Verification
+    //         // Send Code To User Phone
+    //         const sendAuthMsg = await this.twilioClient
+    //             .from('AUTHMSG')
+    //             .to(userSelect.phone)
+    //             .content(`${rndCode} is your confirmation code for ${environment.appName}`)
+    //             .send();
+    //
+    //         // TODO: U also update or change this for perform.
+    //         // For us, This is fasted method to check also 1 code
+    //         // And bypass other many Errors in sql schema Relation
+    //         // Delete all Codes in User Repository Relation
+    //         await this.userRepository.userCodes(uid).delete();
+    //
+    //         // Add Code To User Repository Relation
+    //         await this.userRepository.userCodes(uid)
+    //             .create({
+    //                 random: rndCode
+    //             });
+    //
+    //         return {
+    //             oauth: sendAuthMsg,
+    //             userProfile: userSelect
+    //         };
+    //
+    //     } catch (error) {
+    //
+    //         // MongoError duplicate key error
+    //         if (error.code === 11000 && error.errmsg.includes('index: uniquePhone')) {
+    //             throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
+    //
+    //             // Twilio catch number verification
+    //         } else if (error.code === 21211) {
+    //
+    //             throw new HttpErrors.UnprocessableEntity(
+    //                 `Il numero di telefono non è valido`,
+    //             );
+    //         } else {
+    //             throw error;
+    //         }
+    //     }
+    //
+    // }
+
     /**
      |--------------------------------------------------------------------------
-     | Phone Registration // TODO: complete this
-     |--------------------------------------------------------------------------
-     |
-     | Here is where you can Register Phone Registration for your application.
-     |
-     */
-    @post('/phone/register', {
-        // 'x-visibility': 'undocumented',
-        security: OPERATION_SECURITY_SPEC,
-        responses: {
-            '200': {
-                description: 'Register Phone to User',
-                content: {
-                    'application/json': {
-                        schema: PhoneRegistrationSchema,
-                    },
-                },
-            },
-        },
-    })
-    @authenticate('jwt')
-    async userPhoneRegister(
-        @inject(SecurityBindings.USER)
-            currentUserProfile: UserProfile,
-        @requestBody(PhoneRegisterRequestBody) phoneRegister: PhoneRegister,
-    ): Promise<void | object> {
-
-        // Select User ID from Auth => Json Web Token
-        const uid = currentUserProfile[securityId];
-
-        // Random code for the User
-        const rndCode = this.twilioClient.randCode();
-
-        // Select User Repository
-        const user = this.userRepository;
-
-        const find = await user.findById(uid);
-
-        // Compare user Phone if Exist
-        if (find.phone === phoneRegister.phone) {
-            throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
-        }
-
-        try {
-
-            // Update User Repository
-            await user.updateById(uid,
-                phoneRegister
-            );
-
-            // Select User Repository
-            const userSelect = await user.findById(uid);
-
-            //  TODO: Perform Twilio Sender Number Verification
-            // Send Code To User Phone
-            const sendAuthMsg = await this.twilioClient
-                .from('AUTHMSG')
-                .to(userSelect.phoneCode + userSelect.phone)
-                .content(`${rndCode} is your confirmation for ${environment.appName}`)
-                .send();
-
-            // TODO: U also update or change this for perform.
-            // For us, This is fasted method to check also 1 code
-            // And bypass other many Errors in sql schema Relation
-            // Delete all Codes in User Repository Relation
-            await this.userRepository.userCodes(uid).delete();
-
-            // Add Code To User Repository Relation
-            await this.userRepository.userCodes(uid)
-                .create({
-                    random: rndCode
-                });
-
-            return {
-                oauth: sendAuthMsg,
-                userProfile: userSelect
-            };
-
-        } catch (error) {
-
-            // MongoError duplicate key error
-            if (error.code === 11000 && error.errmsg.includes('index: uniquePhone')) {
-                throw new HttpErrors.Conflict('Numero di telefono già in uso nel sistema');
-
-                // Twilio catch number verification
-            } else if (error.code === 21211) {
-
-                throw new HttpErrors.UnprocessableEntity(
-                    `Il numero di telefono non è valido`,
-                );
-            } else {
-                throw error;
-            }
-        }
-
-    }
-
-    /**
-     |--------------------------------------------------------------------------
-     | Phone Verification // TODO: complete this
+     | Phone Verification // TODO: complete this??
      |--------------------------------------------------------------------------
      |
      | Here is where you can Register Phone Verification for your application.
@@ -186,8 +184,8 @@ export class PhoneController {
             const sms =
                 this.twilioClient
                     .from('AUTHMSG')
-                    .to(userSelect.phoneCode + userSelect.phone)
-                    .content(`${rndCode} is your confirmation for ${environment.appName}`);
+                    .to(userSelect.phone)
+                    .content(`${rndCode} is your confirmation code for ${environment.appName}`);
 
             return await sms.send();
 
@@ -275,8 +273,8 @@ export class PhoneController {
             // Re-Send Code To User Phone
             await this.twilioClient
                 .from('AUTHMSG')
-                .to(userSelect.phoneCode + userSelect.phone)
-                .content(`${rndCode} is your confirmation for ${environment.appName}`)
+                .to(userSelect.phone)
+                .content(`${rndCode} is your confirmation code for ${environment.appName}`)
                 .send();
 
             throw new HttpErrors.UnprocessableEntity(

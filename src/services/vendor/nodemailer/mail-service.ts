@@ -1,4 +1,4 @@
-import {environment} from "../../environments/environment";
+import {environment} from "../../../environments/environment";
 import Mail from "nodemailer/lib/mailer";
 import {SentMessageInfo} from "nodemailer";
 import nodemailer from "nodemailer";

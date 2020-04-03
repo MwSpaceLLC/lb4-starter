@@ -4,13 +4,13 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {BindingKey} from '@loopback/context';
-import {PasswordHasher} from './services/hash.password.bcryptjs';
+import {PasswordHasher} from '../services/core/hash.password.bcryptjs';
 import {TokenService, UserService} from '@loopback/authentication';
-import {User} from './models';
-import {Credentials} from './repositories';
-import {TwilioClientInterface} from "./services/twilio/twilio-service";
-import {environment} from "./environments/environment";
-import {MailClient} from "./services/nodemailer/mail-service";
+import {User} from '../models';
+import {Credentials} from '../repositories';
+import {TwilioClientInterface} from "../services/vendor/twilio/twilio-service";
+import {environment} from "../environments/environment";
+import {MailClient} from "../services/vendor/nodemailer/mail-service";
 
 export namespace TokenServiceConstants {
     export const TOKEN_SECRET_VALUE = environment.TOKEN_SECRET;

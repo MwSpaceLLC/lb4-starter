@@ -4,8 +4,8 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {DefaultCrudRepository} from '@loopback/repository';
-import {UserTokens, UserTokensRelations} from '../models';
-import {MongoDataSource} from '../datasources';
+import {UserTokens, UserTokensRelations} from '../../models';
+import {MongoDataSource} from '../../datasources';
 import {inject} from '@loopback/core';
 
 export class UserTokensRepository extends DefaultCrudRepository<

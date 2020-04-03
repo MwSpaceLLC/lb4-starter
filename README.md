@@ -1,6 +1,6 @@
 ## lb4-starter ~ <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | *ALPHA* | MongoDB
 
-<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/swagger-starter-inf.png" width="100%">
+<img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/swagger-starter-info.png" width="100%">
 
 ## Why use this package? 😎 
 This development is the basis of the new server for our startup. So we thought to share the basic project for other developers who start with this framework without having to develop from scratch authentication Email Sending and other futures 

@@ -3,8 +3,8 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-export * from './user.repository';
-export * from './user-credentials.repository';
-export * from './user.repository';
-export * from './user-tokens.repository';
-export * from './user-codes.repository';
+export * from './core/user.repository';
+export * from './core/user-credentials.repository';
+export * from './core/user.repository';
+export * from './core/user-tokens.repository';
+export * from './core/user-codes.repository';

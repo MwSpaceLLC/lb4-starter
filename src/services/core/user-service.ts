@@ -4,13 +4,13 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {HttpErrors} from '@loopback/rest';
-import {Credentials, UserRepository} from '../repositories/user.repository';
-import {User} from '../models/user.model';
+import {Credentials, UserRepository} from '../../repositories';
+import {User} from '../../models';
 import {UserService} from '@loopback/authentication';
 import {UserProfile, securityId} from '@loopback/security';
 import {repository} from '@loopback/repository';
 import {PasswordHasher} from './hash.password.bcryptjs';
-import {PasswordHasherBindings} from '../keys';
+import {PasswordHasherBindings} from '../../utils/keys';
 import {inject} from '@loopback/context';
 
 export class MyUserService implements UserService<User, Credentials> {
@@ -23,11 +23,7 @@ export class MyUserService implements UserService<User, Credentials> {
 
     async verifyCredentials(credentials: Credentials): Promise<User> {
 
-        const invalidCredentialsError = 'Autenticazione non valida';
-
-        // console.info('');
-        // console.info('credentials: ');
-        // console.log(credentials)
+        const invalidCredentialsError = 'Invalid authentication';
 
         const foundUser = await this.userRepository.findOne({
             where: {email: credentials.email},
@@ -37,17 +33,9 @@ export class MyUserService implements UserService<User, Credentials> {
             throw new HttpErrors.Unauthorized(invalidCredentialsError);
         }
 
-        // console.info('');
-        // console.info('foundUser: ');
-        // console.log(foundUser)
-
         const credentialsFound = await this.userRepository.findCredentials(
             foundUser.id,
         );
-
-        // console.info('');
-        // console.log('credentialsFound: ');
-        // console.log(credentialsFound)
 
         if (!credentialsFound) {
             throw new HttpErrors.Unauthorized(invalidCredentialsError);

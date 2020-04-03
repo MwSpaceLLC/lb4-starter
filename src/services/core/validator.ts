@@ -3,20 +3,20 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {Credentials} from '../repositories';
+import {Credentials} from '../../repositories';
 import isemail from 'isemail';
 import {HttpErrors} from '@loopback/rest';
 
 export function validateCredentials(credentials: Credentials) {
     // Validate Email
     if (!isemail.validate(credentials.email)) {
-        throw new HttpErrors.UnprocessableEntity('e-mail non valida');
+        throw new HttpErrors.UnprocessableEntity('invalid email');
     }
 
     // Validate Password Length
     if (!credentials.password || credentials.password.length < 8) {
         throw new HttpErrors.UnprocessableEntity(
-            'la password deve essere di almeno 8 caratteri',
+            'The password must be at least 8 characters long',
         );
     }
 }

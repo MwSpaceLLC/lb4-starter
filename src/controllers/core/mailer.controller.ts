@@ -1,16 +1,16 @@
 import {HttpErrors, get, param} from "@loopback/rest";
 import {model, repository} from "@loopback/repository";
-import {OPERATION_SECURITY_SPEC} from "../utils/security-spec";
+import {OPERATION_SECURITY_SPEC} from "../../utils/security-spec";
 import {authenticate} from "@loopback/authentication";
 import {inject} from "@loopback/core";
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
-import {UserRepository} from "../repositories";
-import {MailServiceBindings, TwilioServiceBindings} from "../keys";
-import {MailerResponseSchema} from "./specs/mailer-controller.specs";
-import {MailClient} from "../services/nodemailer/mail-service";
+import {UserRepository} from "../../repositories";
+import {MailServiceBindings, TwilioServiceBindings} from "../../utils/keys";
+import {MailerResponseSchema} from "../specs/mailer-controller.specs";
+import {MailClient} from "../../services/vendor/nodemailer/mail-service";
 import {SentMessageInfo} from "nodemailer";
-import {environment} from "../environments/environment";
-import {EmailTokenConfirmSchema} from './specs/mailer-controller.specs'
+import {environment} from "../../environments/environment";
+import {EmailTokenConfirmSchema} from '../specs/mailer-controller.specs'
 import uniqid from "uniqid";
 
 @model()

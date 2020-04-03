@@ -4,8 +4,8 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {DefaultCrudRepository} from '@loopback/repository';
-import {UserCredentials, UserCredentialsRelations} from '../models';
-import {MongoDataSource} from '../datasources';
+import {UserCredentials, UserCredentialsRelations} from '../../models';
+import {MongoDataSource} from '../../datasources';
 import {inject} from '@loopback/core';
 
 export class UserCredentialsRepository extends DefaultCrudRepository<UserCredentials,

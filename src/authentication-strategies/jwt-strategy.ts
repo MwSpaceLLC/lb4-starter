@@ -17,7 +17,7 @@ import {
 } from '@loopback/openapi-v3';
 import {HttpErrors, Request} from '@loopback/rest';
 import {UserProfile} from '@loopback/security';
-import {TokenServiceBindings} from '../keys';
+import {TokenServiceBindings} from '../utils/keys';
 
 @bind(asAuthStrategy, asSpecEnhancer)
 export class JWTAuthenticationStrategy
