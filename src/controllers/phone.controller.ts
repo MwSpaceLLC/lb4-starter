@@ -5,7 +5,7 @@ import {authenticate} from "@loopback/authentication";
 import {inject} from "@loopback/core";
 import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
 import {UserRepository} from "../repositories";
-import {TwilioClient} from "../services/twilio/client-service";
+import {TwilioClientInterface} from "../services/twilio/twilio-service";
 import {TwilioServiceBindings} from "../keys";
 import {
     PhoneCodeConfirmSchema,
@@ -22,7 +22,7 @@ export class PhoneController {
     constructor(
         @repository(UserRepository) public userRepository: UserRepository,
         @inject(TwilioServiceBindings.TWILIO_CLIENT)
-        public twilioClient: TwilioClient,
+        public twilioClient: TwilioClientInterface,
     ) {
     }
 
@@ -179,13 +179,26 @@ export class PhoneController {
             });
 
         try {
-            // Send Code To User Phone
-            const sendAuthMsg = await this.twilioClient.sendAuthCode(
-                userSelect.phoneCode + userSelect.phone,
-                rndCode
-            );
+            // // Send Code To User Phone
+            // const sendAuthMsg = await this.twilioClient.sendAuthCode(
+            //     userSelect.phoneCode + userSelect.phone,
+            //     rndCode
+            // );
+            //
+            // return sendAuthMsg;
+            //
+            // const to = userSelect.phoneCode + userSelect.phone;
 
-            return sendAuthMsg;
+
+            // New Construct sms
+            const sms =
+                this.twilioClient
+                    .from('ln4-starter')
+                    .to('+39 3927376305')
+                    .content('✔ Confirm phone number');
+
+            return await sms.send();
+
 
         } catch (error) {
             // Twilio catch number verification

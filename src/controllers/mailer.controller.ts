@@ -83,7 +83,8 @@ export class MailerController {
 
         // New Construct mail
         const mail =
-            this.mailClient.to('test@mwspace.com')
+            this.mailClient
+                .to('test@mwspace.com')
                 .subject('✔ Confirm e-mail address')
                 .markdown('confirm')
                 .with({link: link});

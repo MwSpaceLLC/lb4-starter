@@ -8,7 +8,7 @@ import {PasswordHasher} from './services/hash.password.bcryptjs';
 import {TokenService, UserService} from '@loopback/authentication';
 import {User} from './models';
 import {Credentials} from './repositories';
-import {TwilioClient} from "./services/twilio/client-service";
+import {TwilioClientInterface} from "./services/twilio/twilio-service";
 import {environment} from "./environments/environment";
 import {MailClient} from "./services/nodemailer/mail-service";
 
@@ -50,7 +50,7 @@ export namespace UserServiceBindings {
  | Here is where you can Register all bindings in app services
  */
 export namespace TwilioServiceBindings {
-    export const TWILIO_CLIENT = BindingKey.create<TwilioClient>(
+    export const TWILIO_CLIENT = BindingKey.create<TwilioClientInterface>(
         'services.twilio.client',
     );
 }

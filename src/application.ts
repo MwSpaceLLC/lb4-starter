@@ -37,7 +37,7 @@ import {BcryptHasher} from './services/hash.password.bcryptjs';
 import {JWTService} from './services/jwt-service';
 import {MyUserService} from './services/user-service';
 import {environment} from "./environments/environment";
-import {TwilioServices} from "./services/twilio/client-service";
+import {TwilioServices} from "./services/twilio/twilio-service";
 import {MailService} from "./services/nodemailer/mail-service";
 
 export class ServerWalletItApplication extends BootMixin(

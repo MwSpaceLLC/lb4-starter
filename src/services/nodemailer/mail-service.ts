@@ -99,7 +99,7 @@ export class MailService implements MailClient {
     async send(): Promise<SentMessageInfo> {
 
         if (!this.toMail) {
-            throw new Error('toMail is required before send()')
+            throw new Error('to is required before send()')
         }
 
         try {

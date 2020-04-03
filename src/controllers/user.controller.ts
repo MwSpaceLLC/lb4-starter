@@ -42,7 +42,7 @@ import moment from 'moment';
 import {NewUserRequest, UserTokenResponse} from "./interfaces/user.interface";
 
 import uniqid from "uniqid";
-import {TwilioClient} from "../services/twilio/client-service";
+import {TwilioClientInterface} from "../services/twilio/twilio-service";
 
 export class UserController {
     constructor(
@@ -54,7 +54,7 @@ export class UserController {
         @inject(UserServiceBindings.USER_SERVICE)
         public userService: UserService<User, Credentials>,
         @inject(TwilioServiceBindings.TWILIO_CLIENT)
-        public twilioClient: TwilioClient,
+        public twilioClient: TwilioClientInterface,
     ) {
     }
 

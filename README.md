@@ -89,11 +89,13 @@ Fine! Please before start read official [Loopback Documentation](https://loopbac
 ##### @inject(TwilioServiceBindings.TWILIO_CLIENT)
     
 ```javascript
-twilioClient.send(
-    user.phone,
-     '✔ Welcome Message | AUTHMSG',
-      'lb4-starter'
-  )
+const sms =
+    this.twilioClient
+        .from('ln4-starter')
+        .to('+39 3927376305')
+        .content('✔ Confirm phone number');
+
+return await sms.send();
 ```
 
 * mail [template management] https://github.com/nodemailer/nodemailer 🎇 | [DEMO](https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mail-template-function.png)
@@ -102,7 +104,8 @@ twilioClient.send(
 
 ```javascript
 const mail =
-    this.mailClient.to('test@mwspace.com')
+    this.mailClient
+        .to('test@mwspace.com')
         .subject('✔ Confirm e-mail address')
         .markdown('confirm')
         .with({link: link});
