@@ -46,7 +46,7 @@ export class MailService implements MailClient {
             }
         });
 
-        this.views = `${__dirname}/../../emails/views`;
+        this.views = `${__dirname}/../../emails/ejs`;
         this.markdowns = `${__dirname}/../../emails/markdown`;
 
     }
@@ -149,10 +149,6 @@ export class MailService implements MailClient {
 
         // Try to read first md file
         const md = fs.readFileSync(`${this.markdowns}/${this.markdownHtml}.md`, 'utf8');
-
-        console.log(md);
-
-        console.log(mit.render(md));
 
         // Try to replace content and place new md
         const complete = main.replace(new RegExp(`{{MD_TEMPLATE_CONTENT}}`, 'g'), mit.render(md));
