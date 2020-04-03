@@ -132,7 +132,9 @@ export class AuthController {
         } catch (error) {
             // MongoError 11000 duplicate key
             if (error.code === 11000 && error.errmsg.includes('index: uniqueEmail')) {
-                throw new HttpErrors.Conflict('Indirizzo email già in uso nel sistema');
+                throw new HttpErrors.Conflict('Email address already taken');
+            } else if (error.code === 11000 && error.errmsg.includes('index: uniquePhone')) {
+                throw new HttpErrors.Conflict('Phone number already taken');
             } else {
                 throw error;
             }
