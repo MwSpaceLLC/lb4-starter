@@ -48,7 +48,7 @@ export const CredentialsRequestBody = {
 const RegisterSchema = {
     description: 'Register Schema',
     type: 'object',
-    required: ['email', 'password'],
+    required: ['email', 'password', 'phone'],
     properties: {
         email: {
             type: 'string',
@@ -57,6 +57,10 @@ const RegisterSchema = {
         password: {
             type: 'string',
             minLength: 8,
+        },
+        phone: {
+            type: 'string',
+            default: true,
         },
         agreement: {
             type: 'boolean',
