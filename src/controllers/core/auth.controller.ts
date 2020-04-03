@@ -7,7 +7,7 @@ import {
     post,
     get,
     requestBody,
-    HttpErrors,
+    HttpErrors, param,
 } from '@loopback/rest';
 
 import {User} from '../../models';
@@ -153,10 +153,15 @@ export class AuthController {
         },
     })
     async login(
-        @requestBody(CredentialsRequestBody) credentials: Credentials,
+        @param.path.string('email') email: string,
+        @param.path.string('password') password: string,
     ): Promise<UserTokenResponse> {
+
         // ensure the user exists, and the password is correct
-        let user = await this.userService.verifyCredentials(credentials);
+        let user = await this.userService.verifyCredentials({
+            email: email,
+            password: password
+        });
 
         const uid = this.userService.convertToUserProfile(user)[securityId];
 

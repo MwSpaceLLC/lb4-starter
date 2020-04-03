@@ -1,4 +1,4 @@
-import {HttpErrors, get, param} from "@loopback/rest";
+import {HttpErrors, get, param, post} from "@loopback/rest";
 import {model, repository} from "@loopback/repository";
 import {OPERATION_SECURITY_SPEC} from "../../utils/security-spec";
 import {authenticate} from "@loopback/authentication";
@@ -101,7 +101,7 @@ export class MailerController {
      | Here is where you can Register Confirmation for your application.
      |
      */
-    @get('/email/confirmation/{token}', {
+    @post('/email/confirmation', {
         // 'x-visibility': 'undocumented',
         security: OPERATION_SECURITY_SPEC,
         responses: {
