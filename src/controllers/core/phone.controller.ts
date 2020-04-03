@@ -131,7 +131,7 @@ export class PhoneController {
     })
     @authenticate('jwt')
     async userPhoneConfirmation(
-        @param.query.string('code') code: string,
+        @param.query.string('code', {required: true}) code: string,
         @inject(SecurityBindings.USER)
             currentUserProfile: UserProfile
     ): Promise<object> {

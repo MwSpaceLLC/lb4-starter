@@ -84,7 +84,7 @@ export class AuthController {
         @param.query.string('email', {required: true}) email: string,
         @param.query.string('password', {required: true}) password: string,
         @param.query.string('phone', {required: true}) phone: string,
-        @param.query.boolean('agreement', {required: true}) agreement: string,
+        @param.query.boolean('agreement', {required: true}) agreement: boolean,
         @param.query.string('plan') plan: string,
     ): Promise<UserTokenResponse> {
 
@@ -102,6 +102,8 @@ export class AuthController {
                 name: uniqid('user-'),
                 phone: phone,
                 plan: plan,
+                agreement: agreement,
+                status: 'pending',
                 roles: ['customer']
             });
 
