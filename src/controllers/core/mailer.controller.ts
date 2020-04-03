@@ -117,7 +117,7 @@ export class MailerController {
     })
     @authenticate('jwt')
     async emailConfirmation(
-        @param.path.string('token') token: string,
+        @param.query.string('token') token: string,
         @inject(SecurityBindings.USER)
             currentUserProfile: UserProfile
     ): Promise<object> {
