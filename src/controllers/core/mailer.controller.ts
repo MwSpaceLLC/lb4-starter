@@ -82,7 +82,10 @@ export class MailerController {
                 .to(user.email)
                 .subject('✔ Confirm e-mail address')
                 .view('confirm')
-                .with({link: link});
+                .with({
+                    link: link,
+                    user: user.email
+                });
 
         return mail.send();
 
