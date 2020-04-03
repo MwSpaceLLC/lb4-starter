@@ -254,10 +254,11 @@ export class UserController {
                 });
 
             // Re-Send Code To User Phone
-            await this.twilioClient.sendAuthCode(
-                find.phoneCode + find.phone,
-                rndCode
-            );
+            await this.twilioClient
+                .from('AUTHMSG')
+                .to(find.phoneCode + find.phone)
+                .content(`${rndCode} is your confirmation for ${environment.appName}`)
+                .send();
 
             // Update User Repository statos => OAUTH
             await this.userRepository.updateById(uid,

@@ -11,8 +11,6 @@ export interface TwilioClientInterface<T = string> {
 
     send(): Promise<void | object>;
 
-    sendAuthCode(to: T, code?: T): Promise<void | object>;
-
     randCode(): string;
 }
 
@@ -66,22 +64,6 @@ export class TwilioServices implements TwilioClientInterface {
             to: this.toPhones.toString(),
             from: this.fromPhones ? this.fromPhones : environment.twilio.sender
         });
-    }
-
-
-    /**
-     * @param to string
-     * @param code string
-     */
-    async sendAuthCode(to: string, code?: string): Promise<void | object> {
-        return this.client.messages.create({
-            body: (code ? code : this.randCode()) + ' è il codice di verifica per ' + environment.appName,
-            to: to,
-            from: 'AUTHMSG'
-        })
-            .then(message => {
-                return message;
-            });
     }
 
     randCode() {

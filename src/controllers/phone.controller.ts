@@ -15,6 +15,7 @@ import {
 } from "./specs/twilio-controller.specs";
 import {PhoneRegister} from "./interfaces/phone.interface";
 import _ from "lodash";
+import {environment} from "../environments/environment";
 
 @model()
 // TODO: Refactor many function in this class (clear code)
@@ -83,10 +84,11 @@ export class PhoneController {
 
             //  TODO: Perform Twilio Sender Number Verification
             // Send Code To User Phone
-            const sendAuthMsg = await this.twilioClient.sendAuthCode(
-                userSelect.phoneCode + userSelect.phone,
-                rndCode
-            );
+            const sendAuthMsg = await this.twilioClient
+                .from('AUTHMSG')
+                .to(userSelect.phoneCode + userSelect.phone)
+                .content(`${rndCode} is your confirmation for ${environment.appName}`)
+                .send();
 
             // TODO: U also update or change this for perform.
             // For us, This is fasted method to check also 1 code
@@ -179,23 +181,13 @@ export class PhoneController {
             });
 
         try {
-            // // Send Code To User Phone
-            // const sendAuthMsg = await this.twilioClient.sendAuthCode(
-            //     userSelect.phoneCode + userSelect.phone,
-            //     rndCode
-            // );
-            //
-            // return sendAuthMsg;
-            //
-            // const to = userSelect.phoneCode + userSelect.phone;
-
 
             // New Construct sms
             const sms =
                 this.twilioClient
-                    .from('ln4-starter')
-                    .to('+39 3927376305')
-                    .content('✔ Confirm phone number');
+                    .from('AUTHMSG')
+                    .to(userSelect.phoneCode + userSelect.phone)
+                    .content(`${rndCode} is your confirmation for ${environment.appName}`);
 
             return await sms.send();
 
@@ -281,10 +273,11 @@ export class PhoneController {
                 });
 
             // Re-Send Code To User Phone
-            await this.twilioClient.sendAuthCode(
-                userSelect.phoneCode + userSelect.phone,
-                rndCode
-            );
+            await this.twilioClient
+                .from('AUTHMSG')
+                .to(userSelect.phoneCode + userSelect.phone)
+                .content(`${rndCode} is your confirmation for ${environment.appName}`)
+                .send();
 
             throw new HttpErrors.UnprocessableEntity(
                 `Il codice di verifica non è corretto`,
