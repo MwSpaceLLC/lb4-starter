@@ -3,6 +3,7 @@ import Mail from "nodemailer/lib/mailer";
 import {SentMessageInfo} from "nodemailer";
 import nodemailer from "nodemailer";
 import ejs from "ejs";
+import fs from "fs";
 
 export interface MailClient<T = string> {
 
@@ -14,10 +15,8 @@ export interface MailClient<T = string> {
 
     with(params: object): MailService;
 
-    // TODO: Markdown
-    // markdown(view: string): MailClient;
-
-    // prepare(subject: string, template: string, params: object): MailClient;
+    // TODO: Markdown check
+    markdown(markdown: string): MailClient;
 
     send(): Promise<SentMessageInfo>;
 }
@@ -27,9 +26,14 @@ export class MailService implements MailClient {
     private transporter: Mail;
 
     private html: string;
+    private viewHtml: string;
+    private markdownHtml: string;
     private toMail: Array<string>;
-    private paramsHtml: object = {};
+    private parameters: object = {};
     private subjectMail: string;
+
+    private views: string;
+    private markdowns: string;
 
     constructor() {
         this.transporter = nodemailer.createTransport({
@@ -41,13 +45,16 @@ export class MailService implements MailClient {
                 pass: environment.MAIL_PASSWORD // ethereal password
             }
         });
+
+        this.views = `${__dirname}/../../emails/views`;
+        this.markdowns = `${__dirname}/../../emails/markdown`;
+
     }
 
     /**
      * @param subject
      */
     subject(subject: string): MailService {
-
         this.subjectMail = subject;
 
         return this;
@@ -58,12 +65,12 @@ export class MailService implements MailClient {
      */
     to(...to: string[]): MailService {
         this.toMail = to;
+
         return this;
     }
 
     with(params: object): MailService {
-
-        this.paramsHtml = params
+        this.parameters = params;
 
         return this;
     };
@@ -72,29 +79,18 @@ export class MailService implements MailClient {
      * @param template
      */
     public view(template: string): MailService {
+        this.viewHtml = template;
 
-        try {
-            //
-            // // Assign subject at Email
-            // this.subject = subject;
+        return this;
+    }
 
-            // Assign Email Template
-            this.html = ejs.renderFile(`${__dirname}/../../emails/views/${template}.ejs`, this.paramsHtml, {}, function (err, html) {
+    /**
+     * @param markdown
+     */
+    public markdown(markdown: string): MailService {
+        this.markdownHtml = markdown;
 
-                if (err) {
-                    console.log(err);
-                    throw new Error(err.message);
-                }
-
-                return html;
-            });
-
-            return this;
-
-        } catch (e) {
-
-            throw new Error(e.message)
-        }
+        return this;
     }
 
     /**
@@ -108,6 +104,24 @@ export class MailService implements MailClient {
 
         try {
 
+            if (this.viewHtml && !this.markdownHtml) {
+
+                // Assign Email Template
+                this.html = ejs
+                    .render(
+                        fs.readFileSync(
+                            `${this.views}/${this.viewHtml}.ejs`, 'utf8'),
+                        Object.assign(this.parameters, {
+                            appName: environment.appName
+                        }));
+            }
+
+            if (!this.viewHtml && this.markdownHtml) {
+                // Assign Email Template
+                this.html = this.replaceKeyFromMdFile();
+            }
+
+            // Send email and try compile Node Mailer
             return await this.transporter.sendMail({
                 from: `"${environment.MAIL_FROM_NAME}" <${environment.MAIL_FROM_ADDRESS}>`, // sender address
                 to: this.toMail.toString(), // list of receivers
@@ -122,22 +136,38 @@ export class MailService implements MailClient {
     }
 
     /**
-     * TODO: Test new ejs Implement
+     * TODO: Test md Implement
      * Replace Native element in template
-     * @param template
-     * @param params
      */
-    // private replaceTemplateKeys(template: string, params: object): void {
-    //     // params.forEach((element: object) => {
-    //     //     for (const [key, value] of Object.entries(element)) {
-    //     //
-    //     //         if (!template.includes(`{{${key}}}`)) {
-    //     //             throw new Error(`Email ts template not include a local var named: {{${key}}}`)
-    //     //         }
-    //     //
-    //     //         this.html = template.replace(new RegExp(`{{${key}}}`, 'g'), value);
-    //     //     }
-    //     // });
-    // }
+    private replaceKeyFromMdFile(): string {
+
+        // commonmark mode
+        const mit = require('markdown-it')('commonmark');
+
+        // Try to read main html content for md
+        const main = fs.readFileSync(`${this.markdowns}/layouts/main.html`, 'utf8');
+
+        // Try to read first md file
+        const md = fs.readFileSync(`${this.markdowns}/${this.markdownHtml}.md`, 'utf8');
+
+        console.log(md);
+
+        console.log(mit.render(md));
+
+        // Try to replace content and place new md
+        const complete = main.replace(new RegExp(`{{MD_TEMPLATE_CONTENT}}`, 'g'), mit.render(md));
+
+        // Try to replace content and place new md
+        const global = complete.replace(new RegExp(`{{APP_NAME}}`, 'g'), environment.appName);
+
+        // Try to replace vars in markdown and main
+        Object.entries(this.parameters).forEach(([key, value]) => {
+
+            this.html = global.replace(new RegExp(`{{${key}}}`, 'g'), value);
+        });
+
+        return this.html;
+
+    }
 
 }

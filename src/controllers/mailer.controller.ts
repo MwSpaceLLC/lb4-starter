@@ -81,11 +81,11 @@ export class MailerController {
             hash: token
         });
 
-        // New Construct mail with (ejs)
+        // New Construct mail
         const mail =
             this.mailClient.to('test@mwspace.com')
                 .subject('✔ Confirm e-mail address')
-                .view('confirm')
+                .markdown('confirm')
                 .with({link: link});
 
         return mail.send();
