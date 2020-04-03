@@ -1,7 +1,6 @@
 import {environment} from "../../../environments/environment";
 import Mail from "nodemailer/lib/mailer";
-import {SentMessageInfo} from "nodemailer";
-import nodemailer from "nodemailer";
+import nodemailer, {SentMessageInfo} from "nodemailer";
 import fs from "fs";
 import uniqid from "uniqid";
 
@@ -15,9 +14,6 @@ export interface MailClient<T = string> {
 
     with(params: object): MailService;
 
-    // // TODO: Markdown check
-    // markdown(markdown: string): MailClient;
-
     send(): Promise<SentMessageInfo>;
 
     token(prefix?: string): string;
@@ -30,7 +26,7 @@ export class MailService implements MailClient {
     private html: string;
     private markdown: string;
     private toMail: Array<string>;
-    private parameters: object = {};
+    private parameters: Object;
     private subjectMail: string;
 
     private readonly views: string;
@@ -47,7 +43,6 @@ export class MailService implements MailClient {
         });
 
         this.views = `${__dirname}/../../../emails`;
-
     }
 
     /**
@@ -83,15 +78,6 @@ export class MailService implements MailClient {
         return this;
     }
 
-    // /**
-    //  * @param markdown
-    //  */
-    // public markdown(markdown: string): MailService {
-    //     this.markdownHtml = markdown;
-    //
-    //     return this;
-    // }
-
     /**
      * Send mail -_-'
      */
@@ -100,6 +86,8 @@ export class MailService implements MailClient {
         if (!this.toMail) {
             throw new Error('to is required before send()')
         }
+
+        this.html = this.replaceKeyFromMdFile();
 
         try {
 
@@ -130,21 +118,19 @@ export class MailService implements MailClient {
         const main = fs.readFileSync(`${this.views}/layouts/main.html`, 'utf8');
 
         // Try to read first md file
-        const md = fs.readFileSync(`${this.views}/${this.markdown}.md`, 'utf8');
+        let md = fs.readFileSync(`${this.views}/${this.markdown}.md`, 'utf8');
+
+        // Try to replace vars in markdown and main
+        Object.entries(this.parameters).forEach(([key, value]) => {
+
+            md = md.replace(new RegExp(`{{${key}}}`, 'g'), value);
+        });
 
         // Try to replace content and place new md
         const complete = main.replace(new RegExp(`{{MD_TEMPLATE_CONTENT}}`, 'g'), mit.render(md));
 
         // Try to replace content and place new md
-        const global = complete.replace(new RegExp(`{{APP_NAME}}`, 'g'), environment.appName);
-
-        // Try to replace vars in markdown and main
-        Object.entries(this.parameters).forEach(([key, value]) => {
-
-            this.html = global.replace(new RegExp(`{{${key}}}`, 'g'), value);
-        });
-
-        return this.html;
+        return complete.replace(new RegExp(`{{APP_NAME}}`, 'g'), environment.appName);
 
     }
 
