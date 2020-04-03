@@ -80,33 +80,39 @@ export class AuthController {
         },
     })
     async create(
-        @requestBody(RegisterRequestBody) newUserRequest: NewUserRequest,
+        // @requestBody(RegisterRequestBody) newUserRequest: NewUserRequest,
+        @param.query.string('email', {required: true}) email: string,
+        @param.query.string('password', {required: true}) password: string,
+        @param.query.string('phone', {required: true}) phone: string,
+        @param.query.boolean('agreement', {required: true}) agreement: string,
+        @param.query.string('plan') plan: string,
     ): Promise<UserTokenResponse> {
 
-        // Assign defautl property
-        newUserRequest.roles = ['customer'];
-
-        // Create Username by default
-        newUserRequest.name = uniqid('user-');
-
         // ensure a valid email value and password value
-        validateCredentials(_.pick(newUserRequest, ['email', 'password']));
-
-        // encrypt the password
-        const password = await this.passwordHasher.hashPassword(
-            newUserRequest.password,
-        );
+        validateCredentials({
+            email: email,
+            password: password
+        });
 
         try {
-            // create the new user
-            const user = await this.userRepository.create(
-                _.omit(newUserRequest, 'password'),
-            );
 
-            // set the password
+            // create the new user
+            const user = await this.userRepository.create({
+                email: email,
+                name: uniqid('user-'),
+                phone: phone,
+                plan: plan,
+                roles: ['customer']
+            });
+
+            // set the password HASHING
             await this.userRepository
                 .userCredentials(user.id)
-                .create({password});
+                .create({
+                    password: await this.passwordHasher.hashPassword(
+                        password,
+                    )
+                });
 
             return {
                 userProfile: user,
