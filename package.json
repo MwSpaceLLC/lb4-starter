@@ -8,7 +8,7 @@
   ],
   "main": "index.js",
   "engines": {
-    "node": ">=10"
+    "node": "0.10.x"
   },
   "scripts": {
     "ejs:copy": "cp -r src/emails dist",
