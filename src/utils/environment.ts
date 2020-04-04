@@ -18,7 +18,6 @@ export function env(status: string) {
         path: `${__dirname}/../../environments/${global}`
     });
 
-
 }
 
 /**
