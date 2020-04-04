@@ -1,4 +1,4 @@
-## lb4-starter ~ <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | *ALPHA* | MongoDB
+## lb4-starter ~ <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | *ALPHA* | [aws DEMO](http://lb4-starter.eu-central-1.elasticbeanstalk.com) | [heroku DEMO](http://lb4-starter.herokuapp.com)
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/swagger-starter.png" width="100%">
 
