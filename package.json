@@ -8,7 +8,8 @@
   ],
   "main": "index.js",
   "engines": {
-    "node": "0.10.x"
+    "node": "v12.16.1",
+    "npm": "6.14.4"
   },
   "scripts": {
     "build": "lb-tsc --copy-resources",
@@ -30,7 +31,9 @@
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
-    "prepublishOnly": "npm run test"
+    "prepublishOnly": "npm run test",
+    "postinstall": "npm run clean && npm run build",
+    "heroku-postbuild": "npm run clean && npm run build"
   },
   "repository": {
     "type": "git"
@@ -82,6 +85,8 @@
     "tslib": "^1.10.0",
     "twilio": "^3.41.1",
     "uniqid": "^5.2.0",
+    "@loopback/build": "^5.0.0",
+    "source-map-support": "^0.5.16",
     "typescript": "^3.8.3"
   },
   "devDependencies": {
