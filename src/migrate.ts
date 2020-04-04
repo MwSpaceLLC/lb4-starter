@@ -3,13 +3,13 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {ServerWalletItApplication} from './application';
+import {ServerLb4Starter} from './application';
 
 export async function migrate(args: string[]) {
   const existingSchema = args.includes('--rebuild') ? 'drop' : 'alter';
   console.log('Migrating schemas (%s existing schema)', existingSchema);
 
-  const app = new ServerWalletItApplication();
+  const app = new ServerLb4Starter();
   await app.boot();
   await app.migrateSchema({existingSchema});
 

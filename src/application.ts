@@ -39,7 +39,7 @@ import {MyUserService} from './services/core/user-service';
 import {TwilioServices} from "./services/vendor/twilio/twilio-service";
 import {MailService} from "./services/vendor/nodemailer/mail-service";
 
-export class ServerWalletItApplication extends BootMixin(
+export class ServerLb4Starter extends BootMixin(
     ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
     constructor(options: ApplicationConfig = {}) {

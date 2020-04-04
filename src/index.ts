@@ -3,35 +3,31 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {ServerWalletItApplication} from './application';
+import {ServerLb4Starter} from './application';
 import {ApplicationConfig} from '@loopback/core';
 
-import moment from 'moment-timezone';
+import {application, env} from "./utils/environment";
 
-import {env} from "./utils/environment";
+export {ServerLb4Starter};
 
-export {ServerWalletItApplication};
-
+/**
+ * @param options
+ */
 export async function main(options: ApplicationConfig = {}) {
+    /**
+     |--------------------------------------------------------------------------
+     | Bootstrap Env Config: TODO: Set your environments var
+     |--------------------------------------------------------------------------
+     | Here is where you can set your environment vars for your application.
+     |
+     */ env('local'); // local, prod ?? set env.local or env.prod
 
-    // Bootstrap Env Config
-    env(''); // local, prod ?? set env.local or env.prod
-
-    options.rest.host = process.env.REST_HOST ?? undefined;
-    options.rest.port = process.env.REST_PORT ?? 3000;
-    options.rest.openApiSpec.disabled = process.env.REST_API_SPEC !== 'true';
-
-    moment().tz(process.env.APP_TIME_ZONE ?? 'Europe/Rome').format();
-    moment.locale(process.env.APP_LANG);
-    moment().format(process.env.APP_DATE_FORMAT);
-
-    const app = new ServerWalletItApplication(options);
-    await app.boot();
-    await app.start();
-
-    const url = app.restServer.url;
-
-    console.log(`©2020 IBM ~ All rights reserved | ${process.env.APP_NAME} lb4 => serve at ${url}`);
-
-    return app;
+    /**
+     |--------------------------------------------------------------------------
+     | Start the ServerLb4Starter Application
+     |--------------------------------------------------------------------------
+     | Here is where you can Start ServerLb4Starter application.
+     |
+     */
+    return application(options);
 }

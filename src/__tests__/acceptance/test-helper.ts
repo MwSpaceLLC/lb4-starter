@@ -1,4 +1,4 @@
-import {ServerWalletItApplication} from '../..';
+import {ServerLb4Starter} from '../..';
 import {
   createRestAppClient,
   givenHttpServerConfig,
@@ -14,7 +14,7 @@ export async function setupApplication(): Promise<AppWithClient> {
     // port: +process.env.PORT,
   });
 
-  const app = new ServerWalletItApplication({
+  const app = new ServerLb4Starter({
     rest: restConfig,
   });
 
@@ -27,6 +27,6 @@ export async function setupApplication(): Promise<AppWithClient> {
 }
 
 export interface AppWithClient {
-  app: ServerWalletItApplication;
+  app: ServerLb4Starter;
   client: Client;
 }

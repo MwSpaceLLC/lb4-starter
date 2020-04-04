@@ -1,9 +1,9 @@
 import {Client} from '@loopback/testlab';
-import {ServerWalletItApplication} from '../..';
+import {ServerLb4Starter} from '../..';
 import {setupApplication} from './test-helper';
 
 describe('HomePage', () => {
-  let app: ServerWalletItApplication;
+  let app: ServerLb4Starter;
   let client: Client;
 
   before('setupApplication', async () => {

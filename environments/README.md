@@ -55,12 +55,17 @@ TWILIO_TOKEN=
 TWILIO_SENDER=
 ```
 
-###### If u want run for example another production in aws:
+###### [Heroku](https://signup.heroku.com) deploy example in environment config:
 
-1) Create one file in **/environments/.env.aws**
+1) Create one file in **/environments/.env.heroku**
 2) Go to **/src/index.ts** and set as follow:
 
 ```ecmascript 6
-// Bootstrap Env Config
-env('aws'); // local, prod ?? set env.local or env.prod
+/**
+ |--------------------------------------------------------------------------
+ | Bootstrap Env Config: TODO: Set your environments var
+ |--------------------------------------------------------------------------
+ | Here is where you can set your environment vars for your application.
+ |
+ */ env('heroku'); // local, prod ?? set env.local or env.prod
 ```
