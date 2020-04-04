@@ -5,15 +5,12 @@
 
 import {ServerLb4Starter} from './application';
 import {ApplicationConfig} from '@loopback/core';
-
 import {application, env} from "./utils/environment";
 
 export {ServerLb4Starter};
 
-/**
- * @param options
- */
-export async function main(options: ApplicationConfig = {}) {
+export function envjs() {
+
     /**
      |--------------------------------------------------------------------------
      | Bootstrap Env Config: TODO: Set your environments var
@@ -22,12 +19,20 @@ export async function main(options: ApplicationConfig = {}) {
      |
      */ env('local'); // local, prod ?? set env.local or env.prod
 
+}
+
+/**
+ * @param options
+ */
+export async function main(options: ApplicationConfig = {}) {
+
     /**
      |--------------------------------------------------------------------------
      | Start the ServerLb4Starter Application
      |--------------------------------------------------------------------------
      | Here is where you can Start ServerLb4Starter application.
      |
-     */
+     */ envjs();
+
     return application(options);
 }

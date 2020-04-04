@@ -17,9 +17,6 @@ export function env(status: string) {
     require('dotenv').config({
         path: `${__dirname}/../../environments/${global}`
     });
-
-    console.log(process.env)
-
 }
 
 /**
