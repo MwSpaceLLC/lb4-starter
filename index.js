@@ -7,8 +7,6 @@ if (require.main === module) {
     // Require env configuration
     application.envjs()
 
-    console.log(process.env)
-
     // Config the application
     const config = {
         rest: {
