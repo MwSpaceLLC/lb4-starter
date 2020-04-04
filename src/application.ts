@@ -51,7 +51,7 @@ export class ServerLb4Starter extends BootMixin(
     constructor(options: ApplicationConfig = {}) {
         super(options);
 
-        console.log(process.env)
+        // console.log(process.env)
 
         // Set config from env file
         this.api({
