@@ -4,10 +4,10 @@ module.exports = application;
 
 if (require.main === module) {
 
-    // Run env configuration
+    // Require env configuration
     application.envjs()
 
-    // Run the application
+    // Config the application
     const config = {
         rest: {
             port: +(process.env.PORT || 3000),
@@ -25,6 +25,7 @@ if (require.main === module) {
         },
     };
 
+    // Run the application
     application.main(config).catch(err => {
         console.error('Cannot start the application.', err);
         process.exit(1);
