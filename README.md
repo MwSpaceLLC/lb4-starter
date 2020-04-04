@@ -21,7 +21,7 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
 ###### Install package and vendor:
     
-    npm install && npm run pretest && npm start
+    npm install && npm run dev
     
 Fine! Please before start read official [Loopback Documentation](https://loopback.io/doc/en/lb4/Inside-LoopBack-Application.html)
  
