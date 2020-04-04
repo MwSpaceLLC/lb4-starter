@@ -23,7 +23,7 @@ describe('HomePage', () => {
 
     it('exposes self-hosted explorer', async () => {
         await client
-            .get(process.env.REST_EXPLORER_PATH ?? '/graph')
+            .get('/graph')
             .expect(200)
             .expect('Content-Type', /text\/html/)
             .expect(/<title>lb4-starter API Graph/);
