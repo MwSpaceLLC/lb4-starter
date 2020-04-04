@@ -85,6 +85,7 @@
     "tslib": "^1.10.0",
     "twilio": "^3.41.1",
     "uniqid": "^5.2.0",
+    "@loopback/testlab": "^2.0.2",
     "@loopback/build": "^5.0.0",
     "source-map-support": "^0.5.16",
     "typescript": "^3.8.3"
