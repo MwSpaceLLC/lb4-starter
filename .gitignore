@@ -6,6 +6,9 @@ package-lock.json
 # dotenv environment variables file
 .env.demo
 
+# Gcp configuration
+app.yaml
+
 # Logs
 logs
 *.log
