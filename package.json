@@ -23,7 +23,6 @@
     "eslint": "lb-eslint --report-unused-disable-directives .",
     "eslint:fix": "npm run eslint -- --fix",
     "pretest": "npm run clean && npm run build",
-    "test": "lb-mocha --allow-console-logs \"dist/__tests__\"",
     "posttest": "npm run lint",
     "test:dev": "lb-mocha --allow-console-logs dist/__tests__/**/*.js && npm run posttest",
     "docker:build": "docker build -t lb4-starter .",
@@ -85,7 +84,6 @@
     "tslib": "^1.10.0",
     "twilio": "^3.41.1",
     "uniqid": "^5.2.0",
-    "@loopback/testlab": "^2.0.2",
     "@loopback/build": "^5.0.0",
     "source-map-support": "^0.5.16",
     "typescript": "^3.8.3"
