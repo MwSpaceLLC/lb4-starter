@@ -18,6 +18,8 @@ export function env(status: string) {
         path: `${__dirname}/../../environments/${global}`
     });
 
+    console.log(process.env)
+
 }
 
 /**
