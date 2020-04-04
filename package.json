@@ -29,7 +29,8 @@
     "docker:run": "docker run -p 3000:3000 -d lb4-starter",
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
-    "start": "node -r source-map-support/register .",
+    "dev": "node -r source-map-support/register .",
+    "start": "node index.js",
     "prepublishOnly": "npm run test",
     "postinstall": "npm run clean && npm run build",
     "heroku-postbuild": "npm run clean && npm run build"
