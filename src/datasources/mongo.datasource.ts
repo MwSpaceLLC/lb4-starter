@@ -17,22 +17,25 @@ export class MongoDataSource extends juggler.DataSource
             dsConfig: object = config,
     ) {
 
-        console.log('DB_URL EXIST' + process.env.DB_URL !== '')
-
-        if (process.env.DB_URL !== '') {
+        //Database set from URI
+        if (process.env.DB_URL !== undefined) {
             super({
                 "name": process.env.DB_NAME,
                 "connector": process.env.DB_CONNECTOR,
                 "url": process.env.DB_URL,
                 "useNewUrlParser": true
             });
-        } else if (process.env.MONGODB_URI !== '') {
+
+            //Database set from heroku https://www.mlab.com/databases
+        } else if (process.env.MONGODB_URI !== undefined) {
             super({
                 "name": process.env.DB_NAME,
                 "connector": process.env.DB_CONNECTOR,
                 "url": process.env.MONGODB_URI,
                 "useNewUrlParser": true
             });
+
+            //Database not set by Uri
         } else {
             super({
                 "name": process.env.DB_NAME,
