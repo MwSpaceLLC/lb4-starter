@@ -81,7 +81,8 @@
     "stripe": "^8.37.0",
     "tslib": "^1.10.0",
     "twilio": "^3.41.1",
-    "uniqid": "^5.2.0"
+    "uniqid": "^5.2.0",
+    "typescript": "^3.8.3"
   },
   "devDependencies": {
     "@loopback/build": "^5.0.0",
