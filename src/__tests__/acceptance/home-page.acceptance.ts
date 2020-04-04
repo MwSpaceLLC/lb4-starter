@@ -3,29 +3,29 @@ import {ServerLb4Starter} from '../..';
 import {setupApplication} from './test-helper';
 
 describe('HomePage', () => {
-  let app: ServerLb4Starter;
-  let client: Client;
+    let app: ServerLb4Starter;
+    let client: Client;
 
-  before('setupApplication', async () => {
-    ({app, client} = await setupApplication());
-  });
+    before('setupApplication', async () => {
+        ({app, client} = await setupApplication());
+    });
 
-  after(async () => {
-    await app.stop();
-  });
+    after(async () => {
+        await app.stop();
+    });
 
-  it('exposes a default home page', async () => {
-    await client
-      .get('/')
-      .expect(200)
-      .expect('Content-Type', /text\/html/);
-  });
+    it('exposes a default home page', async () => {
+        await client
+            .get('/')
+            .expect(200)
+            .expect('Content-Type', /text\/html/);
+    });
 
-  it('exposes self-hosted explorer', async () => {
-    await client
-      .get('/explorer/')
-      .expect(200)
-      .expect('Content-Type', /text\/html/)
-      .expect(/<title>LoopBack API Explorer/);
-  });
+    it('exposes self-hosted explorer', async () => {
+        await client
+            .get(process.env.REST_EXPLORER_PATH ?? '/graph')
+            .expect(200)
+            .expect('Content-Type', /text\/html/)
+            .expect(/<title>lb4-starter API Graph/);
+    });
 });
