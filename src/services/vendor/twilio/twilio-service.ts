@@ -4,6 +4,7 @@
 // License text available at https://opensource.org/licenses/MIT
 
 import {Twilio} from "twilio";
+import {HttpErrors, RestBindings} from "@loopback/rest";
 
 /**
  * @important load .env vars for environment status (local,prod,alpha,etc...) */
@@ -69,11 +70,19 @@ export class TwilioServices implements TwilioClientInterface {
             throw new Error('to is required before send()')
         }
 
-        return this.client.messages.create({
-            body: this.contentString ? this.contentString : 'Hello from lb4-starter',
-            to: this.toPhones.toString(),
-            from: this.fromPhones ? this.fromPhones : process.env.TWILIO_SENDER
-        });
+        try {
+            return await this.client.messages.create({
+                body: this.contentString ? this.contentString : 'Hello from lb4-starter',
+                to: this.toPhones.toString(),
+                from: this.fromPhones ? this.fromPhones : process.env.TWILIO_SENDER
+            });
+        } catch (e) {
+            throw new HttpErrors.Unauthorized(
+                e,
+            );
+        }
+
+
     }
 
     randCode() {
