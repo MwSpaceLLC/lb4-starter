@@ -30,7 +30,7 @@
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
     "dev": "npm run pretest && node -r source-map-support/register .",
-    "start": "node index.js",
+    "start": "npm run pretest && node index.js",
     "prepublishOnly": "npm run test",
     "postinstall": "npm run clean && npm run build",
     "heroku-postbuild": "npm run clean && npm run build"
