@@ -2,3 +2,7 @@ phases:
   install:
     commands:
       - npm install
+
+  post_build:
+    commands:
+      - node index.js
