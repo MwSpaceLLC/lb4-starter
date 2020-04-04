@@ -26,6 +26,13 @@ export class MongoDataSource extends juggler.DataSource
                 "url": process.env.DB_URL,
                 "useNewUrlParser": true
             });
+        } else if (process.env.MONGODB_URI !== '') {
+            super({
+                "name": process.env.DB_NAME,
+                "connector": process.env.DB_CONNECTOR,
+                "url": process.env.MONGODB_URI,
+                "useNewUrlParser": true
+            });
         } else {
             super({
                 "name": process.env.DB_NAME,
