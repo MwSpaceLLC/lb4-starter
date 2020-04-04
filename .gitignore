@@ -3,9 +3,6 @@
 /.lb4-demo
 package-lock.json
 
-# Locals env
-/environments/.env
-
 # Logs
 logs
 *.log
