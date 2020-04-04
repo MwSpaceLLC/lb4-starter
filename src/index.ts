@@ -17,7 +17,7 @@ export function envjs() {
      |--------------------------------------------------------------------------
      | Here is where you can set your environment vars for your application.
      |
-     */ env('local'); // local, prod ?? set env.local or env.prod
+     */ env(process.env.APP_ENV ?? 'local'); // local, prod ?? set env.local or env.prod
 
 }
 

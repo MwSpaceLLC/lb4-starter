@@ -12,7 +12,7 @@ import {ServerLb4Starter} from "../application";
  */
 export function env(status: string) {
 
-    const global = status === 'local' ? '.env' : '.env.' + status;
+    const global = '.env.' + status;
 
     require('dotenv').config({
         path: `${__dirname}/../../environments/${global}`

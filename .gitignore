@@ -4,9 +4,8 @@
 package-lock.json
 
 # dotenv environment variables file
-.env.prod
-.env.aws
-.env.heroku
+.env
+.env.demo
 
 # Logs
 logs
