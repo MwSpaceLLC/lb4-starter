@@ -34,10 +34,16 @@ export class TwilioServices implements TwilioClientInterface {
     private contentString: string;
 
     constructor() {
-        this.client = new Twilio(
-            process.env.TWILIO_SID ?? '',
-            process.env.TWILIO_TOKEN ?? ''
-        );
+        try {
+
+            this.client = new Twilio(
+                process.env.TWILIO_SID ?? '',
+                process.env.TWILIO_TOKEN ?? ''
+            );
+        } catch (e) {
+
+            throw new HttpErrors.Unauthorized(e);
+        }
     }
 
     /**
@@ -77,9 +83,7 @@ export class TwilioServices implements TwilioClientInterface {
                 from: this.fromPhones ? this.fromPhones : process.env.TWILIO_SENDER
             });
         } catch (e) {
-            throw new HttpErrors.Unauthorized(
-                e,
-            );
+            throw new HttpErrors.Unauthorized(e);
         }
 
 
