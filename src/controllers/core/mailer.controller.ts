@@ -1,3 +1,8 @@
+// Copyright IBM Corp. 2019,2020. All Rights Reserved.
+// Node module: lb4-starter | MwSpace LLC
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import {HttpErrors, get, param, post} from "@loopback/rest";
 import {model, repository} from "@loopback/repository";
 import {OPERATION_SECURITY_SPEC} from "../../utils/security-spec";
@@ -9,9 +14,8 @@ import {MailServiceBindings, TwilioServiceBindings} from "../../utils/keys";
 import {MailerResponseSchema} from "../specs/mailer-controller.specs";
 import {MailClient} from "../../services/vendor/nodemailer/mail-service";
 import {SentMessageInfo} from "nodemailer";
-import {environment} from "../../environments/environment";
+
 import {EmailTokenConfirmSchema} from '../specs/mailer-controller.specs'
-import uniqid from "uniqid";
 
 @model()
 export class MailerController {
@@ -62,7 +66,7 @@ export class MailerController {
         const token = this.mailClient.token();
 
         // TODO: Change with your server or perform your action
-        const link = `http://${environment.endpoint}:${environment.endpointPort}/confirm/email/${token}`;
+        const link = `http://localhost/confirm/email/${token}`;
 
         // TODO: U also update or change this for perform.
         // For us, This is fasted method to check also 1 code

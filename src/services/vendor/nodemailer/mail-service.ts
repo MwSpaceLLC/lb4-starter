@@ -1,4 +1,8 @@
-import {environment} from "../../../environments/environment";
+// Copyright IBM Corp. 2019,2020. All Rights Reserved.
+// Node module: lb4-starter | MwSpace LLC
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import Mail from "nodemailer/lib/mailer";
 import nodemailer, {SentMessageInfo} from "nodemailer";
 import fs from "fs";
@@ -32,15 +36,27 @@ export class MailService implements MailClient {
     private readonly views: string;
 
     constructor() {
-        this.transporter = nodemailer.createTransport({
-            host: environment.MAIL_HOST,
-            port: environment.MAIL_PORT,
-            secure: false, // true for 465, false for other ports
-            auth: {
-                user: environment.MAIL_USERNAME, // ethereal user
-                pass: environment.MAIL_PASSWORD // ethereal password
-            }
-        });
+
+        if (process.env.MAIL_TRANSPORT === 'sendmail') {
+            this.transporter = nodemailer.createTransport({
+                sendmail: true,
+
+                // TODO: Test if nodemailer retrive auto path
+                // newline: 'unix',
+                // path: '/usr/sbin/sendmail'
+            });
+        } else {
+            this.transporter = nodemailer.createTransport({
+                host: process.env.MAIL_HOST,
+                port: parseInt(process.env.MAIL_PORT ?? '2525'),
+                secure: false, // true for 465, false for other ports
+                auth: {
+                    user: process.env.MAIL_USERNAME, // ethereal user
+                    pass: process.env.MAIL_PASSWORD // ethereal password
+                }
+            });
+        }
+
 
         this.views = `${__dirname}/../../../emails`;
     }
@@ -93,7 +109,7 @@ export class MailService implements MailClient {
 
             // Send email and try compile Node Mailer
             return await this.transporter.sendMail({
-                from: `"${environment.MAIL_FROM_NAME}" <${environment.MAIL_FROM_ADDRESS}>`, // sender address
+                from: `"${process.env.MAIL_FROM_NAME}" <${process.env.MAIL_FROM_ADDRESS}>`, // sender address
                 to: this.toMail.toString(), // list of receivers
                 subject: this.subjectMail ? this.subjectMail : 'Mail from lb4-starter', // Subject line
                 html: this.html ? this.replaceKeyFromMdFile() : '<b>Hello by lb4-starter!</b> ' // html body
@@ -130,7 +146,7 @@ export class MailService implements MailClient {
         const complete = main.replace(new RegExp(`{{MD_TEMPLATE_CONTENT}}`, 'g'), mit.render(md));
 
         // Try to replace content and place new md
-        return complete.replace(new RegExp(`{{APP_NAME}}`, 'g'), environment.appName);
+        return complete.replace(new RegExp(`{{APP_NAME}}`, 'g'), process.env.APP_NAME ?? 'lb4-starter');
 
     }
 

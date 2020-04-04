@@ -1,4 +1,8 @@
-import {environment} from "../../../environments/environment";
+// Copyright IBM Corp. 2019,2020. All Rights Reserved.
+// Node module: lb4-starter | MwSpace LLC
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import {Twilio} from "twilio";
 
 export interface TwilioClientInterface<T = string> {
@@ -24,8 +28,8 @@ export class TwilioServices implements TwilioClientInterface {
 
     constructor() {
         this.client = new Twilio(
-            environment.twilio.accountSid,
-            environment.twilio.authToken
+            process.env.TWILIO_SID ?? '',
+            process.env.TWILIO_TOKEN ?? ''
         );
     }
 
@@ -62,7 +66,7 @@ export class TwilioServices implements TwilioClientInterface {
         return this.client.messages.create({
             body: this.contentString ? this.contentString : 'Hello from lb4-starter',
             to: this.toPhones.toString(),
-            from: this.fromPhones ? this.fromPhones : environment.twilio.sender
+            from: this.fromPhones ? this.fromPhones : process.env.TWILIO_SENDER
         });
     }
 

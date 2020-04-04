@@ -1,3 +1,8 @@
+// Copyright IBM Corp. 2019,2020. All Rights Reserved.
+// Node module: lb4-starter | MwSpace LLC
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
 import {HttpErrors, get, param, post} from "@loopback/rest";
 import {model, repository} from "@loopback/repository";
 import {OPERATION_SECURITY_SPEC} from "../../utils/security-spec";
@@ -13,7 +18,6 @@ import {
     TwilioResponseSchema
 } from "../specs/twilio-controller.specs";
 
-import {environment} from "../../environments/environment";
 
 @model()
 // TODO: Refactor many function in this class (clear code)
@@ -86,7 +90,7 @@ export class PhoneController {
                 this.twilioClient
                     .from('AUTHMSG')
                     .to(userSelect.phone)
-                    .content(`${rndCode} is your confirmation code for ${environment.appName}`);
+                    .content(`${rndCode} is your confirmation code for ${process.env.APP_NAME}`);
 
             return await sms.send();
 

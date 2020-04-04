@@ -4,7 +4,7 @@
 package-lock.json
 
 # Locals env
-/src/environments/environment.ts
+/environments/.env
 
 # Logs
 logs

@@ -22,7 +22,7 @@ import {
 
 import path from 'path';
 import {ServiceMixin} from '@loopback/service-proxy';
-import {JWTAuthenticationStrategy} from './authentication-strategies/jwt-strategy';
+import {JWTAuthenticationStrategy} from './utils/jwt-strategy';
 
 import {
     MailServiceBindings,
@@ -36,7 +36,6 @@ import {MyAuthenticationSequence} from './sequence';
 import {BcryptHasher} from './services/core/hash.password.bcryptjs';
 import {JWTService} from './services/core/jwt-service';
 import {MyUserService} from './services/core/user-service';
-import {environment} from "./environments/environment";
 import {TwilioServices} from "./services/vendor/twilio/twilio-service";
 import {MailService} from "./services/vendor/nodemailer/mail-service";
 
@@ -49,7 +48,7 @@ export class ServerWalletItApplication extends BootMixin(
         // Set config from env file
         this.api({
             openapi: '3.0.0',
-            info: {title: environment.appName, version: environment.version},
+            info: {title: process.env.APP_NAME ?? 'lb4-starter', version: process.env.APP_VERSION ?? '1.0.0'},
             paths: {},
             servers: [{url: '/'}]
         });
@@ -69,9 +68,9 @@ export class ServerWalletItApplication extends BootMixin(
         this.static('/', path.join(__dirname, '../public'));
 
         // Customize @loopback/rest-explorer configuration here
-        if (environment.apiExplorer) {
+        if (process.env.REST_EXPLORER === 'true') {
             this.configure(RestExplorerBindings.COMPONENT).to({
-                path: environment.apiExplorerPath,
+                path: process.env.REST_EXPLORER_PATH,
                 useSelfHostedSpec: true,
             });
             this.component(RestExplorerComponent);

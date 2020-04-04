@@ -9,12 +9,12 @@ import {TokenService, UserService} from '@loopback/authentication';
 import {User} from '../models';
 import {Credentials} from '../repositories';
 import {TwilioClientInterface} from "../services/vendor/twilio/twilio-service";
-import {environment} from "../environments/environment";
+
 import {MailClient} from "../services/vendor/nodemailer/mail-service";
 
 export namespace TokenServiceConstants {
-    export const TOKEN_SECRET_VALUE = environment.TOKEN_SECRET;
-    export const TOKEN_EXPIRES_IN_VALUE = environment.TOKEN_EXPIRES;
+    export const TOKEN_SECRET_VALUE = process.env.TOKEN_SECRET ?? '';
+    export const TOKEN_EXPIRES_IN_VALUE = process.env.TOKEN_EXPIRES ?? '';
 }
 
 export namespace TokenServiceBindings {

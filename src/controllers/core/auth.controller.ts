@@ -1,12 +1,13 @@
 // Copyright IBM Corp. 2019,2020. All Rights Reserved.
+// Node module: lb4-starter | MwSpace LLC
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
 
 import {repository} from '@loopback/repository';
 import {validateCredentials} from '../../services/core/validator';
 
 import {
     post,
-    get,
-    requestBody,
     HttpErrors, param,
 } from '@loopback/rest';
 
@@ -34,12 +35,9 @@ import {
     PasswordHasherBindings,
     UserServiceBindings, TwilioServiceBindings,
 } from '../../utils/keys';
-import _ from 'lodash';
 
-import {OPERATION_SECURITY_SPEC} from '../../utils/security-spec';
-import {environment} from "../../environments/environment";
 import moment from 'moment';
-import {NewUserRequest, UserTokenResponse} from "./interfaces/user.interface";
+import {UserTokenResponse} from "./interfaces/user.interface";
 
 import uniqid from "uniqid";
 import {TwilioClientInterface} from "../../services/vendor/twilio/twilio-service";
@@ -123,7 +121,7 @@ export class AuthController {
                         this.userService.convertToUserProfile(user)
                     ),
                     expiredAt: moment().add(
-                        environment.TOKEN_EXPIRES,
+                        process.env.TOKEN_EXPIRES,
                         'seconds'
                     ).toDate()
                 }
@@ -173,13 +171,13 @@ export class AuthController {
             password: password
         });
 
-        const uid = this.userService.convertToUserProfile(user)[securityId];
+        // const uid = this.userService.convertToUserProfile(user)[securityId];
 
-        if (environment.loginAuthMsg) {
-            await this.loginSendAuthMsg(uid);
-            // Force to override user data
-            user = await this.userRepository.findById(uid);
-        }
+        // if (environment.loginAuthMsg) {
+        //     await this.loginSendAuthMsg(uid);
+        //     // Force to override user data
+        //     user = await this.userRepository.findById(uid);
+        // }
 
         return {
             userProfile: user,
@@ -188,7 +186,7 @@ export class AuthController {
                     this.userService.convertToUserProfile(user)
                 ),
                 expiredAt: moment().add(
-                    environment.TOKEN_EXPIRES,
+                    process.env.TOKEN_EXPIRES,
                     'seconds'
                 ).toDate()
             }
@@ -222,7 +220,7 @@ export class AuthController {
             await this.twilioClient
                 .from('AUTHMSG')
                 .to(find.phone)
-                .content(`${rndCode} is your confirmation code for ${environment.appName}`)
+                .content(`${rndCode} is your confirmation code for ${process.env.APP_NAME}`)
                 .send();
 
             // Update User Repository statos => OAUTH
