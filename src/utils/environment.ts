@@ -25,7 +25,7 @@ export function env(status: string) {
 export async function application(options: ApplicationConfig = {}) {
 
     options.rest.host = process.env.HOST ?? undefined;
-    options.rest.port = process.env.PORT ?? 3000;
+    options.rest.port = process.env.PORT ?? 8080;
     options.rest.openApiSpec.disabled = process.env.REST_API_SPEC !== 'true';
 
     moment().tz(process.env.APP_TIME_ZONE ?? 'Europe/Rome').format();
