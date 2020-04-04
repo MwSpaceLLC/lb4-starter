@@ -1,3 +1,2 @@
 [build]
-  command = "node index.js"
-  publish = "dist"
+  command = "npm run pretest && node index.js"
