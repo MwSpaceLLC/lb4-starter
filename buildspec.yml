@@ -5,4 +5,4 @@ phases:
 
   post_build:
     commands:
-      - node index.js
+      - PORT=8080 node index.js
