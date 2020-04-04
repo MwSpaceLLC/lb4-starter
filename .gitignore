@@ -3,6 +3,11 @@
 /.lb4-demo
 package-lock.json
 
+# dotenv environment variables file
+.env.prod
+.env.aws
+.env.heroku
+
 # Logs
 logs
 *.log
@@ -58,9 +63,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
-
-# dotenv environment variables file
-.env
 
 # Transpiled JavaScript files from Typescript
 /dist
