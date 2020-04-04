@@ -82,6 +82,8 @@ export class AuthController {
         @param.query.string('plan') plan: string,
     ): Promise<UserTokenResponse> {
 
+        console.log(process.env.TOKEN_EXPIRES)
+
         // ensure a valid email value and password value
         validateCredentials({
             email: email,

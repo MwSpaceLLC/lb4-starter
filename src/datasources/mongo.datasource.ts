@@ -17,38 +17,18 @@ export class MongoDataSource extends juggler.DataSource
             dsConfig: object = config,
     ) {
 
-        //Database set from URI
-        if (process.env.DB_URL !== undefined) {
-            super({
-                "name": process.env.DB_NAME,
-                "connector": process.env.DB_CONNECTOR,
-                "url": process.env.DB_URL,
-                "useNewUrlParser": true
-            });
-
-            //Database set from heroku https://www.mlab.com/databases
-        } else if (process.env.MONGODB_URI !== undefined) {
-            super({
-                "name": process.env.DB_NAME,
-                "connector": process.env.DB_CONNECTOR,
-                "url": process.env.MONGODB_URI,
-                "useNewUrlParser": true
-            });
-
-            //Database not set by Uri
-        } else {
-            super({
-                "name": process.env.DB_NAME,
-                "connector": process.env.DB_CONNECTOR,
-                "url": process.env.DB_URL,
-                "host": process.env.DB_HOST,
-                "port": process.env.DB_PORT,
-                "user": process.env.DB_USERNAME,
-                "password": process.env.DB_PASSWORD,
-                "database": process.env.DB_DATABASE,
-                "useNewUrlParser": true
-            });
-        }
+        //Database setup from env
+        super({
+            "name": process.env.DB_NAME,
+            "connector": process.env.DB_CONNECTOR,
+            "url": process.env.DB_URL,
+            "host": process.env.DB_HOST,
+            "port": process.env.DB_PORT,
+            "user": process.env.DB_USERNAME,
+            "password": process.env.DB_PASSWORD,
+            "database": process.env.DB_DATABASE,
+            "useNewUrlParser": true
+        });
     }
 
     /**

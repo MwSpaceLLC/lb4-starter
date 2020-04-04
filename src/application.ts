@@ -39,11 +39,19 @@ import {MyUserService} from './services/core/user-service';
 import {TwilioServices} from "./services/vendor/twilio/twilio-service";
 import {MailService} from "./services/vendor/nodemailer/mail-service";
 
+/**
+ * @important load .env vars for environment status (local,prod,alpha,etc...) */
+require('dotenv').config({
+    path: `${__dirname}/../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env.local'}`
+});
+
 export class ServerLb4Starter extends BootMixin(
     ServiceMixin(RepositoryMixin(RestApplication)),
 ) {
     constructor(options: ApplicationConfig = {}) {
         super(options);
+
+        console.log(process.env)
 
         // Set config from env file
         this.api({
@@ -89,7 +97,6 @@ export class ServerLb4Starter extends BootMixin(
         };
     }
 
-
     setUpBindings(): void {
 
         this.bind(TokenServiceBindings.TOKEN_SECRET).to(
@@ -119,6 +126,7 @@ export class ServerLb4Starter extends BootMixin(
          |------------------------------------------------------------------------*/
         this.bind(TwilioServiceBindings.TWILIO_CLIENT).toClass(TwilioServices);
         this.bind(MailServiceBindings.MAIL_CLIENT).toClass(MailService);
+
     }
 
     async start() {

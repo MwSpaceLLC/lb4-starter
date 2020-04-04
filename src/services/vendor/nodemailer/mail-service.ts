@@ -8,6 +8,12 @@ import nodemailer, {SentMessageInfo} from "nodemailer";
 import fs from "fs";
 import uniqid from "uniqid";
 
+/**
+ * @important load .env vars for environment status (local,prod,alpha,etc...) */
+require('dotenv').config({
+    path: `${__dirname}/../../../../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env.local'}`
+});
+
 export interface MailClient<T = string> {
 
     to(...to: Array<string>): MailService;

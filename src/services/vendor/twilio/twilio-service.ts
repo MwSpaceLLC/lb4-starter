@@ -5,6 +5,12 @@
 
 import {Twilio} from "twilio";
 
+/**
+ * @important load .env vars for environment status (local,prod,alpha,etc...) */
+require('dotenv').config({
+    path: `${__dirname}/../../../../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env.local'}`
+});
+
 export interface TwilioClientInterface<T = string> {
 
     from(from: string): TwilioServices;

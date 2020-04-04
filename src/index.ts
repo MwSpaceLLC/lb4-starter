@@ -5,34 +5,30 @@
 
 import {ServerLb4Starter} from './application';
 import {ApplicationConfig} from '@loopback/core';
-import {application, env} from "./utils/environment";
+import moment from "moment-timezone";
 
 export {ServerLb4Starter};
-
-export function envjs() {
-
-    /**
-     |--------------------------------------------------------------------------
-     | Bootstrap Env Config: TODO: Set your environments var
-     |--------------------------------------------------------------------------
-     | Here is where you can set your environment vars for your application.
-     |
-     */ env(process.env.APP_ENV ?? 'local'); // local, prod ?? set env.local or env.prod
-
-}
 
 /**
  * @param options
  */
 export async function main(options: ApplicationConfig = {}) {
 
-    /**
-     |--------------------------------------------------------------------------
-     | Start the ServerLb4Starter Application
-     |--------------------------------------------------------------------------
-     | Here is where you can Start ServerLb4Starter application.
-     |
-     */ envjs();
+    options.rest.host = process.env.HOST ?? undefined;
+    options.rest.port = process.env.PORT ?? 8080;
+    options.rest.openApiSpec.disabled = process.env.REST_API_SPEC !== 'true';
 
-    return application(options);
+    moment().tz(process.env.APP_TIME_ZONE ?? 'Europe/Rome').format();
+    moment.locale(process.env.APP_LANG);
+    moment().format(process.env.APP_DATE_FORMAT);
+
+    const app = new ServerLb4Starter(options);
+    await app.boot();
+    await app.start();
+
+    const url = app.restServer.url;
+
+    console.log(`©2020 IBM ~ All rights reserved | ${process.env.APP_NAME} lb4 => serve at ${url}`);
+
+    return app;
 }

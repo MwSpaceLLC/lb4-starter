@@ -21,7 +21,65 @@ The LoopBack 4 CLI is a command-line interface that can scaffold a project or ex
 
 ###### Install package and vendor:
     
-    npm install && npm run dev
+    npm install
+
+###### Configure your environments:
+    
+```dotenv
+#-- APP CONFIG --
+APP_NAME=lb4-starter
+APP_VERSION=0.9.0-alpha
+APP_DEBUG=true
+
+#-- APP LOCAL CONFIG --
+APP_TIME_ZONE=Europe/Rome
+APP_LANG=it
+APP_FALLBACK_LANG=en
+APP_DATE_FORMAT=DD/MM/YYYY
+APP_URL=${REST_CONNECTION}://${REST_HOST}:${REST_PORT}
+
+#-- TOKEN JWT CONFIG --
+TOKEN_SECRET=MyAwesomeSecret
+TOKEN_EXPIRES=14400
+
+#-- REST SRV CONFIG --
+PORT=8080
+HOST=localhost
+REST_CONNECTION=http
+REST_API_SPEC=true
+REST_EXPLORER=true
+REST_SELF_HOSTED=true
+REST_EXPLORER_PATH=/graph
+
+#-- DEFAULT DB CONFIG --
+DB_NAME=mongo
+DB_CONNECTOR=mongodb
+#DB_URL=
+DB_HOST=127.0.0.1
+DB_PORT=27017
+DB_DATABASE=lb4-starter
+DB_USERNAME=
+DB_PASSWORD=
+
+#-- MAIL NODE CONFIG --
+MAIL_TRANSPORT=smtp #sendmail
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=
+MAIL_PASSWORD=
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=no-reply@lb4-starter.git
+MAIL_FROM_NAME="${APP_NAME}"
+
+#-- SMS TWILIO CONFIG --
+TWILIO_SID=
+TWILIO_TOKEN=
+TWILIO_SENDER=
+```
+
+###### Install package and vendor:
+    
+    npm run pretest && npm start
     
 Fine! Please before start read official [Loopback Documentation](https://loopback.io/doc/en/lb4/Inside-LoopBack-Application.html)
  

@@ -4,9 +4,6 @@ module.exports = application;
 
 if (require.main === module) {
 
-    // Require env configuration
-    application.envjs()
-
     // Config the application
     const config = {
         rest: {

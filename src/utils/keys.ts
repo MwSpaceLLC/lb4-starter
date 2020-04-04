@@ -12,6 +12,12 @@ import {TwilioClientInterface} from "../services/vendor/twilio/twilio-service";
 
 import {MailClient} from "../services/vendor/nodemailer/mail-service";
 
+/**
+ * @important load .env vars for environment status (local,prod,alpha,etc...) */
+require('dotenv').config({
+    path: `${__dirname}/../../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env.local'}`
+});
+
 export namespace TokenServiceConstants {
     export const TOKEN_SECRET_VALUE = process.env.TOKEN_SECRET ?? '';
     export const TOKEN_EXPIRES_IN_VALUE = process.env.TOKEN_EXPIRES ?? '';
