@@ -16,16 +16,11 @@ import {UserRepository} from '../../repositories';
 
 import {inject} from '@loopback/core';
 import {
-    authenticate,
     TokenService,
     UserService,
 } from '@loopback/authentication';
 
-import {UserProfile, securityId, SecurityBindings} from '@loopback/security';
-import {
-    CredentialsRequestBody, RegisterRequestBody,
-    UserProfileSchema, UserTokenResponseSchema,
-} from '../specs/user-controller.specs';
+import {UserTokenResponseSchema} from '../specs/user-controller.specs';
 
 import {Credentials} from '../../repositories';
 import {PasswordHasher} from '../../services/core/hash.password.bcryptjs';
@@ -33,14 +28,15 @@ import {PasswordHasher} from '../../services/core/hash.password.bcryptjs';
 import {
     TokenServiceBindings,
     PasswordHasherBindings,
-    UserServiceBindings, TwilioServiceBindings,
+    UserServiceBindings,
+    // TwilioServiceBindings,
 } from '../../utils/keys';
 
+import uniqid from "uniqid";
 import moment from 'moment';
 import {UserTokenResponse} from "./interfaces/user.interface";
 
-import uniqid from "uniqid";
-import {TwilioClientInterface} from "../../services/vendor/twilio/twilio-service";
+// import {TwilioClientInterface} from "../../services/vendor/twilio/twilio-service";
 
 export class AuthController {
     constructor(
@@ -51,8 +47,8 @@ export class AuthController {
         public jwtService: TokenService,
         @inject(UserServiceBindings.USER_SERVICE)
         public userService: UserService<User, Credentials>,
-        @inject(TwilioServiceBindings.TWILIO_CLIENT)
-        public twilioClient: TwilioClientInterface,
+        // @inject(TwilioServiceBindings.TWILIO_CLIENT)
+        // public twilioClient: TwilioClientInterface,
     ) {
     }
 
@@ -166,7 +162,7 @@ export class AuthController {
     ): Promise<UserTokenResponse> {
 
         // ensure the user exists, and the password is correct
-        let user = await this.userService.verifyCredentials({
+        const user = await this.userService.verifyCredentials({
             email: email,
             password: password
         });
@@ -196,42 +192,42 @@ export class AuthController {
     // Auth Chek User ID TODO: Must Refacto
     private async loginSendAuthMsg(uid: string) {
 
-        const find = await this.userRepository.findById(uid);
-
-        // User have phone register and force oauth
-        if (find.phone) {
-
-            // Random code for the User
-            const rndCode = this.twilioClient.randCode();
-
-            // TODO: U also update or change this for perform.
-            // For us, This is fasted method to check also 1 code
-            // And bypass other many Errors in sql schema Relation
-            // Delete all Codes in User Repository Relation
-            await this.userRepository.userCodes(uid).delete();
-
-            // Add Code To User Repository Relation
-            await this.userRepository.userCodes(uid)
-                .create({
-                    random: rndCode.replace(/\s+/g, '')
-                });
-
-            // Re-Send Code To User Phone
-            await this.twilioClient
-                .from('AUTHMSG')
-                .to(find.phone)
-                .content(`${rndCode} is your confirmation code for ${process.env.APP_NAME}`)
-                .send();
-
-            // Update User Repository statos => OAUTH
-            await this.userRepository.updateById(uid,
-                {
-                    status: 'oauth'
-                }
-            );
-        }
-
-        return find;
+        // const find = await this.userRepository.findById(uid);
+        //
+        // // User have phone register and force oauth
+        // if (find.phone) {
+        //
+        //     // Random code for the User
+        //     const rndCode = this.twilioClient.randCode();
+        //
+        //     // TODO: U also update or change this for perform.
+        //     // For us, This is fasted method to check also 1 code
+        //     // And bypass other many Errors in sql schema Relation
+        //     // Delete all Codes in User Repository Relation
+        //     await this.userRepository.userCodes(uid).delete();
+        //
+        //     // Add Code To User Repository Relation
+        //     await this.userRepository.userCodes(uid)
+        //         .create({
+        //             random: rndCode.replace(/\s+/g, '')
+        //         });
+        //
+        //     // Re-Send Code To User Phone
+        //     await this.twilioClient
+        //         .from('AUTHMSG')
+        //         .to(find.phone)
+        //         .content(`${rndCode} is your confirmation code for ${process.env.APP_NAME}`)
+        //         .send();
+        //
+        //     // Update User Repository statos => OAUTH
+        //     await this.userRepository.updateById(uid,
+        //         {
+        //             status: 'oauth'
+        //         }
+        //     );
+        // }
+        //
+        // return find;
     }
 
 
