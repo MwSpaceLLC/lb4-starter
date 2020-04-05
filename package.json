@@ -1,6 +1,6 @@
 {
   "name": "lb4-starter",
-  "version": "0.9.0-alpha",
+  "version": "0.9.0-srv",
   "description": "Silence is Gold",
   "keywords": [
     "loopback-application",
