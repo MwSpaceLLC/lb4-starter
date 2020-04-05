@@ -11,7 +11,7 @@ import uniqid from "uniqid";
 /**
  * @important load .env vars for environment status (local,prod,alpha,etc...) */
 require('dotenv').config({
-    path: `${__dirname}/../../../../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env'}`
+    path: `${__dirname}/../../../../${process.env.NODE_ENV ? '.env.' + process.env.NODE_ENV : '.env'}`
 });
 
 export interface MailClient<T = string> {

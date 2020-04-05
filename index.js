@@ -3,16 +3,17 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-/**
- * @important load .env vars for environment status (local,prod,alpha,etc...) */
-require('dotenv').config({
-    path: `./${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env'}`
-});
-
-
+// Server must init whit APP_ENV
+const fs = require('fs')
 const application = require('./dist');
 
 module.exports = application;
+
+if (!process.env.NODE_ENV) {
+    if (!fs.existsSync(`/.env`)) {
+        process.env.NODE_ENV = 'local';
+    }
+}
 
 if (require.main === module) {
 

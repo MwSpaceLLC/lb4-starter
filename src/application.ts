@@ -42,7 +42,7 @@ import {MailService} from "./services/vendor/nodemailer/mail-service";
 /**
  * @important load .env vars for environment status (local,prod,alpha,etc...) */
 require('dotenv').config({
-    path: `${__dirname}/../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env'}`
+    path: `${__dirname}/../${process.env.NODE_ENV ? '.env.' + process.env.NODE_ENV : '.env'}`
 });
 
 export class ServerLb4Starter extends BootMixin(
@@ -51,7 +51,7 @@ export class ServerLb4Starter extends BootMixin(
     constructor(options: ApplicationConfig = {}) {
         super(options);
 
-        // console.log(process.env)
+        console.log(process.env.NODE_ENV);
 
         // Set config from env file
         this.api({
