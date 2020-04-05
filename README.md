@@ -1,4 +1,4 @@
-## lb4-starter | <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mongo-atlas.png" width="115"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/heroku.png" width="80"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/app-enginge.png" width="80">
+## lb4-starter | <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mongo-atlas.png" width="115"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/heroku.png" width="80"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/app-enginge.png" width="100">
 
 ### *ALPHA* | [aws DEMO](http://lb4-starter.eu-central-1.elasticbeanstalk.com) | [heroku DEMO](https://lb4-starter.herokuapp.com)
 
