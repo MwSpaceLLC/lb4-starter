@@ -59,7 +59,8 @@ export class MailService implements MailClient {
                 auth: {
                     user: process.env.MAIL_USERNAME, // ethereal user
                     pass: process.env.MAIL_PASSWORD // ethereal password
-                }
+                },
+                tls: {rejectUnauthorized: false}
             });
         }
 
