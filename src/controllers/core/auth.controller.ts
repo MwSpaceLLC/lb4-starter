@@ -15,10 +15,7 @@ import {User} from '../../models';
 import {UserRepository} from '../../repositories';
 
 import {inject} from '@loopback/core';
-import {
-    TokenService,
-    UserService,
-} from '@loopback/authentication';
+import {TokenService} from '@loopback/authentication';
 
 import {UserTokenResponseSchema} from '../specs/user-controller.specs';
 
@@ -29,26 +26,26 @@ import {
     TokenServiceBindings,
     PasswordHasherBindings,
     UserServiceBindings,
-    // TwilioServiceBindings,
 } from '../../utils/keys';
 
-import uniqid from "uniqid";
+// import uniqid from "uniqid";
 import moment from 'moment';
 import {UserTokenResponse} from "./interfaces/user.interface";
+import {CustomUserService} from "../../services/core/user-service";
+import query = param.query;
 
 // import {TwilioClientInterface} from "../../services/vendor/twilio/twilio-service";
 
 export class AuthController {
     constructor(
-        @repository(UserRepository) public userRepository: UserRepository,
+        @repository(UserRepository)
+        public userRepository: UserRepository,
         @inject(PasswordHasherBindings.PASSWORD_HASHER)
         public passwordHasher: PasswordHasher,
         @inject(TokenServiceBindings.TOKEN_SERVICE)
         public jwtService: TokenService,
         @inject(UserServiceBindings.USER_SERVICE)
-        public userService: UserService<User, Credentials>,
-        // @inject(TwilioServiceBindings.TWILIO_CLIENT)
-        // public twilioClient: TwilioClientInterface,
+        public userService: CustomUserService<User, Credentials>,
     ) {
     }
 
@@ -75,6 +72,7 @@ export class AuthController {
     })
     async create(
         // @requestBody(RegisterRequestBody) newUserRequest: NewUserRequest,
+        @param.query.string('name', {required: true}) name: string,
         @param.query.string('email', {required: true}) email: string,
         @param.query.string('password', {required: true}) password: string,
         @param.query.string('phone', {required: true}) phone: string,
@@ -82,12 +80,11 @@ export class AuthController {
         @param.query.string('plan') plan: string,
     ): Promise<UserTokenResponse> {
 
-        console.log(process.env.TOKEN_EXPIRES)
-
         // ensure a valid email value and password value
         validateCredentials({
             email: email,
-            password: password
+            password: password,
+            phone: phone
         });
 
         try {
@@ -95,7 +92,7 @@ export class AuthController {
             // create the new user
             const user = await this.userRepository.create({
                 email: email,
-                name: uniqid('user-'),
+                name: name,
                 phone: phone,
                 plan: plan,
                 agreement: agreement,
@@ -111,6 +108,9 @@ export class AuthController {
                         password,
                     )
                 });
+
+            // Send email verification
+            await this.userService.sendVerificationMail(user);
 
             return {
                 userProfile: user,

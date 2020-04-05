@@ -10,17 +10,28 @@ import {UserService} from '@loopback/authentication';
 import {UserProfile, securityId} from '@loopback/security';
 import {repository} from '@loopback/repository';
 import {PasswordHasher} from './hash.password.bcryptjs';
-import {PasswordHasherBindings} from '../../utils/keys';
+import {MailServiceBindings, PasswordHasherBindings} from '../../utils/keys';
 import {inject} from '@loopback/context';
+import {MailClient} from "../vendor/nodemailer/mail-service";
+import {SentMessageInfo} from "nodemailer";
 
-export class MyUserService implements UserService<User, Credentials> {
+export interface CustomUserService<U, C> extends UserService<User, Credentials> {
+    sendVerificationMail(user: U): Promise<SentMessageInfo>;
+}
+
+export class MyUserService implements CustomUserService<User, Credentials> {
     constructor(
         @repository(UserRepository) public userRepository: UserRepository,
         @inject(PasswordHasherBindings.PASSWORD_HASHER)
         public passwordHasher: PasswordHasher,
+        @inject(MailServiceBindings.MAIL_CLIENT)
+        public mailClient: MailClient,
     ) {
     }
 
+    /**
+     * @param credentials
+     */
     async verifyCredentials(credentials: Credentials): Promise<User> {
 
         const invalidCredentialsError = 'Invalid authentication';
@@ -53,6 +64,9 @@ export class MyUserService implements UserService<User, Credentials> {
         return foundUser;
     }
 
+    /**
+     * @param user
+     */
     convertToUserProfile(user: User): UserProfile {
         return {
             [securityId]: user.id,
@@ -62,9 +76,38 @@ export class MyUserService implements UserService<User, Credentials> {
         };
     }
 
-    uniqueId(min: number, max: number) {
-        return Math.floor(
-            Math.random() * (max - min) + min
-        )
+    /**
+     * @param user
+     * @param link
+     */
+    async sendVerificationMail(user: User, link?: string): Promise<SentMessageInfo> {
+
+        const token = this.mailClient.token();
+
+        // TODO: Change with your server or perform your action
+        link = link ? link : `${process.env.FRONTEND_URL}/email/confirm/${token}`;
+
+        // TODO: U also update or change this for perform.
+        // For us, This is fasted method to check also 1 code
+        // And bypass other many Errors in sql schema Relation
+        // Delete all Codes in User Repository Relation
+        await this.userRepository.userTokens(user.id).delete();
+
+        await this.userRepository.userTokens(user.id).create({
+            hash: token
+        });
+
+        // New Construct mail
+        const mail =
+            this.mailClient
+                .to(user.email)
+                .subject('✔ Confirm e-mail address')
+                .view('confirm')
+                .with({
+                    link: link,
+                    name: user.name
+                });
+
+        return mail.send();
     }
 }

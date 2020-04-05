@@ -21,6 +21,7 @@ import {UserCodesRepository} from './user-codes.repository';
 export type Credentials = {
     email: string;
     password: string;
+    phone?: string;
 };
 
 export type RegisterCredentials = {

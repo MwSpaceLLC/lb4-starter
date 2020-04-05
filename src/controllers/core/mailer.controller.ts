@@ -20,7 +20,8 @@ import {EmailTokenConfirmSchema} from '../specs/mailer-controller.specs'
 @model()
 export class MailerController {
     constructor(
-        @repository(UserRepository) public userRepository: UserRepository,
+        @repository(UserRepository)
+        public userRepository: UserRepository,
         @inject(MailServiceBindings.MAIL_CLIENT)
         public mailClient: MailClient,
     ) {

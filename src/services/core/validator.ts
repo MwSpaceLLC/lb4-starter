@@ -19,4 +19,15 @@ export function validateCredentials(credentials: Credentials) {
             'The password must be at least 8 characters long',
         );
     }
+
+    // Validate (MINIMAL) Phone Number
+    if (credentials.phone) {
+        if (credentials.phone.match('[\\\\!@#$%^&*(),.?":«»[\\]{}A-Za-z|<> -]')) {
+            throw new HttpErrors.UnprocessableEntity('The phone must be a valid number');
+        }
+        if (!credentials.phone.includes('+')) {
+            throw new HttpErrors.UnprocessableEntity('The phone require iso code: +1 817 569 8900');
+        }
+    }
+
 }

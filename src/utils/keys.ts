@@ -5,17 +5,18 @@
 
 import {BindingKey} from '@loopback/context';
 import {PasswordHasher} from '../services/core/hash.password.bcryptjs';
-import {TokenService, UserService} from '@loopback/authentication';
+import {TokenService} from '@loopback/authentication';
 import {User} from '../models';
 import {Credentials} from '../repositories';
 import {TwilioClientInterface} from "../services/vendor/twilio/twilio-service";
 
 import {MailClient} from "../services/vendor/nodemailer/mail-service";
+import {CustomUserService} from "../services/core/user-service";
 
 /**
  * @important load .env vars for environment status (local,prod,alpha,etc...) */
 require('dotenv').config({
-    path: `${__dirname}/../../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env.local'}`
+    path: `${__dirname}/../../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env'}`
 });
 
 export namespace TokenServiceConstants {
@@ -43,7 +44,7 @@ export namespace PasswordHasherBindings {
 }
 
 export namespace UserServiceBindings {
-    export const USER_SERVICE = BindingKey.create<UserService<User, Credentials>>(
+    export const USER_SERVICE = BindingKey.create<CustomUserService<User, Credentials>>(
         'services.user.service',
     );
 }

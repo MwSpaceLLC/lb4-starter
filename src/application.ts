@@ -42,7 +42,7 @@ import {MailService} from "./services/vendor/nodemailer/mail-service";
 /**
  * @important load .env vars for environment status (local,prod,alpha,etc...) */
 require('dotenv').config({
-    path: `${__dirname}/../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env.local'}`
+    path: `${__dirname}/../${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env'}`
 });
 
 export class ServerLb4Starter extends BootMixin(
@@ -122,11 +122,10 @@ export class ServerLb4Starter extends BootMixin(
     private customBinding() {
         /**
          |--------------------------------------------------------------------------
-         | Custom Binding Value
+         | Custom Binding Value and Services
          |------------------------------------------------------------------------*/
         this.bind(TwilioServiceBindings.TWILIO_CLIENT).toClass(TwilioServices);
         this.bind(MailServiceBindings.MAIL_CLIENT).toClass(MailService);
-
     }
 
     async start() {

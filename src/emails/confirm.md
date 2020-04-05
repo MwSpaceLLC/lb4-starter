@@ -1,4 +1,4 @@
-## Hi {{user}}!
+## Hi {{name}}!
 
 #### Click this [link]({{link}}) for confirm your email!
 
