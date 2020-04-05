@@ -17,6 +17,8 @@ export class MongoDataSource extends juggler.DataSource
             dsConfig: object = config,
     ) {
 
+        console.log(process.env)
+
         //Database setup from env
         if (process.env.DB_URL) {
             super({
