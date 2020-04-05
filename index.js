@@ -9,11 +9,19 @@ const application = require('./dist');
 
 module.exports = application;
 
+/**
+ * @important check first if environment var exists */
 if (!process.env.NODE_ENV) {
     if (!fs.existsSync(`/.env`)) {
         process.env.NODE_ENV = 'local';
     }
 }
+
+/**
+ * @important load .env vars for environment status (local,prod,alpha,etc...) */
+require('dotenv').config({
+    path: `./${process.env.NODE_ENV ? '.env.' + process.env.NODE_ENV : '.env'}`
+});
 
 if (require.main === module) {
 
