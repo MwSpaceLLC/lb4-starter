@@ -42,7 +42,7 @@ export class TwilioServices implements TwilioClientInterface {
             );
         } catch (e) {
 
-            throw new HttpErrors.Unauthorized(e);
+            throw new HttpErrors.UnprocessableEntity('Credentials SMS sender not set');
         }
     }
 
