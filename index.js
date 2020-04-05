@@ -1,3 +1,15 @@
+// Copyright IBM Corp. 2019,2020. All Rights Reserved.
+// Node module: lb4-starter | MwSpace LLC
+// This file is licensed under the MIT License.
+// License text available at https://opensource.org/licenses/MIT
+
+/**
+ * @important load .env vars for environment status (local,prod,alpha,etc...) */
+require('dotenv').config({
+    path: `./${process.env.APP_ENV ? '.env.' + process.env.APP_ENV : '.env'}`
+});
+
+
 const application = require('./dist');
 
 module.exports = application;
