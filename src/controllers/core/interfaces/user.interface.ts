@@ -3,11 +3,17 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-export interface NewUserRequest {
+export interface LoginUserRequest {
     email: string;
     password: string;
-    roles: string[];
+    remember?: boolean
+}
+
+export interface CreateUserRequest {
     name: string;
+    email: string;
+    password: string;
+    agreement?: boolean
 }
 
 export interface UserTokenResponse {

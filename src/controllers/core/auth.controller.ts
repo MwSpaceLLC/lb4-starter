@@ -8,7 +8,8 @@ import {validateCredentials} from '../../services/core/validator';
 
 import {
     post,
-    HttpErrors, param,
+    HttpErrors,
+    requestBody,
 } from '@loopback/rest';
 
 import {User} from '../../models';
@@ -17,7 +18,7 @@ import {UserRepository} from '../../repositories';
 import {inject} from '@loopback/core';
 import {TokenService} from '@loopback/authentication';
 
-import {UserTokenResponseSchema} from '../specs/user-controller.specs';
+import {LoginRequestBody, RegisterRequestBody, UserTokenResponseSchema} from '../specs/user-controller.specs';
 
 import {Credentials} from '../../repositories';
 import {PasswordHasher} from '../../services/core/hash.password.bcryptjs';
@@ -28,7 +29,7 @@ import {
     UserServiceBindings,
 } from '../../utils/keys';
 
-import {UserTokenResponse} from "./interfaces/user.interface";
+import {LoginUserRequest, CreateUserRequest, UserTokenResponse} from "./interfaces/user.interface";
 import {CustomUserService} from "../../services/core/user-service";
 import _ from 'lodash'
 
@@ -67,31 +68,28 @@ export class AuthController {
         },
     })
     async create(
-        // @requestBody(RegisterRequestBody) newUserRequest: NewUserRequest,
-        @param.query.string('name', {required: true}) name: string,
-        @param.query.string('email', {required: true}) email: string,
-        @param.query.string('password', {required: true}) password: string,
-        @param.query.string('phone', {required: true}) phone: string,
-        @param.query.boolean('agreement', {required: true}) agreement: boolean,
-        @param.query.string('plan') plan: string,
+        //TODO: Open request for force this param also in post data
+        @requestBody(RegisterRequestBody)
+            createUserRequest: CreateUserRequest,
+        // @param.path.string('name', {required: true}) name: string,
+        // @param.query.string('email', {required: true}) email: string,
+        // @param.query.string('password', {required: true}) password: string,
+        // @param.query.boolean('agreement', {required: true}) agreement: boolean,
     ): Promise<UserTokenResponse> {
 
         // ensure a valid email value and password value
         validateCredentials({
-            email: email,
-            password: password,
-            phone: phone
+            email: createUserRequest.email,
+            password: createUserRequest.password
         });
 
         try {
 
             // create the new user
             const user = await this.userRepository.create({
-                email: email,
-                name: name,
-                phone: phone,
-                plan: plan,
-                agreement: agreement,
+                email: createUserRequest.email,
+                name: createUserRequest.name,
+                agreement: createUserRequest.agreement,
                 status: 'pending',
                 roles: ['customer']
             });
@@ -101,7 +99,7 @@ export class AuthController {
                 .userCredentials(user.id)
                 .create({
                     password: await this.passwordHasher.hashPassword(
-                        password,
+                        createUserRequest.password,
                     )
                 });
 
@@ -149,15 +147,20 @@ export class AuthController {
         },
     })
     async login(
-        @param.query.string('email', {required: true}) email: string,
-        @param.query.string('password', {required: true}) password: string,
+        @requestBody(LoginRequestBody)
+            loginUserRequest: LoginUserRequest,
     ): Promise<UserTokenResponse> {
 
         // ensure the user exists, and the password is correct
         const user = await this.userService.verifyCredentials({
-            email: email,
-            password: password
+            email: loginUserRequest.email,
+            password: loginUserRequest.password
         });
+
+        // TODO: perform action
+        if (loginUserRequest.remember) {
+            // Do staff
+        }
 
         // A new response minimal object
         return _.assign({

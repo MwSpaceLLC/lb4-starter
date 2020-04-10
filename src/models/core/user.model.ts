@@ -61,7 +61,7 @@ export class User extends Entity {
         type: 'boolean',
         required: true,
     })
-    agreement?: boolean;
+    agreement: boolean;
 
     @property({
         type: 'string',

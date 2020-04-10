@@ -21,8 +21,8 @@ export const UserProfileSchema = {
     },
 };
 
-const CredentialsSchema = {
-    description: 'Credentials Schema',
+const LoginSchema = {
+    description: 'Login Schema',
     type: 'object',
     required: ['email', 'password'],
     properties: {
@@ -34,22 +34,28 @@ const CredentialsSchema = {
             type: 'string',
             minLength: 8,
         },
+        remember: {
+            type: 'boolean',
+        },
     },
 };
 
-export const CredentialsRequestBody = {
-    description: 'Credentials Request Body',
+export const LoginRequestBody = {
+    description: 'Login RequestBody Request Body',
     required: true,
     content: {
-        'application/json': {schema: CredentialsSchema},
+        'application/json': {schema: LoginSchema},
     },
 };
 
 const RegisterSchema = {
-    description: 'Register Schema',
     type: 'object',
-    required: ['email', 'password', 'phone'],
+    required: ['email', 'password'],
     properties: {
+        user: {
+            type: 'string',
+            format: 'username',
+        },
         email: {
             type: 'string',
             format: 'email',
@@ -58,19 +64,15 @@ const RegisterSchema = {
             type: 'string',
             minLength: 8,
         },
-        phone: {
-            type: 'string',
-            default: true,
-        },
         agreement: {
             type: 'boolean',
-            default: true,
         },
     },
 };
 
 export const RegisterRequestBody = {
-    description: 'Register Request Body',
+    description: 'The input of login function',
+    required: true,
     content: {
         'application/json': {schema: RegisterSchema},
     },
