@@ -28,12 +28,9 @@ import {
     UserServiceBindings,
 } from '../../utils/keys';
 
-// import uniqid from "uniqid";
-import moment from 'moment';
 import {UserTokenResponse} from "./interfaces/user.interface";
 import {CustomUserService} from "../../services/core/user-service";
-
-// import {TwilioClientInterface} from "../../services/vendor/twilio/twilio-service";
+import _ from 'lodash'
 
 export class AuthController {
     constructor(
@@ -56,7 +53,7 @@ export class AuthController {
      | Here is where you can Register web users for your application.
      |
      */
-    @post('/auth/register', {
+    @post('/auth/signup', {
         // 'x-visibility': 'undocumented',
         responses: {
             '200': {
@@ -108,21 +105,15 @@ export class AuthController {
                     )
                 });
 
-            // Send email verification
+            // TODO: perform your action | Send verification
             await this.userService.sendVerificationMail(user);
 
-            return {
-                userProfile: user,
-                token: {
-                    value: await this.jwtService.generateToken(
-                        this.userService.convertToUserProfile(user)
-                    ),
-                    expiredAt: moment().add(
-                        process.env.TOKEN_EXPIRES,
-                        'seconds'
-                    ).toDate()
-                }
-            };
+            // A new response minimal object
+            return _.assign({
+                token: await this.jwtService.generateToken(
+                    this.userService.convertToUserProfile(user)
+                )
+            }, user)
 
         } catch (error) {
             // MongoError 11000 duplicate key
@@ -168,68 +159,13 @@ export class AuthController {
             password: password
         });
 
-        // const uid = this.userService.convertToUserProfile(user)[securityId];
+        // A new response minimal object
+        return _.assign({
+            token: await this.jwtService.generateToken(
+                this.userService.convertToUserProfile(user)
+            )
+        }, user)
 
-        // if (environment.loginAuthMsg) {
-        //     await this.loginSendAuthMsg(uid);
-        //     // Force to override user data
-        //     user = await this.userRepository.findById(uid);
-        // }
-
-        return {
-            userProfile: user,
-            token: {
-                value: await this.jwtService.generateToken(
-                    this.userService.convertToUserProfile(user)
-                ),
-                expiredAt: moment().add(
-                    process.env.TOKEN_EXPIRES,
-                    'seconds'
-                ).toDate()
-            }
-        };
     }
-
-    // Auth Chek User ID TODO: Must Refacto
-    private async loginSendAuthMsg(uid: string) {
-
-        // const find = await this.userRepository.findById(uid);
-        //
-        // // User have phone register and force oauth
-        // if (find.phone) {
-        //
-        //     // Random code for the User
-        //     const rndCode = this.twilioClient.randCode();
-        //
-        //     // TODO: U also update or change this for perform.
-        //     // For us, This is fasted method to check also 1 code
-        //     // And bypass other many Errors in sql schema Relation
-        //     // Delete all Codes in User Repository Relation
-        //     await this.userRepository.userCodes(uid).delete();
-        //
-        //     // Add Code To User Repository Relation
-        //     await this.userRepository.userCodes(uid)
-        //         .create({
-        //             random: rndCode.replace(/\s+/g, '')
-        //         });
-        //
-        //     // Re-Send Code To User Phone
-        //     await this.twilioClient
-        //         .from('AUTHMSG')
-        //         .to(find.phone)
-        //         .content(`${rndCode} is your confirmation code for ${process.env.APP_NAME}`)
-        //         .send();
-        //
-        //     // Update User Repository statos => OAUTH
-        //     await this.userRepository.updateById(uid,
-        //         {
-        //             status: 'oauth'
-        //         }
-        //     );
-        // }
-        //
-        // return find;
-    }
-
 
 }

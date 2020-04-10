@@ -11,9 +11,4 @@ export interface NewUserRequest {
 }
 
 export interface UserTokenResponse {
-    userProfile: object;
-    token: {
-        value: string,
-        expiredAt: Date
-    }
 }

@@ -80,22 +80,13 @@ export const UserTokenResponseSchema = {
     description: 'User Token Response Schema',
     type: 'object',
     properties: {
-        "userProfile": {
-            type: 'object',
-            properties: {
-                "id": {type: 'string'},
-                "email": {type: 'string'},
-                "name": {type: 'string'},
-                "agreement": {type: 'boolean'},
-                // "roles": {type: 'array', items: []}
-            },
-        },
-        "token": {
-            type: 'object',
-            properties: {
-                "value": {type: 'string'},
-                "expiredAt": {type: 'string'}
-            }
-        }
+        "token": {type: 'string'},
+        "id": {type: 'string'},
+        "email": {type: 'string'},
+        "name": {type: 'string'},
+        "agreement": {type: 'boolean'},
+        "phone": {type: 'string'},
+        "status": {type: 'string'},
+        "roles": {type: 'array', items: []}
     },
 };

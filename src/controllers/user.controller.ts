@@ -33,7 +33,7 @@ import {
 } from '../utils/keys';
 
 import {OPERATION_SECURITY_SPEC} from '../utils/security-spec';
-import {TwilioClientInterface} from "../services/vendor/twilio/twilio-service";
+// import {TwilioClientInterface} from "../services/vendor/twilio/twilio-service";
 
 export class UserController {
     constructor(
