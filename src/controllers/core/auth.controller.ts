@@ -32,7 +32,6 @@ import {
 import moment from 'moment';
 import {UserTokenResponse} from "./interfaces/user.interface";
 import {CustomUserService} from "../../services/core/user-service";
-import query = param.query;
 
 // import {TwilioClientInterface} from "../../services/vendor/twilio/twilio-service";
 

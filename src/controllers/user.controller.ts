@@ -44,8 +44,8 @@ export class UserController {
         public jwtService: TokenService,
         @inject(UserServiceBindings.USER_SERVICE)
         public userService: UserService<User, Credentials>,
-        @inject(TwilioServiceBindings.TWILIO_CLIENT)
-        public twilioClient: TwilioClientInterface,
+        // @inject(TwilioServiceBindings.TWILIO_CLIENT)
+        // public twilioClient: TwilioClientInterface,
     ) {
     }
 
