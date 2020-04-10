@@ -1,6 +1,6 @@
 ## lb4-starter | <img src="https://loopback.io/images/branding/powered-by-loopback/blue/powered-by-loopback-sm.png" width="115"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/mongo-atlas.png" width="115"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/heroku.png" width="80"> | <img src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/app-enginge.png" width="100">
 
-### *ALPHA* | [aws DEMO](http://lb4-starter.eu-central-1.elasticbeanstalk.com) | [heroku DEMO](https://lb4-starter.herokuapp.com) <a href="https://app.netlify.com/start/deploy?repository=https://github.com/MwSpaceLLC/lb4-starter"><img align="right" src="https://www.netlify.com/img/deploy/button.svg" class="deploy-button" alt="deploy to netlify"></a>
+### *ALPHA* | [aws DEMO](http://lb4-starter.eu-central-1.elasticbeanstalk.com) | [heroku DEMO](https://lb4-starter.herokuapp.com) | [App Engine DEMO](https://mwspace.oa.r.appspot.com/) <a href="https://app.netlify.com/start/deploy?repository=https://github.com/MwSpaceLLC/lb4-starter"><img align="right" src="https://www.netlify.com/img/deploy/button.svg" class="deploy-button" alt="deploy to netlify"></a>
 
 <img syle="border-radius:15px" src="https://raw.githubusercontent.com/MwSpaceLLC/lb4-starter/master/swagger-starter.png" width="100%">
 
