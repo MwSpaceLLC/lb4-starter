@@ -52,9 +52,8 @@ const RegisterSchema = {
     type: 'object',
     required: ['email', 'password'],
     properties: {
-        user: {
+        name: {
             type: 'string',
-            format: 'username',
         },
         email: {
             type: 'string',
